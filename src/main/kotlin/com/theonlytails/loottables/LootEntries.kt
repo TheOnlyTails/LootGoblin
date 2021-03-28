@@ -77,3 +77,6 @@ fun LootEntry.Builder<*>.condition(getCondition: () -> ILootCondition.IBuilder):
 @LootTablesDsl
 fun StandaloneLootEntry.Builder<*>.function(getFunction: () -> ILootFunction.IBuilder): StandaloneLootEntry.Builder<*> =
 	apply(getFunction())
+
+@LootTablesDsl
+fun LootEntry.Builder<*>.add(pool: LootPool.Builder): LootPool.Builder = pool.add(this)
