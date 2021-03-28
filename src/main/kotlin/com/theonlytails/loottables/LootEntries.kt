@@ -16,7 +16,7 @@ fun LootPool.Builder.itemEntry(
 @LootTablesDsl
 fun LootPool.Builder.itemEntry(
 	item: IItemProvider,
-	body: StandaloneLootEntry.Builder<*>.() -> StandaloneLootEntry.Builder<*>,
+	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
 ): LootPool.Builder = add(ItemLootEntry.lootTableItem(item).body())
 
 @LootTablesDsl
@@ -27,7 +27,7 @@ fun LootPool.Builder.tagEntry(
 @LootTablesDsl
 fun LootPool.Builder.tagEntry(
 	tag: ITag<Item>,
-	body: StandaloneLootEntry.Builder<*>.() -> StandaloneLootEntry.Builder<*>,
+	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
 ): LootPool.Builder = add(TagLootEntry.expandTag(tag).body())
 
 @LootTablesDsl
@@ -38,7 +38,7 @@ fun LootPool.Builder.tableEntry(
 @LootTablesDsl
 fun LootPool.Builder.tableEntry(
 	lootTable: ResourceLocation,
-	body: StandaloneLootEntry.Builder<*>.() -> StandaloneLootEntry.Builder<*>,
+	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
 ): LootPool.Builder = add(TableLootEntry.lootTableReference(lootTable).body())
 
 @LootTablesDsl
@@ -49,7 +49,7 @@ fun LootPool.Builder.dynamicEntry(
 @LootTablesDsl
 fun LootPool.Builder.dynamicEntry(
 	id: ResourceLocation,
-	body: StandaloneLootEntry.Builder<*>.() -> StandaloneLootEntry.Builder<*>,
+	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
 ): LootPool.Builder = add(DynamicLootEntry.dynamicEntry(id).body())
 
 @LootTablesDsl
@@ -75,5 +75,5 @@ fun LootEntry.Builder<*>.condition(getCondition: () -> ILootCondition.IBuilder):
 	`when`(getCondition())
 
 @LootTablesDsl
-fun StandaloneLootEntry.Builder<*>.function(getFunction: () -> ILootFunction.IBuilder): LootEntry.Builder<*> =
+fun StandaloneLootEntry.Builder<*>.function(getFunction: () -> ILootFunction.IBuilder): StandaloneLootEntry.Builder<*> =
 	apply(getFunction())
