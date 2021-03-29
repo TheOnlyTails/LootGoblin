@@ -34,7 +34,7 @@ val author: String by extra
 plugins {
 	`java-library`
 	`maven-publish`
-	kotlin("jvm") version ("1.4.31")
+	kotlin("jvm") version "1.4.31"
 }
 
 apply(plugin = "net.minecraftforge.gradle")
@@ -45,6 +45,13 @@ println(
 			" JVM: ${System.getProperty("java.vm.version")}(${System.getProperty("java.vendor")})" +
 			" Arch: ${System.getProperty("os.arch")}"
 )
+
+repositories {
+	maven {
+		name = "kotlinforforge"
+		url = uri("https://thedarkcolour.github.io/KotlinForForge/")
+	}
+}
 
 // Minecraft Dependency
 // Note: Due to the way kotlin gradle works we need to define the minecraft dependency before we configure Minecraft
@@ -78,13 +85,6 @@ minecraft {
 				file("src/main/resources/")
 			)
 		}
-	}
-}
-
-repositories {
-	maven {
-		name = "kotlinforforge"
-		url = uri("https://thedarkcolour.github.io/KotlinForForge/")
 	}
 }
 
@@ -167,5 +167,5 @@ fun NamedDomainObjectContainerScope<RunConfig>.config(name: String, additionalCo
 
 // Testing
 tasks.withType<Test> {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

@@ -7,73 +7,180 @@ import net.minecraft.loot.functions.ILootFunction
 import net.minecraft.tags.ITag
 import net.minecraft.util.IItemProvider
 import net.minecraft.util.ResourceLocation
+import net.minecraft.loot.LootEntry.Builder as Entry
+import net.minecraft.loot.LootPool.Builder as Pool
+import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
 
+/**
+ * Adds an [ItemLootEntry] to a [Pool].
+ *
+ * @param item the item of the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.itemEntry(
+fun Pool.itemEntry(
 	item: IItemProvider,
-): StandaloneLootEntry.Builder<*> = ItemLootEntry.lootTableItem(item).also { add(it) }
+): StandaloneEntry<*> = ItemLootEntry.lootTableItem(item).also { add(it) }
 
+/**
+ * Adds an [ItemLootEntry] to a [Pool].
+ *
+ * @param item the item of the entry.
+ * @param body a block of code the configures the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.itemEntry(
+fun Pool.itemEntry(
 	item: IItemProvider,
-	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
+	body: StandaloneEntry<*>.() -> Entry<*>,
 ) = itemEntry(item).body().also { add(it) }
 
+/**
+ * Adds a [TagLootEntry] to a [Pool].
+ *
+ * @param tag the [ITag] of the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.tagEntry(
+fun Pool.tagEntry(
 	tag: ITag<Item>,
-): StandaloneLootEntry.Builder<*> = TagLootEntry.expandTag(tag).also { add(it) }
+): StandaloneEntry<*> = TagLootEntry.expandTag(tag).also { add(it) }
 
+/**
+ * Adds a [TagLootEntry] to a [Pool].
+ *
+ * @param tag the [ITag] of the entry.
+ * @param body a block of code the configures the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.tagEntry(
+fun Pool.tagEntry(
 	tag: ITag<Item>,
-	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
+	body: StandaloneEntry<*>.() -> Entry<*>,
 ) = tagEntry(tag).body().also { add(it) }
 
+/**
+ * Adds a [TableLootEntry] to a [Pool].
+ *
+ * @param lootTable the loot table being referenced in the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.tableEntry(
+fun Pool.tableEntry(
 	lootTable: ResourceLocation,
-): StandaloneLootEntry.Builder<*> = TableLootEntry.lootTableReference(lootTable).also { add(it) }
+): StandaloneEntry<*> = TableLootEntry.lootTableReference(lootTable).also { add(it) }
 
+/**
+ * Adds a [TableLootEntry] to a [Pool].
+ *
+ * @param lootTable the loot table being referenced in the entry.
+ * @param body a block of code the configures the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.tableEntry(
+fun Pool.tableEntry(
 	lootTable: ResourceLocation,
-	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
+	body: StandaloneEntry<*>.() -> Entry<*>,
 ) = tableEntry(lootTable).body().also { add(it) }
 
+/**
+ * Adds a [DynamicLootEntry] to a [Pool].
+ *
+ * @param id the id of the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.dynamicEntry(
+fun Pool.dynamicEntry(
 	id: ResourceLocation,
-): StandaloneLootEntry.Builder<*> = DynamicLootEntry.dynamicEntry(id).also { add(it) }
+): StandaloneEntry<*> = DynamicLootEntry.dynamicEntry(id).also { add(it) }
 
+/**
+ * Adds a [DynamicLootEntry] to a [Pool].
+ *
+ * @param id the id of the entry.
+ * @param body a block of code the configures the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.dynamicEntry(
+fun Pool.dynamicEntry(
 	id: ResourceLocation,
-	body: StandaloneLootEntry.Builder<*>.() -> LootEntry.Builder<*>,
+	body: StandaloneEntry<*>.() -> Entry<*>,
 ) = dynamicEntry(id).body().also { add(it) }
 
+/**
+ * Adds an [AlternativesLootEntry] to a [Pool].
+ *
+ * @param entries the sub-entries of the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.alternativesEntry(
-	vararg entries: LootEntry.Builder<*>,
+fun Pool.alternativesEntry(
+	vararg entries: Entry<*>,
 ): AlternativesLootEntry.Builder = AlternativesLootEntry.alternatives(*entries).also { add(it) }
 
+/**
+ * Adds an [AlternativesLootEntry] to a [Pool].
+ *
+ * @param entries the sub-entries of the entry.
+ * @param body a block of code the configures the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.alternativesEntry(
-	vararg entries: LootEntry.Builder<*>,
+fun Pool.alternativesEntry(
+	vararg entries: Entry<*>,
 	body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder,
 ) = alternativesEntry(*entries).body().also { add(it) }
 
+/**
+ * Adds an [EmptyLootEntry] to a [Pool].
+ *
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.emptyEntry(): StandaloneLootEntry.Builder<*> = EmptyLootEntry.emptyItem().also { add(it) }
+fun Pool.emptyEntry(): StandaloneEntry<*> = EmptyLootEntry.emptyItem().also { add(it) }
 
+/**
+ * Adds an [EmptyLootEntry] to a [Pool].
+ *
+ * @param body a block of code the configures the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootPool.Builder.emptyEntry(body: StandaloneLootEntry.Builder<*>.() -> StandaloneLootEntry.Builder<*>) =
+fun Pool.emptyEntry(body: StandaloneEntry<*>.() -> StandaloneEntry<*>) =
 	emptyEntry().body().also { add(it) }
 
+/**
+ * Adds a condition to an [Entry].
+ *
+ * @receiver an [Entry].
+ * @param getCondition a lambda that returns the condition.
+ * @return the original entry, with the condition added.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun LootEntry.Builder<*>.condition(getCondition: () -> ILootCondition.IBuilder): LootEntry.Builder<*> =
+fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder): Entry<*> =
 	`when`(getCondition())
 
+/**
+ * Adds a function to a [StandaloneEntry].
+ *
+ * @receiver a [StandaloneEntry].
+ * @param getFunction a lambda that returns the function.
+ * @return the original entry, with the function added.
+ * @author TheOnlyTails
+ */
 @LootTablesDsl
-fun StandaloneLootEntry.Builder<*>.function(getFunction: () -> ILootFunction.IBuilder): StandaloneLootEntry.Builder<*> =
+fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder): StandaloneEntry<*> =
 	apply(getFunction())
