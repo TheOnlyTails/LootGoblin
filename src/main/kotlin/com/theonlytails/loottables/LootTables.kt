@@ -45,8 +45,8 @@ fun lootTable(parameterSet: LootParameterSet, body: LootTable.Builder.() -> Loot
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> LootPool.Builder): LootTable.Builder =
-	withPool(lootPool().setRolls(constantRange(rolls)).body())
+fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> Unit): LootTable.Builder =
+	withPool(lootPool().setRolls(constantRange(rolls)).also(body))
 
 /**
  * Adds a new [LootPool.Builder] to a [LootTable.Builder].
@@ -57,5 +57,5 @@ fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> LootPool
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun LootTable.Builder.pool(rolls: IRandomRange, body: LootPool.Builder.() -> LootPool.Builder): LootTable.Builder =
-	withPool(lootPool().setRolls(rolls).body())
+fun LootTable.Builder.pool(rolls: IRandomRange, body: LootPool.Builder.() -> Unit): LootTable.Builder =
+	withPool(lootPool().setRolls(rolls).also(body))
