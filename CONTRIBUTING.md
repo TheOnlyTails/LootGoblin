@@ -17,7 +17,7 @@ Now that you have your own copy, make a new branch with a descriptive name (`new
 
 ## Step #3 - Write the Code
 
-Just - do it. There's not much to detail here. Regarding code styling, stick to the [official guidelines](https://kotlinlang.org/docs/coding-conventions.html) supplied by the Kotlin team.
+Just - do it. There's not much to detail here. Regarding code styling, stick to the [official guidelines](https://kotlinlang.org/docs/coding-conventions.html) supplied by the Kotlin team. (Note: every function, property and class must have [KDocs](https://kotlinlang.org/docs/kotlin-doc.html) attached)
 
 
 ## Step #4 - Make a Pull Request
