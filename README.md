@@ -4,6 +4,8 @@
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
+For documentation and usage instructions, please take a look at the [wiki](https://github.com/TheOnlyTails/LootTables/wiki).
+
 ## Installation
 
 #### Gradle/Groovy:
