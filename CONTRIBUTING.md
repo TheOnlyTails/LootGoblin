@@ -24,7 +24,10 @@ Just - do it. There's not much to detail here. Regarding code styling, stick to 
 
 Once you're done coding your new feature/bugfix, come back to your fork, and make a new Pull Request from your branch to the [main branch](https://github.com/theonlytails/loottables/tree/main).
 
-Before creating your PR, make sure to request a review from at least one of the [members of the triage team](https://github.com/TheOnlyTails/LootTables/wiki/Triage-Team).
+Before creating your PR, make sure to:
+- Request a review from at least one of the [members of the triage team](https://github.com/TheOnlyTails/LootTables/wiki/Triage-Team).
+- Add a relevant label.
+- If your PR is supposed to close an issue, add "Closes #<issue number>" (e.g. "Closes #3" for issue number 3) at the end of your PR message.
 
 Now that you've created your PR, the reviewers will discuss the changes with you, and automated checks will run on your code.
 **IMPORTANT:** Make sure to enable *auto-squash and merge*. Once it's enabled, your PR will be automatically merged once all checks pass and reviewers approve.
