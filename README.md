@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/TheOnlyTails/LootTables.svg)](https://jitpack.io/#TheOnlyTails/LootTables)
+
 # LootTables
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
