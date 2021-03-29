@@ -1,13 +1,14 @@
 [![](https://jitpack.io/v/TheOnlyTails/LootTables.svg)](https://jitpack.io/#TheOnlyTails/LootTables)
 
 # LootTables
+
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
 ## Installation
 
+#### Gradle/Groovy:
 
-Gradle/Groovy:
-```gradle
+```groovy
 repositories {
     maven { url 'https://jitpack.io' }
 }
@@ -17,7 +18,7 @@ dependencies {
 }
 ```
 
-Gradle/Kotlin:
+#### Gradle/Kotlin:
 ```kotlin
 repositories {
     maven(url = "https://jitpack.io")
@@ -28,7 +29,7 @@ dependencies {
 }
 ```
 
-Maven:
+#### Maven:
 ```xml
 <repositories>
 	<repository>
