@@ -35,26 +35,6 @@ fun stateProperties(body: StatePropertiesPredicate.Builder.() -> StateProperties
  * Creates a [BlockPredicate] that checks for a [Block].
  *
  * @param block the block to check for.
- * @return the predicate.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun blockPredicate(block: Block): BlockPredicate.Builder = BlockPredicate.Builder.block().of(block)
-
-/**
- * Creates a [BlockPredicate] that checks for an [ITag].
- *
- * @param blockTag the block [ITag] to check for.
- * @return the predicate.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun blockPredicate(blockTag: ITag<Block>): BlockPredicate.Builder = BlockPredicate.Builder.block().of(blockTag)
-
-/**
- * Creates a [BlockPredicate] that checks for a [Block].
- *
- * @param block the block to check for.
  * @param body configures the predicate.
  * @return the predicate.
  * @author TheOnlyTails
@@ -62,7 +42,7 @@ fun blockPredicate(blockTag: ITag<Block>): BlockPredicate.Builder = BlockPredica
 @LootTablesDsl
 fun blockPredicate(
 	block: Block,
-	body: BlockPredicate.Builder.() -> BlockPredicate.Builder,
+	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
 ): BlockPredicate.Builder = BlockPredicate.Builder.block().of(block).body()
 
 /**
@@ -76,28 +56,8 @@ fun blockPredicate(
 @LootTablesDsl
 fun blockPredicate(
 	blockTag: ITag<Block>,
-	body: BlockPredicate.Builder.() -> BlockPredicate.Builder,
+	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
 ): BlockPredicate.Builder = BlockPredicate.Builder.block().of(blockTag).body()
-
-/**
- * Creates a [ItemPredicate] that checks for an [IItemProvider].
- *
- * @param item the item to check for.
- * @return the predicate.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun itemPredicate(item: IItemProvider): ItemPredicate.Builder = ItemPredicate.Builder.item().of(item)
-
-/**
- * Creates a [ItemPredicate] that checks for an [ITag].
- *
- * @param itemTag the item [ITag] to check for.
- * @return the predicate.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun itemPredicate(itemTag: ITag<Item>): ItemPredicate.Builder = ItemPredicate.Builder.item().of(itemTag)
 
 /**
  * Creates a [ItemPredicate] that checks for an [IItemProvider].
@@ -110,7 +70,7 @@ fun itemPredicate(itemTag: ITag<Item>): ItemPredicate.Builder = ItemPredicate.Bu
 @LootTablesDsl
 fun itemPredicate(
 	item: IItemProvider,
-	body: ItemPredicate.Builder.() -> ItemPredicate.Builder,
+	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
 ): ItemPredicate.Builder = ItemPredicate.Builder.item().of(item).body()
 
 /**
@@ -124,18 +84,8 @@ fun itemPredicate(
 @LootTablesDsl
 fun itemPredicate(
 	itemTag: ITag<Item>,
-	body: ItemPredicate.Builder.() -> ItemPredicate.Builder,
+	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
 ): ItemPredicate.Builder = ItemPredicate.Builder.item().of(itemTag).body()
-
-/**
- * Creates a [ItemPredicate] that checks for a [CompoundNBT].
- *
- * @param tag the [CompoundNBT] to check for.
- * @return the predicate.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun itemHasNbt(tag: CompoundNBT): ItemPredicate.Builder = ItemPredicate.Builder.item().hasNbt(tag)
 
 /**
  * Creates a [ItemPredicate] that checks for a [CompoundNBT].
@@ -146,19 +96,11 @@ fun itemHasNbt(tag: CompoundNBT): ItemPredicate.Builder = ItemPredicate.Builder.
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun itemHasNbt(tag: CompoundNBT, body: ItemPredicate.Builder.() -> ItemPredicate.Builder): ItemPredicate.Builder =
+fun itemHasNbt(
+	tag: CompoundNBT,
+	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
+): ItemPredicate.Builder =
 	ItemPredicate.Builder.item().hasNbt(tag)
-
-/**
- * Creates a [ItemPredicate] that checks for an [EnchantmentPredicate].
- *
- * @param enchantment the [EnchantmentPredicate] to check for.
- * @return the predicate.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun itemHasEnchantment(enchantment: EnchantmentPredicate): ItemPredicate.Builder =
-	ItemPredicate.Builder.item().hasEnchantment(enchantment)
 
 /**
  * Creates a [ItemPredicate] that checks for a [EnchantmentPredicate].
@@ -171,7 +113,7 @@ fun itemHasEnchantment(enchantment: EnchantmentPredicate): ItemPredicate.Builder
 @LootTablesDsl
 fun itemHasEnchantment(
 	enchantment: EnchantmentPredicate,
-	body: ItemPredicate.Builder.() -> ItemPredicate.Builder,
+	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
 ): ItemPredicate.Builder =
 	ItemPredicate.Builder.item().hasEnchantment(enchantment)
 

@@ -5,6 +5,15 @@ import net.minecraft.block.BlockState
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.loot.*
 import net.minecraft.loot.functions.*
+import net.minecraft.loot.functions.CopyBlockState.copyState
+import net.minecraft.loot.functions.CopyName.copyName
+import net.minecraft.loot.functions.EnchantWithLevels.enchantWithLevels
+import net.minecraft.loot.functions.ExplosionDecay.explosionDecay
+import net.minecraft.loot.functions.LimitCount.limitCount
+import net.minecraft.loot.functions.SetContents.setContents
+import net.minecraft.loot.functions.SetCount.setCount
+import net.minecraft.loot.functions.SetDamage.setDamage
+import net.minecraft.loot.functions.SetStewEffect.stewEffect
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.loot.LootFunction.Builder as Function
 import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
@@ -25,34 +34,13 @@ fun Function<*>.condition(getCondition: () -> Condition): Function<*> =
  * Creates a [SetCount] loot function.
  *
  * @param value the range parameter of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun setCount(value: IRandomRange): Function<*> = SetCount.setCount(value)
-
-/**
- * Creates a [SetCount] loot function.
- *
- * @param value the range parameter of the function.
  * @param body a block of code that runs on the function.
  * @return the [Function].
  * @author TheOnlyTails
  */
-
 @LootTablesDsl
-fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*>) = setCount(value).body()
-
-/**
- * Creates a [SetCount] loot function with a [ConstantRange].
- *
- * @param value the value of the constant range.
- * @return the [Function].
- * @author TheOnlyTails
- */
-
-@LootTablesDsl
-fun setConstantCount(value: Int): Function<*> = SetCount.setCount(constantRange(value))
+fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }) =
+	setCount(value).body()
 
 /**
  * Creates a [SetCount] loot function with a [ConstantRange].
@@ -64,17 +52,7 @@ fun setConstantCount(value: Int): Function<*> = SetCount.setCount(constantRange(
  */
 
 @LootTablesDsl
-fun setConstantCount(value: Int, body: Function<*>.() -> Function<*>) = setCount(constantRange(value)).body()
-
-/**
- * Creates an [EnchantWithLevels] loot function.
- *
- * @param levels the range parameter of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun enchantWithLevels(levels: IRandomRange): EnchantWithLevels.Builder = EnchantWithLevels.enchantWithLevels(levels)
+fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this }) = setCount(constantRange(value)).body()
 
 /**
  * Creates an [EnchantWithLevels] loot function.
@@ -85,37 +63,19 @@ fun enchantWithLevels(levels: IRandomRange): EnchantWithLevels.Builder = Enchant
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun enchantWithLevels(levels: IRandomRange, body: Function<*>.() -> Function<*>) =
+fun enchantWithLevels(levels: IRandomRange, body: Function<*>.() -> Function<*> = { this }) =
 	enchantWithLevels(levels).body()
 
 /**
  * Creates an [EnchantRandomly] loot function.
  *
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun enchantRandomly(): Function<*> = EnchantRandomly.randomApplicableEnchantment()
-
-/**
- * Creates an [EnchantRandomly] loot function.
- *
  * @param body a block of code that runs on the function.
  * @return the [Function].
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun enchantRandomly(body: Function<*>.() -> Function<*>) = enchantRandomly().body()
-
-/**
- * Creates a [SetNBT] loot function.
- *
- * @param tag the [CompoundNBT] parameter of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun setNbt(tag: CompoundNBT): Function<*> = SetNBT.setTag(tag)
+fun enchantRandomly(body: Function<*>.() -> Function<*> = { this }) =
+	EnchantRandomly.randomApplicableEnchantment().body()
 
 /**
  * Creates an [SetNBT] loot function.
@@ -126,16 +86,7 @@ fun setNbt(tag: CompoundNBT): Function<*> = SetNBT.setTag(tag)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun setNbt(tag: CompoundNBT, body: Function<*>.() -> Function<*>) = setNbt(tag).body()
-
-/**
- * Creates an [Smelt] loot function.
- *
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun furnaceSmelt(): Function<*> = Smelt.smelted()
+fun setNbt(tag: CompoundNBT, body: Function<*>.() -> Function<*> = { this }) = SetNBT.setTag(tag).body()
 
 /**
  * Creates an [Smelt] loot function.
@@ -145,17 +96,7 @@ fun furnaceSmelt(): Function<*> = Smelt.smelted()
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun furnaceSmelt(body: Function<*>.() -> Function<*>) = furnaceSmelt().body()
-
-/**
- * Creates an [LootingEnchantBonus] loot function.
- *
- * @param value the range parameter of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun looting(value: RandomValueRange): LootingEnchantBonus.Builder = LootingEnchantBonus.lootingMultiplier(value)
+fun furnaceSmelt(body: Function<*>.() -> Function<*> = { this }) = Smelt.smelted().body()
 
 /**
  * Creates an [LootingEnchantBonus] loot function.
@@ -166,18 +107,8 @@ fun looting(value: RandomValueRange): LootingEnchantBonus.Builder = LootingEncha
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun looting(value: RandomValueRange, body: Function<*>.() -> Function<*>) =
-	looting(value).body()
-
-/**
- * Creates an [SetDamage] loot function.
- *
- * @param damage the range of damage of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun setDamage(damage: RandomValueRange): Function<*> = SetDamage.setDamage(damage)
+fun looting(value: RandomValueRange, body: Function<*>.() -> Function<*> = { this }) =
+	LootingEnchantBonus.lootingMultiplier(value).body()
 
 /**
  * Creates an [SetDamage] loot function.
@@ -188,36 +119,18 @@ fun setDamage(damage: RandomValueRange): Function<*> = SetDamage.setDamage(damag
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*>) =
+fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*> = { this }) =
 	setDamage(damage).body()
 
 /**
  * Creates an [ExplorationMap] loot function.
  *
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun explorationMap(): ExplorationMap.Builder = ExplorationMap.makeExplorationMap()
-
-/**
- * Creates an [ExplorationMap] loot function.
- *
  * @param body a block of code that runs on the function.
  * @return the [Function].
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun explorationMap(body: Function<*>.() -> Function<*>) = explorationMap().body()
-
-/**
- * Creates an [SetStewEffect] loot function.
- *
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun stewEffect(): SetStewEffect.Builder = SetStewEffect.stewEffect()
+fun explorationMap(body: Function<*>.() -> Function<*> = { this }) = ExplorationMap.makeExplorationMap().body()
 
 /**
  * Creates an [SetStewEffect] loot function.
@@ -227,17 +140,7 @@ fun stewEffect(): SetStewEffect.Builder = SetStewEffect.stewEffect()
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun stewEffect(body: Function<*>.() -> Function<*>) = stewEffect().body()
-
-/**
- * Creates an [CopyName] loot function.
- *
- * @param source the type of [CopyName.Source] to copy the name from.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun copyName(source: CopyName.Source): Function<*> = CopyName.copyName(source)
+fun stewEffect(body: Function<*>.() -> Function<*> = { this }) = stewEffect().body()
 
 /**
  * Creates an [CopyName] loot function.
@@ -248,37 +151,18 @@ fun copyName(source: CopyName.Source): Function<*> = CopyName.copyName(source)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*>) =
+fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*> = { this }) =
 	copyName(source).body()
 
 /**
  * Creates an [SetContents] loot function.
  *
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun setContents(): SetContents.Builder = SetContents.setContents()
-
-/**
- * Creates an [SetContents] loot function.
- *
  * @param body a block of code that runs on the function.
  * @return the [Function].
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun setContents(body: Function<*>.() -> Function<*>) = setContents().body()
-
-/**
- * Creates an [LimitCount] loot function.
- *
- * @param limiter the limiter of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun limitCount(limiter: IntClamper): Function<*> = LimitCount.limitCount(limiter)
+fun setContents(body: Function<*>.() -> Function<*> = { this }) = setContents().body()
 
 /**
  * Creates an [LimitCount] loot function.
@@ -289,20 +173,7 @@ fun limitCount(limiter: IntClamper): Function<*> = LimitCount.limitCount(limiter
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun limitCount(limiter: IntClamper, body: Function<*>.() -> Function<*>) =
-	limitCount(limiter).body()
-
-/**
- * Creates an [ApplyBonus] loot function of type [ApplyBonus.addUniformBonusCount].
- *
- * @param enchantment the enchantment of the function.
- * @param bonusMultiplier the bonus multiplier passed to the [ApplyBonus.UniformBonusCountFormula] of the function
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun uniformBonusCount(enchantment: Enchantment, bonusMultiplier: Int = 1): Function<*> =
-	ApplyBonus.addUniformBonusCount(enchantment, bonusMultiplier)
+fun limitCount(limiter: IntClamper, body: Function<*>.() -> Function<*> = { this }) = limitCount(limiter).body()
 
 /**
  * Creates an [ApplyBonus] loot function of type [ApplyBonus.addUniformBonusCount].
@@ -317,21 +188,8 @@ fun uniformBonusCount(enchantment: Enchantment, bonusMultiplier: Int = 1): Funct
 fun uniformBonusCount(
 	enchantment: Enchantment,
 	bonusMultiplier: Int = 1,
-	body: Function<*>.() -> Function<*>,
-) = uniformBonusCount(enchantment, bonusMultiplier).body()
-
-/**
- * Creates an [ApplyBonus] loot function of type [ApplyBonus.addBonusBinomialDistributionCount].
- *
- * @param enchantment the enchantment of the function.
- * @param chance the chance parameter passed to the formula of the function.
- * @param extraRounds the extra rounds parameter passed to the formula of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun bonusBinomialDistributionCount(enchantment: Enchantment, chance: Float, extraRounds: Int): Function<*> =
-	ApplyBonus.addBonusBinomialDistributionCount(enchantment, chance, extraRounds)
+	body: Function<*>.() -> Function<*> = { this },
+) = ApplyBonus.addUniformBonusCount(enchantment, bonusMultiplier).body()
 
 /**
  * Creates an [ApplyBonus] loot function of type [ApplyBonus.addBonusBinomialDistributionCount].
@@ -348,18 +206,8 @@ fun bonusBinomialDistributionCount(
 	enchantment: Enchantment,
 	chance: Float,
 	extraRounds: Int,
-	body: Function<*>.() -> Function<*>,
-) = bonusBinomialDistributionCount(enchantment, chance, extraRounds).body()
-
-/**
- * Creates an [ApplyBonus] loot function of type [ApplyBonus.addOreBonusCount] with the [ApplyBonus.OreDropsFormula].
- *
- * @param enchantment the [Enchantment] of the function.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun oreBonusCount(enchantment: Enchantment): Function<*> = ApplyBonus.addOreBonusCount(enchantment)
+	body: Function<*>.() -> Function<*> = { this },
+) = ApplyBonus.addBonusBinomialDistributionCount(enchantment, chance, extraRounds).body()
 
 /**
  * Creates an [ApplyBonus] loot function of type [ApplyBonus.addOreBonusCount] with the [ApplyBonus.OreDropsFormula].
@@ -370,17 +218,8 @@ fun oreBonusCount(enchantment: Enchantment): Function<*> = ApplyBonus.addOreBonu
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun oreBonusCount(enchantment: Enchantment, body: Function<*>.() -> Function<*>) =
-	oreBonusCount(enchantment).body()
-
-/**
- * Creates an [ExplosionDecay] loot function.
- *
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun explosionDecay(): Function<*> = ExplosionDecay.explosionDecay()
+fun oreBonusCount(enchantment: Enchantment, body: Function<*>.() -> Function<*> = { this }) =
+	ApplyBonus.addOreBonusCount(enchantment).body()
 
 /**
  * Creates an [ExplosionDecay] loot function.
@@ -390,17 +229,7 @@ fun explosionDecay(): Function<*> = ExplosionDecay.explosionDecay()
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun explosionDecay(body: Function<*>.() -> Function<*>) = explosionDecay().body()
-
-/**
- * Creates an [CopyNbt] loot function.
- *
- * @param source the type of [CopyNbt.Source] to copy the [CompoundNBT] from.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun copyNbt(source: CopyNbt.Source): CopyNbt.Builder = CopyNbt.copyData(source)
+fun explosionDecay(body: Function<*>.() -> Function<*> = { this }) = explosionDecay().body()
 
 /**
  * Creates an [CopyNbt] loot function.
@@ -411,17 +240,7 @@ fun copyNbt(source: CopyNbt.Source): CopyNbt.Builder = CopyNbt.copyData(source)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun copyNbt(source: CopyNbt.Source, body: Function<*>.() -> Function<*>) = copyNbt(source).body()
-
-/**
- * Creates an [CopyBlockState] loot function.
- *
- * @param block the [Block] to copy the [BlockState] from.
- * @return the [Function].
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun copyState(block: Block): CopyBlockState.Builder = CopyBlockState.copyState(block)
+fun copyNbt(source: CopyNbt.Source, body: Function<*>.() -> Function<*> = { this }) = CopyNbt.copyData(source).body()
 
 /**
  * Creates an [CopyBlockState] loot function.
@@ -432,4 +251,4 @@ fun copyState(block: Block): CopyBlockState.Builder = CopyBlockState.copyState(b
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun copyState(block: Block, body: Function<*>.() -> Function<*>) = copyState(block).body()
+fun copyState(block: Block, body: Function<*>.() -> Function<*> = { this }) = copyState(block).body()

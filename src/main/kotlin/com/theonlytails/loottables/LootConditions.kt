@@ -5,18 +5,13 @@ import net.minecraft.block.Block
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.loot.LootContext.EntityTarget
 import net.minecraft.loot.conditions.*
+import net.minecraft.loot.conditions.Alternative.alternative
+import net.minecraft.loot.conditions.EntityHasProperty.entityPresent
+import net.minecraft.loot.conditions.KilledByPlayer.killedByPlayer
+import net.minecraft.loot.conditions.RandomChance.randomChance
+import net.minecraft.loot.conditions.SurvivesExplosion.survivesExplosion
 import net.minecraft.util.math.BlockPos
 import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
-
-/**
- * Uses an [Inverted] condition to invert another [Condition].
- *
- * @param condition the condition being inverted.
- * @return the [Inverted] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun randomChanceWithLooting(condition: Condition): Condition = Inverted.invert(condition)
 
 /**
  * Uses an [Inverted] condition to invert another [Condition].
@@ -27,19 +22,8 @@ fun randomChanceWithLooting(condition: Condition): Condition = Inverted.invert(c
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun randomChanceWithLooting(condition: Condition, body: Condition.() -> Condition) =
-	randomChanceWithLooting(condition).body()
-
-/**
- * Uses an [Alternative] condition to choose between multiple [Condition]s.
- *
- * @param conditions the conditions being chosen from.
- * @return the [Alternative] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun alternative(conditions: Collection<Condition>): Alternative.Builder =
-	Alternative.alternative(*conditions.toTypedArray())
+fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) =
+	Inverted.invert(condition).body()
 
 /**
  * Uses an [Alternative] condition to choose between multiple [Condition].
@@ -52,18 +36,8 @@ fun alternative(conditions: Collection<Condition>): Alternative.Builder =
 @LootTablesDsl
 fun alternative(
 	conditions: Collection<Condition>,
-	body: Condition.() -> Condition,
-) = alternative(conditions).body()
-
-/**
- * Creates a [RandomChance] condition.
- *
- * @param chance the chance of this condition.
- * @return the [RandomChance] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun randomChance(chance: Float): Condition = RandomChance.randomChance(chance)
+	body: Condition.() -> Condition = { this },
+) = alternative(*conditions.toTypedArray()).body()
 
 /**
  * Creates a [RandomChance] condition.
@@ -74,20 +48,7 @@ fun randomChance(chance: Float): Condition = RandomChance.randomChance(chance)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun randomChance(chance: Float, body: Condition.() -> Condition) =
-	randomChance(chance).body()
-
-/**
- * Creates a [RandomChanceWithLooting] condition.
- *
- * @param chance the chance of this condition.
- * @param lootingMultiplier the multiplier of the output if looting is applied.
- * @return the [RandomChanceWithLooting] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun randomChanceWithLooting(chance: Float, lootingMultiplier: Float): Condition =
-	RandomChanceWithLooting.randomChanceAndLootingBoost(chance, lootingMultiplier)
+fun randomChance(chance: Float, body: Condition.() -> Condition = { this }) = randomChance(chance).body()
 
 /**
  * Creates a [RandomChanceWithLooting] condition.
@@ -102,20 +63,8 @@ fun randomChanceWithLooting(chance: Float, lootingMultiplier: Float): Condition 
 fun randomChanceWithLooting(
 	chance: Float,
 	lootingMultiplier: Float,
-	body: Condition.() -> Condition,
-) = randomChanceWithLooting(chance, lootingMultiplier).body()
-
-/**
- * Creates a [EntityHasProperty] condition.
- *
- * @param target the entity targeted by this condition.
- * @param predicate the [EntityPredicate] that matches against the targeted entity.
- * @return the [EntityHasProperty] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun entityProperties(target: EntityTarget, predicate: EntityPredicate.Builder): Condition =
-	EntityHasProperty.hasProperties(target, predicate)
+	body: Condition.() -> Condition = { this },
+) = RandomChanceWithLooting.randomChanceAndLootingBoost(chance, lootingMultiplier).body()
 
 /**
  * Creates a [EntityHasProperty] condition.
@@ -130,19 +79,8 @@ fun entityProperties(target: EntityTarget, predicate: EntityPredicate.Builder): 
 fun entityProperties(
 	target: EntityTarget,
 	predicate: EntityPredicate.Builder,
-	body: Condition.() -> Condition,
-) = entityProperties(target, predicate).body()
-
-/**
- * Creates a [EntityHasProperty] condition.
- *
- * @param target the entity targeted by this condition.
- * @return the [EntityHasProperty] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun entityPresent(target: EntityTarget): Condition =
-	EntityHasProperty.entityPresent(target)
+	body: Condition.() -> Condition = { this },
+) = EntityHasProperty.hasProperties(target, predicate).body()
 
 /**
  * Creates a [EntityHasProperty] condition.
@@ -153,17 +91,7 @@ fun entityPresent(target: EntityTarget): Condition =
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun entityPresent(target: EntityTarget, body: Condition.() -> Condition) =
-	entityPresent(target).body()
-
-/**
- * Creates a [KilledByPlayer] condition.
- *
- * @return the [KilledByPlayer] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun killedByPlayer(): Condition = KilledByPlayer.killedByPlayer()
+fun entityPresent(target: EntityTarget, body: Condition.() -> Condition = { this }) = entityPresent(target).body()
 
 /**
  * Creates a [KilledByPlayer] condition.
@@ -173,17 +101,7 @@ fun killedByPlayer(): Condition = KilledByPlayer.killedByPlayer()
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun killedByPlayer(body: Condition.() -> Condition) = killedByPlayer().body()
-
-/**
- * Creates a [BlockStateProperty] condition.
- *
- * @param block the block of this condition.
- * @return the [BlockStateProperty] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun blockStateProperty(block: Block): BlockStateProperty.Builder = BlockStateProperty.hasBlockStateProperties(block)
+fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer().body()
 
 /**
  * Creates a [BlockStateProperty] condition.
@@ -194,18 +112,8 @@ fun blockStateProperty(block: Block): BlockStateProperty.Builder = BlockStatePro
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> BlockStateProperty.Builder) =
-	blockStateProperty(block).body()
-
-/**
- * Creates a [MatchTool] condition.
- *
- * @param predicate the predicate that matches against the tool in this condition.
- * @return the [MatchTool] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun matchTool(predicate: ItemPredicate.Builder): Condition = MatchTool.toolMatches(predicate)
+fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> BlockStateProperty.Builder = { this }) =
+	BlockStateProperty.hasBlockStateProperties(block).body()
 
 /**
  * Creates a [MatchTool] condition.
@@ -216,20 +124,8 @@ fun matchTool(predicate: ItemPredicate.Builder): Condition = MatchTool.toolMatch
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition) =
-	matchTool(predicate).body()
-
-/**
- * Creates a [TableBonus] condition that passes with probability picked from table, indexed by enchantment level.
- *
- * @param enchantment the enchantment being indexed by.
- * @param chances the list of chances for each enchantment level.
- * @return the [TableBonus] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun tableBonus(enchantment: Enchantment, vararg chances: Float): Condition =
-	TableBonus.bonusLevelFlatChance(enchantment, *chances)
+fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition = { this }) =
+	MatchTool.toolMatches(predicate).body()
 
 /**
  * Creates a [TableBonus] condition that passes with probability picked from table, indexed by enchantment level.
@@ -245,17 +141,8 @@ fun tableBonus(enchantment: Enchantment, vararg chances: Float): Condition =
 fun tableBonus(
 	enchantment: Enchantment,
 	vararg chances: Float,
-	body: Condition.() -> Condition,
-) = tableBonus(enchantment, *chances).body()
-
-/**
- * Creates a [SurvivesExplosion] condition.
- *
- * @return the [SurvivesExplosion] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun survivesExplosion(): Condition = SurvivesExplosion.survivesExplosion()
+	body: Condition.() -> Condition = { this },
+) = TableBonus.bonusLevelFlatChance(enchantment, *chances).body()
 
 /**
  * Creates a [SurvivesExplosion] condition.
@@ -265,18 +152,7 @@ fun survivesExplosion(): Condition = SurvivesExplosion.survivesExplosion()
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun survivesExplosion(body: Condition.() -> Condition) = survivesExplosion().body()
-
-/**
- * Creates a [DamageSourceProperties] condition.
- *
- * @param predicate the [DamageSourcePredicate] that this condition matches against.
- * @return the [DamageSourceProperties] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun damageSourceProperties(predicate: DamageSourcePredicate.Builder): Condition =
-	DamageSourceProperties.hasDamageSource(predicate)
+fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExplosion().body()
 
 /**
  * Creates a [DamageSourceProperties] condition.
@@ -289,20 +165,8 @@ fun damageSourceProperties(predicate: DamageSourcePredicate.Builder): Condition 
 @LootTablesDsl
 fun damageSourceProperties(
 	predicate: DamageSourcePredicate.Builder,
-	body: Condition.() -> Condition,
-) = damageSourceProperties(predicate).body()
-
-/**
- * Creates a [LocationCheck] condition.
- *
- * @param pos the position to perform this check on.
- * @param predicate the [LocationPredicate] that this condition matches against.
- * @return the [LocationCheck] condition.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun locationCheck(pos: BlockPos = BlockPos.ZERO, predicate: LocationPredicate.Builder): Condition =
-	LocationCheck.checkLocation(predicate, pos)
+	body: Condition.() -> Condition = { this },
+) = DamageSourceProperties.hasDamageSource(predicate).body()
 
 /**
  * Creates a [LocationCheck] condition.
@@ -317,5 +181,5 @@ fun locationCheck(pos: BlockPos = BlockPos.ZERO, predicate: LocationPredicate.Bu
 fun locationCheck(
 	pos: BlockPos = BlockPos.ZERO,
 	predicate: LocationPredicate.Builder,
-	body: Condition.() -> Condition,
-) = locationCheck(pos, predicate).body()
+	body: Condition.() -> Condition = { this },
+) = LocationCheck.checkLocation(predicate, pos).body()

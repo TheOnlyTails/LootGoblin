@@ -15,18 +15,6 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
  * Adds an [ItemLootEntry] to a [Pool].
  *
  * @param item the item of the entry.
- * @return the entry.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun Pool.itemEntry(
-	item: IItemProvider,
-): StandaloneEntry<*> = ItemLootEntry.lootTableItem(item).also { add(it) }
-
-/**
- * Adds an [ItemLootEntry] to a [Pool].
- *
- * @param item the item of the entry.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
@@ -34,20 +22,8 @@ fun Pool.itemEntry(
 @LootTablesDsl
 fun Pool.itemEntry(
 	item: IItemProvider,
-	body: StandaloneEntry<*>.() -> Entry<*>,
-) = itemEntry(item).body().also { add(it) }
-
-/**
- * Adds a [TagLootEntry] to a [Pool].
- *
- * @param tag the [ITag] of the entry.
- * @return the entry.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun Pool.tagEntry(
-	tag: ITag<Item>,
-): StandaloneEntry<*> = TagLootEntry.expandTag(tag).also { add(it) }
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = ItemLootEntry.lootTableItem(item).body().also { add(it) }
 
 /**
  * Adds a [TagLootEntry] to a [Pool].
@@ -60,20 +36,8 @@ fun Pool.tagEntry(
 @LootTablesDsl
 fun Pool.tagEntry(
 	tag: ITag<Item>,
-	body: StandaloneEntry<*>.() -> Entry<*>,
-) = tagEntry(tag).body().also { add(it) }
-
-/**
- * Adds a [TableLootEntry] to a [Pool].
- *
- * @param lootTable the loot table being referenced in the entry.
- * @return the entry.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun Pool.tableEntry(
-	lootTable: ResourceLocation,
-): StandaloneEntry<*> = TableLootEntry.lootTableReference(lootTable).also { add(it) }
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = TagLootEntry.expandTag(tag).body().also { add(it) }
 
 /**
  * Adds a [TableLootEntry] to a [Pool].
@@ -86,20 +50,8 @@ fun Pool.tableEntry(
 @LootTablesDsl
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
-	body: StandaloneEntry<*>.() -> Entry<*>,
-) = tableEntry(lootTable).body().also { add(it) }
-
-/**
- * Adds a [DynamicLootEntry] to a [Pool].
- *
- * @param id the id of the entry.
- * @return the entry.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun Pool.dynamicEntry(
-	id: ResourceLocation,
-): StandaloneEntry<*> = DynamicLootEntry.dynamicEntry(id).also { add(it) }
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = TableLootEntry.lootTableReference(lootTable).body().also { add(it) }
 
 /**
  * Adds a [DynamicLootEntry] to a [Pool].
@@ -112,20 +64,8 @@ fun Pool.dynamicEntry(
 @LootTablesDsl
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
-	body: StandaloneEntry<*>.() -> Entry<*>,
-) = dynamicEntry(id).body().also { add(it) }
-
-/**
- * Adds an [AlternativesLootEntry] to a [Pool].
- *
- * @param entries the sub-entries of the entry.
- * @return the entry.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun Pool.alternativesEntry(
-	vararg entries: Entry<*>,
-): AlternativesLootEntry.Builder = AlternativesLootEntry.alternatives(*entries).also { add(it) }
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = DynamicLootEntry.dynamicEntry(id).body().also { add(it) }
 
 /**
  * Adds an [AlternativesLootEntry] to a [Pool].
@@ -138,17 +78,8 @@ fun Pool.alternativesEntry(
 @LootTablesDsl
 fun Pool.alternativesEntry(
 	vararg entries: Entry<*>,
-	body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder,
-) = alternativesEntry(*entries).body().also { add(it) }
-
-/**
- * Adds an [EmptyLootEntry] to a [Pool].
- *
- * @return the entry.
- * @author TheOnlyTails
- */
-@LootTablesDsl
-fun Pool.emptyEntry(): StandaloneEntry<*> = EmptyLootEntry.emptyItem().also { add(it) }
+	body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder = { this },
+) = AlternativesLootEntry.alternatives(*entries).body().also { add(it) }
 
 /**
  * Adds an [EmptyLootEntry] to a [Pool].
@@ -158,8 +89,8 @@ fun Pool.emptyEntry(): StandaloneEntry<*> = EmptyLootEntry.emptyItem().also { ad
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun Pool.emptyEntry(body: StandaloneEntry<*>.() -> StandaloneEntry<*>) =
-	emptyEntry().body().also { add(it) }
+fun Pool.emptyEntry(body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this }) =
+	EmptyLootEntry.emptyItem().body().also { add(it) }
 
 /**
  * Adds a condition to an [Entry].
