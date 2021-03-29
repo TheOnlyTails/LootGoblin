@@ -14,7 +14,9 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.TheOnlyTails:LootTables:${version}"
+    implementation fg.deobf(project.dependencies.create(group: "com.github.TheOnlyTails", name: "LootTables", version: version) {
+	transitive = false
+    })
 }
 ```
 
@@ -25,22 +27,11 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "com.github.TheOnlyTails", name = "LootTables", version = version)
+    implementation(project.the<DependencyManagementExtension>()
+	.deobf(project.dependencies.create(group = "com.github.TheOnlyTails", name = "LootTables", version = version)
+		.apply {
+			isTransitive = false
+		}
+	))
 }
-```
-
-#### Maven:
-```xml
-<repositories>
-	<repository>
-	    <id>jitpack.io</id>
-	    <url>https://jitpack.io</url>
-	</repository>
-</repositories>
-  
-<dependency>
-    <groupId>com.github.TheOnlyTails</groupId>
-    <artifactId>LootTables</artifactId>
-    <version>version</version>
-</dependency>
 ```
