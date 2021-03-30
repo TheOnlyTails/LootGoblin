@@ -8,7 +8,7 @@ For documentation and usage instructions, please take a look at the [wiki](https
 
 ## Installation
 
-#### Gradle/Groovy:
+#### Gradle/Groovy
 
 ```groovy
 repositories {
@@ -22,7 +22,7 @@ dependencies {
 }
 ```
 
-#### Gradle/Kotlin:
+#### Gradle/Kotlin
 ```kotlin
 repositories {
     maven(url = "https://jitpack.io")
