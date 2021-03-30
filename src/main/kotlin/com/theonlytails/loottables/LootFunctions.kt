@@ -50,7 +50,6 @@ fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }
  * @return the [Function].
  * @author TheOnlyTails
  */
-
 @LootTablesDsl
 fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this }) = setCount(constantRange(value)).body()
 
@@ -63,7 +62,10 @@ fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this })
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun enchantWithLevels(levels: IRandomRange, body: Function<*>.() -> Function<*> = { this }) =
+fun enchantWithLevels(
+	levels: IRandomRange,
+	body: EnchantWithLevels.Builder.() -> EnchantWithLevels.Builder = { this }
+) =
 	enchantWithLevels(levels).body()
 
 /**
@@ -107,7 +109,7 @@ fun furnaceSmelt(body: Function<*>.() -> Function<*> = { this }) = Smelt.smelted
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun looting(value: RandomValueRange, body: Function<*>.() -> Function<*> = { this }) =
+fun looting(value: RandomValueRange, body: LootingEnchantBonus.Builder.() -> LootingEnchantBonus.Builder = { this }) =
 	LootingEnchantBonus.lootingMultiplier(value).body()
 
 /**
@@ -130,7 +132,8 @@ fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*> = { 
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun explorationMap(body: Function<*>.() -> Function<*> = { this }) = ExplorationMap.makeExplorationMap().body()
+fun explorationMap(body: ExplorationMap.Builder.() -> ExplorationMap.Builder = { this }) =
+	ExplorationMap.makeExplorationMap().body()
 
 /**
  * Creates an [SetStewEffect] loot function.
@@ -140,7 +143,7 @@ fun explorationMap(body: Function<*>.() -> Function<*> = { this }) = Exploration
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun stewEffect(body: Function<*>.() -> Function<*> = { this }) = stewEffect().body()
+fun stewEffect(body: SetStewEffect.Builder.() -> SetStewEffect.Builder = { this }) = stewEffect().body()
 
 /**
  * Creates an [CopyName] loot function.
@@ -162,7 +165,7 @@ fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*> = { th
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun setContents(body: Function<*>.() -> Function<*> = { this }) = setContents().body()
+fun setContents(body: SetContents.Builder.() -> SetContents.Builder = { this }) = setContents().body()
 
 /**
  * Creates an [LimitCount] loot function.
@@ -240,7 +243,8 @@ fun explosionDecay(body: Function<*>.() -> Function<*> = { this }) = explosionDe
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun copyNbt(source: CopyNbt.Source, body: Function<*>.() -> Function<*> = { this }) = CopyNbt.copyData(source).body()
+fun copyNbt(source: CopyNbt.Source, body: CopyNbt.Builder.() -> CopyNbt.Builder = { this }) =
+	CopyNbt.copyData(source).body()
 
 /**
  * Creates an [CopyBlockState] loot function.
@@ -251,4 +255,5 @@ fun copyNbt(source: CopyNbt.Source, body: Function<*>.() -> Function<*> = { this
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun copyState(block: Block, body: Function<*>.() -> Function<*> = { this }) = copyState(block).body()
+fun copyState(block: Block, body: CopyBlockState.Builder.() -> CopyBlockState.Builder = { this }) =
+	copyState(block).body()

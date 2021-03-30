@@ -2,6 +2,8 @@ package com.theonlytails.loottables
 
 import net.minecraft.item.Item
 import net.minecraft.loot.*
+import net.minecraft.loot.EmptyLootEntry.emptyItem
+import net.minecraft.loot.ItemLootEntry.lootTableItem
 import net.minecraft.loot.conditions.ILootCondition
 import net.minecraft.loot.functions.ILootFunction
 import net.minecraft.tags.ITag
@@ -15,6 +17,7 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
  * Adds an [ItemLootEntry] to a [Pool].
  *
  * @param item the item of the entry.
+ * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
@@ -22,13 +25,15 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
 @LootTablesDsl
 fun Pool.itemEntry(
 	item: IItemProvider,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = ItemLootEntry.lootTableItem(item).body().also { add(it) }
+	addToPool: Boolean = true,
+	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+) = lootTableItem(item).body().also { if (addToPool) add(it) }
 
 /**
  * Adds a [TagLootEntry] to a [Pool].
  *
  * @param tag the [ITag] of the entry.
+ * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
@@ -36,13 +41,15 @@ fun Pool.itemEntry(
 @LootTablesDsl
 fun Pool.tagEntry(
 	tag: ITag<Item>,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = TagLootEntry.expandTag(tag).body().also { add(it) }
+	addToPool: Boolean = true,
+	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+) = TagLootEntry.expandTag(tag).body().also { if (addToPool) add(it) }
 
 /**
  * Adds a [TableLootEntry] to a [Pool].
  *
  * @param lootTable the loot table being referenced in the entry.
+ * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
@@ -50,13 +57,15 @@ fun Pool.tagEntry(
 @LootTablesDsl
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = TableLootEntry.lootTableReference(lootTable).body().also { add(it) }
+	addToPool: Boolean = true,
+	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+) = TableLootEntry.lootTableReference(lootTable).body().also { if (addToPool) add(it) }
 
 /**
  * Adds a [DynamicLootEntry] to a [Pool].
  *
  * @param id the id of the entry.
+ * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
@@ -64,13 +73,15 @@ fun Pool.tableEntry(
 @LootTablesDsl
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = DynamicLootEntry.dynamicEntry(id).body().also { add(it) }
+	addToPool: Boolean = true,
+	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+) = dynamicLootEntry(id).body().also { if (addToPool) add(it) }
 
 /**
  * Adds an [AlternativesLootEntry] to a [Pool].
  *
  * @param entries the sub-entries of the entry.
+ * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
@@ -78,19 +89,23 @@ fun Pool.dynamicEntry(
 @LootTablesDsl
 fun Pool.alternativesEntry(
 	vararg entries: Entry<*>,
+	addToPool: Boolean = true,
 	body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder = { this },
-) = AlternativesLootEntry.alternatives(*entries).body().also { add(it) }
+) = AlternativesLootEntry.alternatives(*entries).body().also { if (addToPool) add(it) }
 
 /**
  * Adds an [EmptyLootEntry] to a [Pool].
  *
+ * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun Pool.emptyEntry(body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this }) =
-	EmptyLootEntry.emptyItem().body().also { add(it) }
+fun Pool.emptyEntry(
+	addToPool: Boolean = true,
+	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+) = emptyItem().body().also { if (addToPool) add(it) }
 
 /**
  * Adds a condition to an [Entry].
@@ -115,3 +130,12 @@ fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder): Entry<*> =
 @LootTablesDsl
 fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder): StandaloneEntry<*> =
 	apply(getFunction())
+
+/**
+ * This solves some recursion issues in [dynamicEntry].
+ *
+ * @param id the id of the entry.
+ * @return the entry.
+ * @author TheOnlyTails
+ */
+private fun dynamicLootEntry(id: ResourceLocation) = DynamicLootEntry.dynamicEntry(id)
