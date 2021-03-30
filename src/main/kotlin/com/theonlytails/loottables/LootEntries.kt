@@ -26,7 +26,7 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
 fun Pool.itemEntry(
 	item: IItemProvider,
 	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
 ) = lootTableItem(item).body().also { if (addToPool) add(it) }
 
 /**
@@ -42,7 +42,7 @@ fun Pool.itemEntry(
 fun Pool.tagEntry(
 	tag: ITag<Item>,
 	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
 ) = TagLootEntry.expandTag(tag).body().also { if (addToPool) add(it) }
 
 /**
@@ -58,7 +58,7 @@ fun Pool.tagEntry(
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
 	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
 ) = TableLootEntry.lootTableReference(lootTable).body().also { if (addToPool) add(it) }
 
 /**
@@ -74,7 +74,7 @@ fun Pool.tableEntry(
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
 	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
 ) = dynamicLootEntry(id).body().also { if (addToPool) add(it) }
 
 /**
@@ -104,7 +104,7 @@ fun Pool.alternativesEntry(
 @LootTablesDsl
 fun Pool.emptyEntry(
 	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> StandaloneEntry<*> = { this },
+	body: StandaloneEntry<*>.() -> Entry<*> = { this },
 ) = emptyItem().body().also { if (addToPool) add(it) }
 
 /**
