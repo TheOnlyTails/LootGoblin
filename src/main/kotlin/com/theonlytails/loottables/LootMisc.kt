@@ -45,6 +45,16 @@ fun intClamperUpper(max: Int): IntClamper = IntClamper.clamp(Int.MIN_VALUE, max)
 fun randomRangeValue(min: Float, max: Float) = RandomValueRange(min, max)
 
 /**
+ * Creates a [RandomValueRange] with a Kotlin [IntRange].
+ *
+ * @param range a Kotlin range.
+ * @return the random range.
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun randomRangeValue(range: IntRange) = randomRangeValue(range.first.toFloat(), range.last.toFloat())
+
+/**
  * Creates a [ConstantRange].
  *
  * @param value the value of the range.

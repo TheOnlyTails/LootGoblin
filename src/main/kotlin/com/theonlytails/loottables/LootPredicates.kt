@@ -5,6 +5,7 @@ import net.minecraft.block.Block
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.Enchantments.SILK_TOUCH
 import net.minecraft.item.Item
+import net.minecraft.loot.FishingPredicate
 import net.minecraft.loot.conditions.ILootCondition
 import net.minecraft.loot.conditions.MatchTool
 import net.minecraft.nbt.CompoundNBT
@@ -130,7 +131,7 @@ fun enchantAtLeast(enchantment: Enchantment, min: Int) =
 	EnchantmentPredicate(enchantment, MinMaxBounds.IntBound.atLeast(min))
 
 /**
- * Creates a [EnchantmentPredicate] that checks for an exact of an [Enchantment].
+ * Creates a [EnchantmentPredicate] that checks for an exact level of an [Enchantment].
  *
  * @param enchantment the [Enchantment] to check for.
  * @param level the level of the enchantment.
@@ -140,3 +141,13 @@ fun enchantAtLeast(enchantment: Enchantment, min: Int) =
 @LootTablesDsl
 fun enchantExactly(enchantment: Enchantment, level: Int) =
 	EnchantmentPredicate(enchantment, MinMaxBounds.IntBound.exactly(level))
+
+/**
+ * Creates a [FishingPredicate] that checks whether the player was fishing in open water (or not).
+ *
+ * @param isInOpenWater to check if the player was fishing in open water, or if they weren't.
+ * @return the predicate.
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun fishingInOpenWater(isInOpenWater: Boolean): FishingPredicate = FishingPredicate.inOpenWater(isInOpenWater)

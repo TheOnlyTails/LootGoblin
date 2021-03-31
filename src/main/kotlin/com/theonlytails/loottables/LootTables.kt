@@ -10,6 +10,7 @@ import net.minecraft.loot.LootTable.lootTable
  * @author TheOnlyTails
  */
 @DslMarker
+@MustBeDocumented
 annotation class LootTablesDsl
 
 /**
