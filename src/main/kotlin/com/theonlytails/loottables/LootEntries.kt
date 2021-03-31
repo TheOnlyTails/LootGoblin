@@ -20,17 +20,18 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
  * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
 fun Pool.itemEntry(
-	item: IItemProvider,
-	weight: Int = 1,
-	quality: Int = 0,
-	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-): StandaloneLootEntry.Builder<*> =
-	lootTableItem(item).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    item: IItemProvider,
+    weight: Int = 1,
+    quality: Int = 0,
+    addToPool: Boolean = true,
+    body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = lootTableItem(item).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: item")
 
 /**
  * Adds a [TagLootEntry] to a [Pool].
@@ -39,17 +40,18 @@ fun Pool.itemEntry(
  * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
 fun Pool.tagEntry(
-	tag: ITag<Item>,
-	weight: Int = 1,
-	quality: Int = 0,
-	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-): StandaloneLootEntry.Builder<*> =
-	TagLootEntry.expandTag(tag).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    tag: ITag<Item>,
+    weight: Int = 1,
+    quality: Int = 0,
+    addToPool: Boolean = true,
+    body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = TagLootEntry.expandTag(tag).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: tag")
 
 /**
  * Adds a [TableLootEntry] to a [Pool].
@@ -58,18 +60,19 @@ fun Pool.tagEntry(
  * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
 fun Pool.tableEntry(
-	lootTable: ResourceLocation,
-	weight: Int = 1,
-	quality: Int = 0,
-	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-): StandaloneLootEntry.Builder<*> =
-	TableLootEntry.lootTableReference(lootTable)
-		.also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    lootTable: ResourceLocation,
+    weight: Int = 1,
+    quality: Int = 0,
+    addToPool: Boolean = true,
+    body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = TableLootEntry.lootTableReference(lootTable)
+    .also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: loot_table")
 
 /**
  * Adds a [DynamicLootEntry] to a [Pool].
@@ -78,17 +81,18 @@ fun Pool.tableEntry(
  * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
 fun Pool.dynamicEntry(
-	id: ResourceLocation,
-	weight: Int = 1,
-	quality: Int = 0,
-	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-): StandaloneLootEntry.Builder<*> =
-	dynamicLootEntry(id).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    id: ResourceLocation,
+    weight: Int = 1,
+    quality: Int = 0,
+    addToPool: Boolean = true,
+    body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = dynamicLootEntry(id).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: dynamic")
 
 /**
  * Adds an [AlternativesLootEntry] to a [Pool].
@@ -97,15 +101,16 @@ fun Pool.dynamicEntry(
  * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
 fun Pool.alternativesEntry(
-	vararg entries: Entry<*>,
-	addToPool: Boolean = true,
-	body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder = { this },
-): AlternativesLootEntry.Builder =
-	AlternativesLootEntry.alternatives(*entries).also { it.body(); if (addToPool) this.add(it) }
+    vararg entries: Entry<*>,
+    addToPool: Boolean = true,
+    body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder = { this },
+) = AlternativesLootEntry.alternatives(*entries).also { it.body(); if (addToPool) this.add(it) }
+    ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: alternatives")
 
 /**
  * Adds an [EmptyLootEntry] to a [Pool].
@@ -113,16 +118,17 @@ fun Pool.alternativesEntry(
  * @param addToPool controls whether this entry should be added to the pool.
  * @param body a block of code the configures the entry.
  * @return the entry.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
 fun Pool.emptyEntry(
-	weight: Int = 1,
-	quality: Int = 0,
-	addToPool: Boolean = true,
-	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-): StandaloneLootEntry.Builder<*> =
-	emptyItem().also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    weight: Int = 1,
+    quality: Int = 0,
+    addToPool: Boolean = true,
+    body: StandaloneEntry<*>.() -> Entry<*> = { this },
+) = emptyItem().also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
+    ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: empty")
 
 /**
  * Adds a condition to an [Entry].
@@ -130,11 +136,12 @@ fun Pool.emptyEntry(
  * @receiver an [Entry].
  * @param getCondition a lambda that returns the condition.
  * @return the original entry, with the condition added.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder): Entry<*> =
-	`when`(getCondition())
+fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCondition())
+    ?: throw LootTableCreationException("Something went wrong while adding a condition to a loot entry")
 
 /**
  * Adds a function to a [StandaloneEntry].
@@ -142,11 +149,12 @@ fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder): Entry<*> =
  * @receiver a [StandaloneEntry].
  * @param getFunction a lambda that returns the function.
  * @return the original entry, with the function added.
+ * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder): StandaloneEntry<*> =
-	apply(getFunction())
+fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder) = apply(getFunction())
+    ?: throw LootTableCreationException("Something went wrong while adding a function to a loot entry")
 
 /**
  * This solves some recursion issues in [dynamicEntry].

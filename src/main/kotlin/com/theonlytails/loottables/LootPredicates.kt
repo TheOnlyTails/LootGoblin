@@ -7,19 +7,16 @@ import net.minecraft.enchantment.Enchantments.SILK_TOUCH
 import net.minecraft.item.Item
 import net.minecraft.loot.FishingPredicate
 import net.minecraft.loot.conditions.ILootCondition
-import net.minecraft.loot.conditions.MatchTool
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.tags.ITag
 import net.minecraft.util.IItemProvider
 
 /**
- * A utility function for a [MatchTool] condition that checks if a tool has the [SILK_TOUCH] enchantment applied.
- *
- * @return a [ILootCondition.IBuilder] that checks if the breaking tool has silk touch applied.
+ * An [ILootCondition.IBuilder] that checks if the breaking tool has [SILK_TOUCH] applied.
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun hasSilkTouch(): ILootCondition.IBuilder = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
+val hasSilkTouch = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 
 /**
  * Creates a [StatePropertiesPredicate].

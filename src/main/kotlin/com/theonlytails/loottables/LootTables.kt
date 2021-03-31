@@ -1,7 +1,10 @@
 package com.theonlytails.loottables
 
-import net.minecraft.loot.*
+import net.minecraft.loot.IRandomRange
+import net.minecraft.loot.LootParameterSet
+import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootPool.lootPool
+import net.minecraft.loot.LootTable
 import net.minecraft.loot.LootTable.lootTable
 
 /**
@@ -12,6 +15,9 @@ import net.minecraft.loot.LootTable.lootTable
 @DslMarker
 @MustBeDocumented
 annotation class LootTablesDsl
+
+@LootTablesDsl
+class LootTableCreationException(message: String) : Exception(message)
 
 /**
  * Creates a new [LootTable.Builder].

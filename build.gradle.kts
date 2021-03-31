@@ -11,7 +11,7 @@ buildscript {
 
 	dependencies {
 		classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "4.1.+")
-		classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.4.31")
+		classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.5.0-M2")
 	}
 }
 
@@ -34,7 +34,7 @@ val author: String by extra
 plugins {
 	`java-library`
 	`maven-publish`
-	kotlin("jvm") version "1.4.31"
+	kotlin("jvm") version "1.5.0-M2"
 }
 
 apply(plugin = "net.minecraftforge.gradle")
