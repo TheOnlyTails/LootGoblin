@@ -1,5 +1,4 @@
 import Build_gradle.*
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 // BuildScript
 buildscript {
@@ -97,11 +96,6 @@ base.archivesBaseName = artifact
 tasks.withType<JavaCompile> {
 	sourceCompatibility = "1.8"
 	targetCompatibility = "1.8"
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-	kotlinOptions.jvmTarget = "1.8"
-	kotlinOptions.useIR = true
 }
 
 // Finalize the jar by Reobf
