@@ -54,6 +54,38 @@ fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }
 fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this }) = setCount(constantRange(value)).body()
 
 /**
+ * Creates a [SetCount] loot function with a [BinomialRange].
+ *
+ * @param amount the amount of trails in the range.
+ * @param chance the chance of success in a trail.
+ * @param body a block of code that runs on the function.
+ * @return the [Function].
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun setBinomialCount(
+	amount: Int,
+	chance: Float,
+	body: LootFunction.Builder<*>.() -> LootFunction.Builder<*> = { this }
+) = setCount(binomialRange(amount, chance)).body()
+
+/**
+ * Creates a [SetCount] loot function with a [RandomValueRange].
+ *
+ * @param min the lower bound of the range.
+ * @param max the upper bound of the range.
+ * @param body a block of code that runs on the function.
+ * @return the [Function].
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun setRandomCount(
+	min: Float,
+	max: Float,
+	body: LootFunction.Builder<*>.() -> LootFunction.Builder<*> = { this }
+) = setCount(randomRangeValue(min, max)).body()
+
+/**
  * Creates an [EnchantWithLevels] loot function.
  *
  * @param levels the range parameter of the function.
@@ -65,8 +97,7 @@ fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this })
 fun enchantWithLevels(
 	levels: IRandomRange,
 	body: EnchantWithLevels.Builder.() -> EnchantWithLevels.Builder = { this }
-) =
-	enchantWithLevels(levels).body()
+) = enchantWithLevels(levels).body()
 
 /**
  * Creates an [EnchantRandomly] loot function.

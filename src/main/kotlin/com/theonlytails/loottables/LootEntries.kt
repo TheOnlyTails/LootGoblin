@@ -25,9 +25,12 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
 @LootTablesDsl
 fun Pool.itemEntry(
 	item: IItemProvider,
+	weight: Int = 1,
+	quality: Int = 0,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = lootTableItem(item).body().also { if (addToPool) add(it) }
+): StandaloneLootEntry.Builder<*> =
+	lootTableItem(item).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
 
 /**
  * Adds a [TagLootEntry] to a [Pool].
@@ -41,9 +44,12 @@ fun Pool.itemEntry(
 @LootTablesDsl
 fun Pool.tagEntry(
 	tag: ITag<Item>,
+	weight: Int = 1,
+	quality: Int = 0,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = TagLootEntry.expandTag(tag).body().also { if (addToPool) add(it) }
+): StandaloneLootEntry.Builder<*> =
+	TagLootEntry.expandTag(tag).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
 
 /**
  * Adds a [TableLootEntry] to a [Pool].
@@ -57,9 +63,13 @@ fun Pool.tagEntry(
 @LootTablesDsl
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
+	weight: Int = 1,
+	quality: Int = 0,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = TableLootEntry.lootTableReference(lootTable).body().also { if (addToPool) add(it) }
+): StandaloneLootEntry.Builder<*> =
+	TableLootEntry.lootTableReference(lootTable)
+		.also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
 
 /**
  * Adds a [DynamicLootEntry] to a [Pool].
@@ -73,9 +83,12 @@ fun Pool.tableEntry(
 @LootTablesDsl
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
+	weight: Int = 1,
+	quality: Int = 0,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = dynamicLootEntry(id).body().also { if (addToPool) add(it) }
+): StandaloneLootEntry.Builder<*> =
+	dynamicLootEntry(id).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
 
 /**
  * Adds an [AlternativesLootEntry] to a [Pool].
@@ -91,7 +104,8 @@ fun Pool.alternativesEntry(
 	vararg entries: Entry<*>,
 	addToPool: Boolean = true,
 	body: AlternativesLootEntry.Builder.() -> AlternativesLootEntry.Builder = { this },
-) = AlternativesLootEntry.alternatives(*entries).body().also { if (addToPool) add(it) }
+): AlternativesLootEntry.Builder =
+	AlternativesLootEntry.alternatives(*entries).also { it.body(); if (addToPool) this.add(it) }
 
 /**
  * Adds an [EmptyLootEntry] to a [Pool].
@@ -103,9 +117,12 @@ fun Pool.alternativesEntry(
  */
 @LootTablesDsl
 fun Pool.emptyEntry(
+	weight: Int = 1,
+	quality: Int = 0,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Entry<*> = { this },
-) = emptyItem().body().also { if (addToPool) add(it) }
+): StandaloneLootEntry.Builder<*> =
+	emptyItem().also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
 
 /**
  * Adds a condition to an [Entry].

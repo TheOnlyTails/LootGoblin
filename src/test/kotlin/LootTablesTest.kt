@@ -6,6 +6,7 @@ import net.minecraft.block.ShulkerBoxBlock
 import net.minecraft.item.Items
 import net.minecraft.loot.LootParameterSets.BLOCK
 import net.minecraft.loot.LootSerializers
+import net.minecraft.loot.LootTable
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
 import org.apache.logging.log4j.LogManager
@@ -18,30 +19,32 @@ val gson: Gson = LootSerializers.createLootTableSerializer()
 	.setPrettyPrinting()
 	.create()
 
+fun Gson.testLootTable(lootTable: LootTable) = logger.info(this.toJson(lootTable))
+
 class LootTablesTest : StringSpec({
 	"loot tables and pools example + basic entry" {
-		gson.toJson(lootTable(BLOCK) {
+		gson.testLootTable(lootTable(BLOCK) {
 			pool {
 				itemEntry(Items.STICK)
 			}
-		}).also(logger::info)
+		})
 	}
 
 	"loot entries" {
-		gson.toJson(lootTable(BLOCK) {
+		gson.testLootTable(lootTable(BLOCK) {
 			pool {
 				itemEntry(Items.STICK /* this is an example item, of course */)
 				tagEntry(ItemTags.PLANKS)
 				tableEntry(ResourceLocation("grass_block"))
 				alternativesEntry(itemEntry(Items.STICK, addToPool = false))
 				dynamicEntry(ShulkerBoxBlock.CONTENTS) // I couldn't find any other example of this being used in vanilla.
-				emptyEntry()
+				emptyEntry(weight = 2, quality = 2)
 			}
-		}).also(logger::info)
+		})
 	}
 
 	"loot conditions"{
-		gson.toJson(lootTable(BLOCK) {
+		gson.testLootTable(lootTable(BLOCK) {
 			pool {
 				itemEntry(Items.STICK) {
 					condition { randomChance(0.1f) }
@@ -49,11 +52,11 @@ class LootTablesTest : StringSpec({
 
 				condition { survivesExplosion() }
 			}
-		}).also(logger::info)
+		})
 	}
 
 	"loot functions" {
-		gson.toJson(lootTable(BLOCK) {
+		gson.testLootTable(lootTable(BLOCK) {
 			pool {
 				itemEntry(Items.STICK) {
 					function { explosionDecay() }
@@ -61,7 +64,7 @@ class LootTablesTest : StringSpec({
 
 				function { setConstantCount(2) } // this is a shortened form of setCount(constantCount(2))
 			}
-		}).also(logger::info)
+		})
 	}
 }
 )
