@@ -37,7 +37,7 @@ fun Pool.add(vararg entries: LootEntry.Builder<*>) = entries.forEach { add(it) }
  */
 @LootTablesDsl
 fun Pool.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCondition())
-    ?: throw LootTableCreationException("Something went wrong while adding a condition to a loot pool")
+	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot pool")
 
 /**
  * Adds a function to a [Pool].
@@ -49,4 +49,30 @@ fun Pool.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCond
  */
 @LootTablesDsl
 fun Pool.function(getFunction: () -> ILootFunction.IBuilder) = apply(getFunction())
-    ?: throw LootTableCreationException("Something went wrong while adding a function to a loot pool")
+	?: throw LootTableCreationException("Something went wrong while adding a function to a loot pool")
+
+/**
+ * Adds a list of conditions to a [Pool].
+ *
+ * @receiver a [Pool].
+ * @param conditions a list of conditions.
+ * @return the original pool, with the conditions added.
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun Pool.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
+	conditions.forEach { condition { it } }
+}
+
+/**
+ * Adds a list of functions to a [Pool].
+ *
+ * @receiver a [Pool].
+ * @param functions a list of functions.
+ * @return the original pool, with the function added.
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun Pool.function(vararg functions: ILootFunction.IBuilder) = this.also {
+	functions.forEach { function { it } }
+}

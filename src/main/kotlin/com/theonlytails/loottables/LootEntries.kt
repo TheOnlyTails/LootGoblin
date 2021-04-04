@@ -157,6 +157,32 @@ fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder) = app
     ?: throw LootTableCreationException("Something went wrong while adding a function to a loot entry")
 
 /**
+ * Adds a list of conditions to a [Pool].
+ *
+ * @receiver a [Pool].
+ * @param conditions a list of conditions.
+ * @return the original pool, with the conditions added.
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun Entry<*>.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
+    conditions.forEach { condition { it } }
+}
+
+/**
+ * Adds a list of functions to a [Pool].
+ *
+ * @receiver a [Pool].
+ * @param functions a list of functions.
+ * @return the original pool, with the function added.
+ * @author TheOnlyTails
+ */
+@LootTablesDsl
+fun StandaloneEntry<*>.function(vararg functions: ILootFunction.IBuilder) = this.also {
+    functions.forEach { function { it } }
+}
+
+/**
  * This solves some recursion issues in [dynamicEntry].
  *
  * @param id the id of the entry.
