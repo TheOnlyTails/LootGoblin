@@ -8,6 +8,8 @@ For documentation and usage instructions, please take a look at the [wiki](https
 
 ## Installation
 
+###### Don't forget to replace the VERSION key with the version in the JitPack badge at the top!
+
 #### Gradle/Groovy
 
 ```groovy
@@ -16,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf(project.dependencies.create(group: "com.github.TheOnlyTails", name: "LootTables", version: version) {
+    implementation fg.deobf(project.dependencies.create(group: "com.github.TheOnlyTails", name: "LootTables", version: VERSION) {
 	transitive = false
     })
 }
@@ -30,7 +32,7 @@ repositories {
 
 dependencies {
     implementation(project.the<DependencyManagementExtension>()
-	.deobf(project.dependencies.create(group = "com.github.TheOnlyTails", name = "LootTables", version = version)
+	.deobf(project.dependencies.create(group = "com.github.TheOnlyTails", name = "LootTables", version = VERSION)
 		.apply {
 			isTransitive = false
 		}
