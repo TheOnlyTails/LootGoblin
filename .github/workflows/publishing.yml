@@ -28,15 +28,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Copy build distribution
-        run: cp build/distributions/*.zip loottables-distribution.zip
-
-      - name: Attach build distribution from this build
-        uses: actions/upload-artifact@v2
-        with:
-          name: LootTables distribution from this build
-          path: ./loottables-distribution.zip
-
       # Publish to Sonatype OSS
       - name: Deploy
         run: .build/deploy.sh
