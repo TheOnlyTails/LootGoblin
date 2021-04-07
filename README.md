@@ -14,7 +14,7 @@ For documentation and usage instructions, please take a look at the [wiki](https
 
 ```groovy
 repositories {
-    maven { url 'https://jitpack.io' }
+    mavenCentral()
 }
 
 dependencies {
@@ -27,7 +27,7 @@ dependencies {
 #### Gradle/Kotlin
 ```kotlin
 repositories {
-    maven(url = "https://jitpack.io")
+    mavenCentral()
 }
 
 dependencies {
