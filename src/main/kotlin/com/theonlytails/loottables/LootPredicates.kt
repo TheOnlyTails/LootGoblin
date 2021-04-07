@@ -97,8 +97,7 @@ fun itemPredicate(
 fun itemHasNbt(
 	tag: CompoundNBT,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
-): ItemPredicate.Builder =
-	ItemPredicate.Builder.item().hasNbt(tag)
+) = ItemPredicate.Builder.item().hasNbt(tag).body()
 
 /**
  * Creates a [ItemPredicate] that checks for a [EnchantmentPredicate].
@@ -112,8 +111,7 @@ fun itemHasNbt(
 fun itemHasEnchantment(
 	enchantment: EnchantmentPredicate,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
-): ItemPredicate.Builder =
-	ItemPredicate.Builder.item().hasEnchantment(enchantment)
+) = ItemPredicate.Builder.item().hasEnchantment(enchantment).body()
 
 /**
  * Creates a [EnchantmentPredicate] that checks for a lower bound of an [Enchantment].

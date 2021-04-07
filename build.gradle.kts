@@ -24,15 +24,18 @@ val level: String by extra
 val markers: String by extra
 
 // Config -> Gradle/Maven
-val `package`: String by extra
+val mavenGroup: String by extra
 val artifact: String by extra
 val modVersion: String by extra
 val author: String by extra
+val ossrhUsername: String by extra
+val ossrhPassword: String by extra
 
 // Plugins
 plugins {
 	`java-library`
 	`maven-publish`
+	signing
 	kotlin("jvm") version "1.4.32"
 }
 
@@ -88,7 +91,7 @@ minecraft {
 }
 
 // Setup
-project.group = `package`
+project.group = mavenGroup
 project.version = "$minecraftVersion-$modVersion"
 base.archivesBaseName = artifact
 
@@ -120,14 +123,74 @@ tasks.withType<Jar> {
 // Publishing to maven central
 publishing {
 	publications {
-		create<MavenPublication>("lootTables") {
-			groupId = `package`
+		create<MavenPublication>("maven") {
+			groupId = mavenGroup
 			artifactId = artifact
 			version = modVersion
 
 			from(components["java"])
+
+			pom {
+				name.set("LootTables")
+				description.set("A Kotlin DSL for creating loot tables in Minecraft Forge mods")
+				url.set("https://github.com/theonlytails/loottables")
+
+				properties.set(
+					mapOf(
+						"project.build.sourceEncoding" to "UTF-8"
+					)
+				)
+
+				licenses {
+					license {
+						name.set("MIT License")
+						url.set("https://www.opensource.org/licenses/mit-license.php")
+						distribution.set("repo")
+					}
+				}
+
+				developers {
+					developer {
+						id.set("theonlytails")
+						name.set("TheOnlyTails")
+					}
+				}
+
+				issueManagement {
+					url.set("https://github.com/theonlytails/loottables/issues")
+					system.set("GitHub Issues")
+				}
+
+				scm {
+					connection.set("scm:git:git:github.com/theonlytails/loottables.git")
+					developerConnection.set("scm:git:git@github.com:theonlytails/loottables.git")
+					url.set("https://github.com/theonlytails/loottables")
+				}
+			}
 		}
 	}
+
+	repositories {
+		maven {
+			name = "LootTables"
+			url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+
+			credentials {
+				username = System.getenv("MAVEN_USERNAME")
+				password = System.getenv("MAVEN_PASSWORD")
+			}
+		}
+	}
+}
+
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+signing {
+	useGpgCmd()
+	sign(publishing.publications["maven"])
 }
 
 // Utilities
