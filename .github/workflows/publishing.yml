@@ -13,7 +13,7 @@ jobs:
           distribution: 'adopt'
           java-version: '8'
       - name: Publish package
-        run: gradle publish
+        run: gradle publish -Psigning.gnupg.executable=gpg -Psigning.gnupg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Psigning.gnupg.keyName=${{ secrets.GPG_KEY_NAME }}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
