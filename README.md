@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/TheOnlyTails/LootTables.svg)](https://jitpack.io/#TheOnlyTails/LootTables)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.theonlytails/loottables/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.theonlytails/loottables)
 
 # LootTables
 
@@ -8,7 +8,7 @@ For documentation and usage instructions, please take a look at the [wiki](https
 
 ## Installation
 
-###### Don't forget to replace the VERSION key with the version in the JitPack badge at the top!
+###### Don't forget to replace the VERSION key with the version in the top with the Maven Central badge at the top!
 
 #### Gradle/Groovy
 
