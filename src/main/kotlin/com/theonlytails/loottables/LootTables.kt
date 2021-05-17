@@ -1,10 +1,7 @@
 package com.theonlytails.loottables
 
-import net.minecraft.loot.IRandomRange
-import net.minecraft.loot.LootParameterSet
-import net.minecraft.loot.LootPool
+import net.minecraft.loot.*
 import net.minecraft.loot.LootPool.lootPool
-import net.minecraft.loot.LootTable
 import net.minecraft.loot.LootTable.lootTable
 
 /**
@@ -28,8 +25,11 @@ class LootTableCreationException(message: String) : Exception(message)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun lootTableBuilder(parameterSet: LootParameterSet, body: LootTable.Builder.() -> LootTable.Builder): LootTable.Builder =
-	lootTable().body().setParamSet(parameterSet)
+fun lootTableBuilder(
+	parameterSet: LootParameterSet,
+	body: LootTable.Builder.() -> LootTable.Builder
+) = lootTable().body().setParamSet(parameterSet)
+	?: throw LootTableCreationException("Something went wrong while creating a loot table")
 
 /**
  * Creates a new [LootTable].
@@ -40,8 +40,9 @@ fun lootTableBuilder(parameterSet: LootParameterSet, body: LootTable.Builder.() 
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun lootTable(parameterSet: LootParameterSet, body: LootTable.Builder.() -> LootTable.Builder): LootTable =
+fun lootTable(parameterSet: LootParameterSet, body: LootTable.Builder.() -> LootTable.Builder) =
 	lootTableBuilder(parameterSet, body).build()
+		?: throw LootTableCreationException("Something went wrong while creating a loot table")
 
 /**
  * Adds a new [LootPool.Builder] to a [LootTable.Builder].
@@ -52,8 +53,9 @@ fun lootTable(parameterSet: LootParameterSet, body: LootTable.Builder.() -> Loot
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> Unit): LootTable.Builder =
+fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool().setRolls(constantRange(rolls)).also(body))
+		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
 
 /**
  * Adds a new [LootPool.Builder] to a [LootTable.Builder].
@@ -64,5 +66,6 @@ fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> Unit): L
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun LootTable.Builder.pool(rolls: IRandomRange, body: LootPool.Builder.() -> Unit): LootTable.Builder =
+fun LootTable.Builder.pool(rolls: IRandomRange, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool().setRolls(rolls).also(body))
+		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")

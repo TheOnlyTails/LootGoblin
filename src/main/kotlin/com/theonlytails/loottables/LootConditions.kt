@@ -6,10 +6,18 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.loot.LootContext.EntityTarget
 import net.minecraft.loot.conditions.*
 import net.minecraft.loot.conditions.Alternative.alternative
+import net.minecraft.loot.conditions.BlockStateProperty.hasBlockStateProperties
+import net.minecraft.loot.conditions.DamageSourceProperties.hasDamageSource
 import net.minecraft.loot.conditions.EntityHasProperty.entityPresent
+import net.minecraft.loot.conditions.EntityHasProperty.hasProperties
+import net.minecraft.loot.conditions.Inverted.invert
 import net.minecraft.loot.conditions.KilledByPlayer.killedByPlayer
+import net.minecraft.loot.conditions.LocationCheck.checkLocation
+import net.minecraft.loot.conditions.MatchTool.toolMatches
 import net.minecraft.loot.conditions.RandomChance.randomChance
+import net.minecraft.loot.conditions.RandomChanceWithLooting.randomChanceAndLootingBoost
 import net.minecraft.loot.conditions.SurvivesExplosion.survivesExplosion
+import net.minecraft.loot.conditions.TableBonus.bonusLevelFlatChance
 import net.minecraft.util.math.BlockPos
 import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
 
@@ -22,8 +30,7 @@ import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) =
-	Inverted.invert(condition).body()
+fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) = invert(condition).body()
 
 /**
  * Uses an [Alternative] condition to choose between multiple [Condition].
@@ -64,7 +71,7 @@ fun randomChanceWithLooting(
 	chance: Float,
 	lootingMultiplier: Float,
 	body: Condition.() -> Condition = { this },
-) = RandomChanceWithLooting.randomChanceAndLootingBoost(chance, lootingMultiplier).body()
+) = randomChanceAndLootingBoost(chance, lootingMultiplier).body()
 
 /**
  * Creates a [EntityHasProperty] condition.
@@ -80,7 +87,7 @@ fun entityProperties(
 	target: EntityTarget,
 	predicate: EntityPredicate.Builder,
 	body: Condition.() -> Condition = { this },
-) = EntityHasProperty.hasProperties(target, predicate).body()
+) = hasProperties(target, predicate).body()
 
 /**
  * Creates a [EntityHasProperty] condition.
@@ -113,7 +120,7 @@ fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer(
  */
 @LootTablesDsl
 fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> BlockStateProperty.Builder = { this }) =
-	BlockStateProperty.hasBlockStateProperties(block).body()
+	hasBlockStateProperties(block).body()
 
 /**
  * Creates a [MatchTool] condition.
@@ -125,7 +132,7 @@ fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> Bloc
  */
 @LootTablesDsl
 fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition = { this }) =
-	MatchTool.toolMatches(predicate).body()
+	toolMatches(predicate).body()
 
 /**
  * Creates a [TableBonus] condition that passes with probability picked from table, indexed by enchantment level.
@@ -142,7 +149,7 @@ fun tableBonus(
 	enchantment: Enchantment,
 	vararg chances: Float,
 	body: Condition.() -> Condition = { this },
-) = TableBonus.bonusLevelFlatChance(enchantment, *chances).body()
+) = bonusLevelFlatChance(enchantment, *chances).body()
 
 /**
  * Creates a [SurvivesExplosion] condition.
@@ -166,7 +173,7 @@ fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExpl
 fun damageSourceProperties(
 	predicate: DamageSourcePredicate.Builder,
 	body: Condition.() -> Condition = { this },
-) = DamageSourceProperties.hasDamageSource(predicate).body()
+) = hasDamageSource(predicate).body()
 
 /**
  * Creates a [LocationCheck] condition.
@@ -182,4 +189,4 @@ fun locationCheck(
 	pos: BlockPos = BlockPos.ZERO,
 	predicate: LocationPredicate.Builder,
 	body: Condition.() -> Condition = { this },
-) = LocationCheck.checkLocation(predicate, pos).body()
+) = checkLocation(predicate, pos).body()

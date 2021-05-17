@@ -1,52 +1,144 @@
-import Build_gradle.*
+import com.vanniktech.maven.publish.MavenPublishPluginExtension
+import com.vanniktech.maven.publish.SonatypeHost
+import net.minecraftforge.gradle.common.util.ModConfig
+import net.minecraftforge.gradle.common.util.RunConfig
+import net.minecraftforge.gradle.userdev.UserDevExtension
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 // BuildScript
 buildscript {
 	repositories {
-		maven(url = "https://files.minecraftforge.net/maven")
+		maven(url = "https://maven.minecraftforge.net/")
 		jcenter()
 		mavenCentral()
 	}
 
 	dependencies {
-		classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "4.1.+")
-		classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.4.32")
+		classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "4.1.+") {
+			isChanging = true
+		}
+		classpath(group = "com.vanniktech", name = "gradle-maven-publish-plugin", version = "latest.release")
 	}
 }
+
+plugins {
+	idea
+	`java-library`
+	kotlin("jvm") version "1.5.0"
+}
+apply(plugin = "com.vanniktech.maven.publish")
+apply(plugin = "net.minecraftforge.gradle")
 
 // Config -> Minecraft
 val forgeVersion: String by extra
 val minecraftVersion: String by extra
 val kffVersion: String by extra
 
-// Config -> Run Config
-val level: String by extra
-val markers: String by extra
+@Suppress("PropertyName")
+val VERSION_NAME: String by extra
 
-// Config -> Gradle/Maven
-val mavenGroup: String by extra
-val artifact: String by extra
-val modVersion: String by extra
-val author: String by extra
-val ossrhUsername: String by extra
-val ossrhPassword: String by extra
+@Suppress("PropertyName")
+val GROUP: String by extra
 
-// Plugins
-plugins {
-	`java-library`
-	`maven-publish`
-	signing
-	kotlin("jvm") version "1.4.32"
-}
-
-apply(plugin = "net.minecraftforge.gradle")
+@Suppress("PropertyName")
+val POM_ARTIFACT_ID: String by extra
 
 // JVM Info
 println(
-	"Java: ${System.getProperty("java.version")}" +
-			" JVM: ${System.getProperty("java.vm.version")}(${System.getProperty("java.vendor")})" +
-			" Arch: ${System.getProperty("os.arch")}"
+	"""
+		Java: ${System.getProperty("java.version")} 
+		JVM: ${System.getProperty("java.vm.version")} (${System.getProperty("java.vendor")}) 
+		Arch: ${System.getProperty("os.arch")}
+	""".trimIndent()
 )
+
+// Minecraft
+configure<UserDevExtension> {
+	mappings("official", minecraftVersion)
+
+	@Suppress("SpellCheckingInspection")
+	accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+
+	runs(closureOf<NamedDomainObjectContainer<RunConfig>> {
+		create("client") {
+			workingDirectory(file("run"))
+
+			taskName = "client"
+
+			// Recommended logging data for a userdev environment
+			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
+
+			// Recommended logging level for the console
+			property("forge.logging.console.level", "debug")
+
+			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
+				create("loottables") {
+					source(sourceSets["main"])
+				}
+			})
+		}
+
+		create("server") {
+			workingDirectory(file("run"))
+
+			taskName = "server"
+
+			// Recommended logging data for a userdev environment
+			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
+
+			// Recommended logging level for the console
+			property("forge.logging.console.level", "debug")
+
+			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
+				create("loottables") {
+					source(sourceSets["main"])
+				}
+			})
+		}
+
+		create("data") {
+			workingDirectory(file("run"))
+
+			taskName = "datagen"
+
+			// Recommended logging data for a userdev environment
+			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
+
+			// Recommended logging level for the console
+			property("forge.logging.console.level", "debug")
+
+			// Specify the mod id for data generation, where to output the resulting resource, and where to look for existing resources.
+			args(
+				"--mod",
+				"loottables",
+				"--all",
+				"--output",
+				file("src/generated/resources/"),
+				"--existing",
+				file("src/main/resources/")
+			)
+
+			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
+				create("loottables") {
+					source(sourceSets["main"])
+				}
+			})
+		}
+	})
+}
+
+// Minecraft Dependency
+// Note: Due to the way kotlin gradle works we need to define the minecraft dependency after we configure Minecraft
+dependencies {
+	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
+	implementation(group = "thedarkcolour", name = "kotlinforforge", version = "latest.release")
+	testImplementation(
+		group = "org.jetbrains.kotlin",
+		name = "kotlin-test-junit5",
+		version = kotlin.coreLibrariesVersion
+	)
+}
 
 repositories {
 	maven {
@@ -55,174 +147,41 @@ repositories {
 	}
 }
 
-// Minecraft Dependency
-// Note: Due to the way kotlin gradle works we need to define the minecraft dependency before we configure Minecraft
-dependencies {
-	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
+// Setup
+project.group = GROUP
+project.version = VERSION_NAME
+base.archivesBaseName = POM_ARTIFACT_ID
 
-	implementation(group = "thedarkcolour", name = "kotlinforforge", version = kffVersion)
-	testImplementation(group = "io.kotest", name = "kotest-runner-junit5", version = "4.4.3")
-}
-
-// Minecraft
-minecraft {
-	mappingChannel = "official"
-	mappingVersion = minecraftVersion
-
-	accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
-
-	runs {
-		config("client")
-
-		config("server")
-
-		config("data") {
-			args(
-				"--mod",
-				artifact,
-				"--all",
-				"--output",
-				file("src/generated/resources/"),
-				"--existing",
-				file("src/main/resources/")
-			)
-		}
+// Sets the toolchain to compile against OpenJDK 8
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(8))
+		vendor.set(JvmVendorSpec.ADOPTOPENJDK)
 	}
 }
 
-// Setup
-project.group = mavenGroup
-project.version = "$minecraftVersion-$modVersion"
-base.archivesBaseName = artifact
-
-// Java 8 Target
-tasks.withType<JavaCompile> {
-	sourceCompatibility = "1.8"
-	targetCompatibility = "1.8"
-}
-
-// Finalize the jar by Reobf
-tasks.named<Jar>("jar") { finalizedBy("reobfJar") }
-
-// Manifest
-tasks.withType<Jar> {
+// Finalize the jar by re-obfuscating
+tasks.named<Jar>("jar") {
+	// Manifest
 	manifest {
 		attributes(
-			"Specification-Title" to artifact,
-			"Specification-Vendor" to author,
+			"Specification-Title" to "LootTables",
+			"Specification-Vendor" to "TheOnlyTails",
 			"Specification-Version" to "1",
-			"Implementation-Title" to project.name,
+			"Implementation-Title" to "LootTables",
 			"Implementation-Version" to project.version,
-			"Implementation-Vendor" to author,
-			"Implementation-Timestamp" to Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+			"Implementation-Vendor" to "TheOnlyTails",
+			"Implementation-Timestamp" to DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
 			"FMLModType" to "LIBRARY"
 		)
 	}
+
+	@Suppress("SpellCheckingInspection")
+	finalizedBy("reobfJar")
 }
 
 // Publishing to maven central
-publishing {
-	publications {
-		create<MavenPublication>("maven") {
-			groupId = mavenGroup
-			artifactId = artifact
-			version = modVersion
-
-			from(components["java"])
-
-			pom {
-				name.set("LootTables")
-				description.set("A Kotlin DSL for creating loot tables in Minecraft Forge mods")
-				url.set("https://github.com/theonlytails/loottables")
-
-				properties.set(
-					mapOf(
-						"project.build.sourceEncoding" to "UTF-8"
-					)
-				)
-
-				licenses {
-					license {
-						name.set("MIT License")
-						url.set("https://www.opensource.org/licenses/mit-license.php")
-						distribution.set("repo")
-					}
-				}
-
-				developers {
-					developer {
-						id.set("theonlytails")
-						name.set("TheOnlyTails")
-					}
-				}
-
-				issueManagement {
-					url.set("https://github.com/theonlytails/loottables/issues")
-					system.set("GitHub Issues")
-				}
-
-				scm {
-					connection.set("scm:git:git:github.com/theonlytails/loottables.git")
-					developerConnection.set("scm:git:git@github.com:theonlytails/loottables.git")
-					url.set("https://github.com/theonlytails/loottables")
-				}
-			}
-		}
-	}
-
-	repositories {
-		maven {
-			name = "LootTables"
-			url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
-
-			credentials {
-				username = System.getenv("MAVEN_USERNAME")
-				password = System.getenv("MAVEN_PASSWORD")
-			}
-		}
-	}
-}
-
-java {
-	withJavadocJar()
-	withSourcesJar()
-}
-
-signing {
-	useGpgCmd()
-	sign(publishing.publications["maven"])
-}
-
-// Utilities
-typealias Date = java.util.Date
-typealias SimpleDateFormat = java.text.SimpleDateFormat
-
-fun Date.format(format: String) = SimpleDateFormat(format).format(this)
-
-typealias RunConfig = net.minecraftforge.gradle.common.util.RunConfig
-typealias UserDevExtension = net.minecraftforge.gradle.userdev.UserDevExtension
-
-typealias RunConfiguration = RunConfig.() -> Unit
-
-fun minecraft(configuration: UserDevExtension.() -> Unit) =
-	configuration(extensions.getByName("minecraft") as UserDevExtension)
-
-fun NamedDomainObjectContainerScope<RunConfig>.config(name: String, additionalConfiguration: RunConfiguration = {}) {
-	val runDirectory = project.file("run")
-	val sourceSet = the<JavaPluginConvention>().sourceSets["main"]
-
-	create(name) {
-		workingDirectory(runDirectory)
-		property("forge.logging.markers", markers)
-		property("forge.logging.console.level", level)
-
-		additionalConfiguration(this)
-
-		mods { create(artifact) { source(sourceSet) } }
-	}
-}
+extensions.getByType<MavenPublishPluginExtension>().sonatypeHost = SonatypeHost.S01
 
 // Testing
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
+tasks.withType<Test> { useJUnitPlatform() }

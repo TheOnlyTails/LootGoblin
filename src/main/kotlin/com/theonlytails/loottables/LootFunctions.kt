@@ -27,8 +27,8 @@ import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun Function<*>.condition(getCondition: () -> Condition): Function<*> =
-	`when`(getCondition())
+fun Function<*>.condition(getCondition: () -> Condition) = `when`(getCondition())
+	?: throw LootTableCreationException("Something went wrong while adding a condition to a function")
 
 /**
  * Creates a [SetCount] loot function.
@@ -39,8 +39,7 @@ fun Function<*>.condition(getCondition: () -> Condition): Function<*> =
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }) =
-	setCount(value).body()
+fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }) = setCount(value).body()
 
 /**
  * Creates a [SetCount] loot function with a [ConstantRange].
@@ -152,8 +151,7 @@ fun looting(value: RandomValueRange, body: LootingEnchantBonus.Builder.() -> Loo
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*> = { this }) =
-	setDamage(damage).body()
+fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*> = { this }) = setDamage(damage).body()
 
 /**
  * Creates an [ExplorationMap] loot function.
@@ -185,8 +183,7 @@ fun stewEffect(body: SetStewEffect.Builder.() -> SetStewEffect.Builder = { this 
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*> = { this }) =
-	copyName(source).body()
+fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*> = { this }) = copyName(source).body()
 
 /**
  * Creates an [SetContents] loot function.

@@ -19,6 +19,17 @@ import net.minecraft.util.IItemProvider
 val hasSilkTouch = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 
 /**
+ * An [ILootCondition.IBuilder] that checks if the breaking tool has [SILK_TOUCH] applied.
+ * @author TheOnlyTails
+ */
+@Deprecated(
+	message = "please use the property version of this function.",
+	replaceWith = ReplaceWith("hasSilkTouch")
+)
+@LootTablesDsl
+fun hasSilkTouch() = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
+
+/**
  * Creates a [StatePropertiesPredicate].
  *
  * @param body a block of code that configures the predicate.
@@ -41,7 +52,7 @@ fun stateProperties(body: StatePropertiesPredicate.Builder.() -> StateProperties
 fun blockPredicate(
 	block: Block,
 	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
-): BlockPredicate.Builder = BlockPredicate.Builder.block().of(block).body()
+) = BlockPredicate.Builder.block().of(block).body()
 
 /**
  * Creates a [BlockPredicate] that checks for an [ITag].
@@ -55,7 +66,7 @@ fun blockPredicate(
 fun blockPredicate(
 	blockTag: ITag<Block>,
 	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
-): BlockPredicate.Builder = BlockPredicate.Builder.block().of(blockTag).body()
+) = BlockPredicate.Builder.block().of(blockTag).body()
 
 /**
  * Creates a [ItemPredicate] that checks for an [IItemProvider].
@@ -69,7 +80,7 @@ fun blockPredicate(
 fun itemPredicate(
 	item: IItemProvider,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
-): ItemPredicate.Builder = ItemPredicate.Builder.item().of(item).body()
+) = ItemPredicate.Builder.item().of(item).body()
 
 /**
  * Creates a [ItemPredicate] that checks for an [ITag].
@@ -83,7 +94,7 @@ fun itemPredicate(
 fun itemPredicate(
 	itemTag: ITag<Item>,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
-): ItemPredicate.Builder = ItemPredicate.Builder.item().of(itemTag).body()
+) = ItemPredicate.Builder.item().of(itemTag).body()
 
 /**
  * Creates a [ItemPredicate] that checks for a [CompoundNBT].
@@ -145,4 +156,5 @@ fun enchantExactly(enchantment: Enchantment, level: Int) =
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun fishingInOpenWater(isInOpenWater: Boolean): FishingPredicate = FishingPredicate.inOpenWater(isInOpenWater)
+fun fishingInOpenWater(isInOpenWater: Boolean) = FishingPredicate.inOpenWater(isInOpenWater)
+	?: throw LootTableCreationException("Something went wrong while creating a fishing predicate for fishing in open water.")

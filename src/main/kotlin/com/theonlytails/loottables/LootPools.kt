@@ -14,7 +14,8 @@ import net.minecraft.loot.LootPool.Builder as Pool
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun LootEntry.Builder<*>.add(pool: Pool): Pool = pool.add(this)
+fun LootEntry.Builder<*>.add(pool: Pool) = pool.add(this)
+	?: throw LootTableCreationException("Something went wrong while adding a loot entry to a pool")
 
 /**
  * Adds multiple [LootEntry] to a [Pool].

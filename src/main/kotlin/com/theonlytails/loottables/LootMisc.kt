@@ -11,7 +11,8 @@ import net.minecraft.loot.*
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun intClamper(min: Int, max: Int): IntClamper = IntClamper.clamp(min, max)
+fun intClamper(min: Int, max: Int) = IntClamper.clamp(min, max)
+	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
 
 /**
  * Creates an [IntClamper] with a lower bound.
@@ -21,7 +22,8 @@ fun intClamper(min: Int, max: Int): IntClamper = IntClamper.clamp(min, max)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun intClamperLower(min: Int): IntClamper = IntClamper.clamp(min, Int.MAX_VALUE)
+fun intClamperLower(min: Int) = IntClamper.clamp(min, Int.MAX_VALUE)
+	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
 
 /**
  * Creates an [IntClamper] with an upper bound.
@@ -31,7 +33,8 @@ fun intClamperLower(min: Int): IntClamper = IntClamper.clamp(min, Int.MAX_VALUE)
  * @author TheOnlyTails
  */
 @LootTablesDsl
-fun intClamperUpper(max: Int): IntClamper = IntClamper.clamp(Int.MIN_VALUE, max)
+fun intClamperUpper(max: Int) = IntClamper.clamp(Int.MIN_VALUE, max)
+	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
 
 /**
  * Creates a [RandomValueRange] with lower and upper bounds.

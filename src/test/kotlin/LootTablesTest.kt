@@ -1,7 +1,6 @@
-
 import com.google.gson.Gson
+import com.google.gson.JsonIOException
 import com.theonlytails.loottables.*
-import io.kotest.core.spec.style.StringSpec
 import net.minecraft.block.ShulkerBoxBlock
 import net.minecraft.item.Items
 import net.minecraft.loot.LootParameterSets.BLOCK
@@ -10,61 +9,58 @@ import net.minecraft.loot.LootTable
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import org.apache.logging.log4j.LoggingException
+import org.junit.jupiter.api.Test
 
-val logger: Logger = LogManager.getLogger()
+val logger = LogManager.getLogger("LootTablesTester") ?: throw LoggingException("error creating the logger")
 
-val gson: Gson = LootSerializers.createLootTableSerializer()
+val gson = LootSerializers.createLootTableSerializer()
 	.disableHtmlEscaping()
 	.setPrettyPrinting()
-	.create()
+	.create() ?: throw JsonIOException("error creating a Gson object")
 
-fun Gson.testLootTable(lootTable: LootTable) = logger.info(this.toJson(lootTable))
+fun Gson.testLootTable(lootTable: LootTable.Builder.() -> LootTable.Builder) =
+	logger.info(this.toJson(lootTable(BLOCK, lootTable)))
 
-class LootTablesTest : StringSpec({
-	"loot tables and pools example + basic entry" {
-		gson.testLootTable(lootTable(BLOCK) {
-			pool {
-				itemEntry(Items.STICK)
-			}
-		})
+class LootTablesTests {
+	@Test
+	fun `loot tables and pools example + basic entry`() = gson.testLootTable {
+		pool {
+			itemEntry(Items.STICK)
+		}
 	}
 
-	"loot entries" {
-		gson.testLootTable(lootTable(BLOCK) {
-			pool {
-				itemEntry(Items.STICK /* this is an example item, of course */)
-				tagEntry(ItemTags.PLANKS)
-				tableEntry(ResourceLocation("grass_block"))
-				alternativesEntry(itemEntry(Items.STICK, addToPool = false))
-				dynamicEntry(ShulkerBoxBlock.CONTENTS) // I couldn't find any other example of this being used in vanilla.
-				emptyEntry(weight = 2, quality = 2)
-			}
-		})
+	@Test
+	fun `loot entries`() = gson.testLootTable {
+		pool {
+			itemEntry(Items.STICK /* this is an example item, of course */)
+			tagEntry(ItemTags.PLANKS)
+			tableEntry(ResourceLocation("grass_block"))
+			alternativesEntry(itemEntry(Items.STICK))
+			dynamicEntry(ShulkerBoxBlock.CONTENTS) // I couldn't find any other example of this being used in vanilla.
+			emptyEntry(weight = 2, quality = 2)
+		}
 	}
 
-	"loot conditions"{
-		gson.testLootTable(lootTable(BLOCK) {
-			pool {
-				itemEntry(Items.STICK) {
-					condition { randomChance(0.1f) }
-				}
-
-				condition { survivesExplosion() }
+	@Test
+	fun `loot conditions`() = gson.testLootTable {
+		pool {
+			itemEntry(Items.STICK) {
+				condition { randomChance(0.1f) }
 			}
-		})
+
+			condition { survivesExplosion() }
+		}
 	}
 
-	"loot functions" {
-		gson.testLootTable(lootTable(BLOCK) {
-			pool {
-				itemEntry(Items.STICK) {
-					function { explosionDecay() }
-				}
-
-				function { setConstantCount(2) } // this is a shortened form of setCount(constantCount(2))
+	@Test
+	fun `loot functions`() = gson.testLootTable {
+		pool {
+			itemEntry(Items.STICK) {
+				function { explosionDecay() }
 			}
-		})
+
+			function { setConstantCount(2) } // this is a shortened form of setCount(constantCount(2))
+		}
 	}
 }
-)
