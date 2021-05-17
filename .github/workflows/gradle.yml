@@ -26,6 +26,5 @@ jobs:
       - name: Remove Forge MojMaps warning
         run: ./gradlew hideOfficialWarningUntilChanged
 
-      -name:
-        - name: Build with Gradle
-          run: ./gradlew build
+      - name: Build with Gradle
+        run: ./gradlew build
