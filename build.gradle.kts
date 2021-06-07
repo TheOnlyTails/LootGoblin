@@ -3,8 +3,9 @@ import com.vanniktech.maven.publish.SonatypeHost
 import net.minecraftforge.gradle.common.util.ModConfig
 import net.minecraftforge.gradle.common.util.RunConfig
 import net.minecraftforge.gradle.userdev.UserDevExtension
-import java.time.Instant
-import java.time.format.DateTimeFormatter
+import org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTOPENJDK
+import java.time.Instant.now
+import java.time.format.DateTimeFormatter.ISO_INSTANT
 
 // BuildScript
 buildscript {
@@ -25,7 +26,7 @@ buildscript {
 plugins {
 	idea
 	`java-library`
-	kotlin("jvm") version "1.5.0"
+	kotlin("jvm") version "1.5.10"
 }
 apply(plugin = "com.vanniktech.maven.publish")
 apply(plugin = "net.minecraftforge.gradle")
@@ -156,7 +157,7 @@ base.archivesBaseName = POM_ARTIFACT_ID
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(8))
-		vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+		vendor.set(ADOPTOPENJDK)
 	}
 }
 
@@ -171,7 +172,7 @@ tasks.named<Jar>("jar") {
 			"Implementation-Title" to "LootTables",
 			"Implementation-Version" to project.version,
 			"Implementation-Vendor" to "TheOnlyTails",
-			"Implementation-Timestamp" to DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
+			"Implementation-Timestamp" to ISO_INSTANT.format(now()),
 			"FMLModType" to "LIBRARY"
 		)
 	}
