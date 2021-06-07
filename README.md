@@ -20,9 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "loottables", version: VERSION) {
-	transitive = false
-    })
+    implementation group: "com.theonlytails", name: "loottables", version: VERSION
 }
 ```
 
@@ -33,11 +31,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project.the<DependencyManagementExtension>()
-	.deobf(project.dependencies.create(group = "com.theonlytails", name = "loottables", version = VERSION)
-		.apply {
-			isTransitive = false
-		}
-	))
+    implementation(group = "com.theonlytails", name = "loottables", version = VERSION)
 }
 ```
