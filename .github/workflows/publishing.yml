@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install JDK 8
+      - name: Install JDK 16
         uses: actions/setup-java@v1
         with:
           java-version: 16
