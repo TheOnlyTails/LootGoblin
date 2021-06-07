@@ -34,7 +34,6 @@ apply(plugin = "net.minecraftforge.gradle")
 // Config -> Minecraft
 val forgeVersion: String by extra
 val minecraftVersion: String by extra
-val kffVersion: String by extra
 
 @Suppress("PropertyName")
 val VERSION_NAME: String by extra
@@ -74,7 +73,7 @@ configure<UserDevExtension> {
 			property("forge.logging.console.level", "debug")
 
 			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create("loottables") {
+				create(POM_ARTIFACT_ID) {
 					source(sourceSets["main"])
 				}
 			})
@@ -92,7 +91,7 @@ configure<UserDevExtension> {
 			property("forge.logging.console.level", "debug")
 
 			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create("loottables") {
+				create(POM_ARTIFACT_ID) {
 					source(sourceSets["main"])
 				}
 			})
@@ -112,7 +111,7 @@ configure<UserDevExtension> {
 			// Specify the mod id for data generation, where to output the resulting resource, and where to look for existing resources.
 			args(
 				"--mod",
-				"loottables",
+				POM_ARTIFACT_ID,
 				"--all",
 				"--output",
 				file("src/generated/resources/"),
@@ -121,7 +120,7 @@ configure<UserDevExtension> {
 			)
 
 			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create("loottables") {
+				create(POM_ARTIFACT_ID) {
 					source(sourceSets["main"])
 				}
 			})
@@ -176,9 +175,6 @@ tasks.named<Jar>("jar") {
 			"FMLModType" to "LIBRARY"
 		)
 	}
-
-	@Suppress("SpellCheckingInspection")
-	finalizedBy("reobfJar")
 }
 
 // Publishing to maven central
