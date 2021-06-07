@@ -6,6 +6,8 @@ A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
 For documentation and usage instructions, please take a look at the [wiki](https://github.com/TheOnlyTails/LootTables/wiki).
 
+Here's the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/repositories/releases/content/com/theonlytails/loottables/maven-metadata.xml) of this library.
+
 ## Installation
 
 ###### Don't forget to replace the VERSION key with the version in the top with the Maven Central badge at the top!
