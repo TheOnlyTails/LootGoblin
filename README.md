@@ -1,10 +1,12 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.theonlytails/loottables/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.theonlytails/loottables)
+![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2Floottables%2Fmaven-metadata.xml&style=flat-square)
 
 # LootTables
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
 For documentation and usage instructions, please take a look at the [wiki](https://github.com/TheOnlyTails/LootTables/wiki).
+
+Here's the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/repositories/releases/content/com/theonlytails/loottables/maven-metadata.xml) of this library.
 
 ## Installation
 
@@ -18,9 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "loottables", version: VERSION) {
-	transitive = false
-    })
+    implementation group: "com.theonlytails", name: "loottables", version: VERSION
 }
 ```
 
@@ -31,11 +31,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project.the<DependencyManagementExtension>()
-	.deobf(project.dependencies.create(group = "com.theonlytails", name = "loottables", version = VERSION)
-		.apply {
-			isTransitive = false
-		}
-	))
+    implementation(group = "com.theonlytails", name = "loottables", version = VERSION)
 }
 ```
