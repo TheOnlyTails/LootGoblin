@@ -1,4 +1,7 @@
-![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2Floottables%2Fmaven-metadata.xml&style=flat-square)
+![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2Floottables%2Fmaven-metadata.xml&style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TheOnlyTails/loottables/Java%20CI%20with%20Gradle?label=gradle%20build&logo=github&style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/TheOnlyTails/loottables?logo=kotlin&logoColor=white&style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/theonlytails/loottables?style=for-the-badge&logo=key)
 
 # LootTables
 
