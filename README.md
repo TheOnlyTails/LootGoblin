@@ -42,4 +42,4 @@ dependencies {
 }
 ```
 
-The `isTransitive` property is added to make sure the library is imported corretly.
+The `isTransitive` property is added to make sure the library is imported correctly.
