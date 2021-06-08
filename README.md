@@ -20,7 +20,11 @@ repositories {
 }
 
 dependencies {
-    implementation group: "com.theonlytails", name: "loottables", version: VERSION
+    def lootTables = fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "loottables", version: VERSION) {
+	    transitive = false
+    })
+    
+	implementation fg.deobf(lootTables)
 }
 ```
 
@@ -31,6 +35,11 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "com.theonlytails", name = "loottables", version = VERSION)
+    val lootTables = project.dependencies.create(group = "com.theonlytails", name = "loottables", version = VERSION)
+		.apply { isTransitive = false }
+
+	implementation(project.the<DependencyManagementExtension>().deobf(lootTables))
 }
 ```
+
+The `isTransitive` property is added to make sure the library is imported corretly.
