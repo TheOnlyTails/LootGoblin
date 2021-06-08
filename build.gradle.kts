@@ -175,6 +175,8 @@ tasks.named<Jar>("jar") {
 			"FMLModType" to "LIBRARY"
 		)
 	}
+
+	finalizedBy("reobfJar")
 }
 
 // Publishing to maven central
