@@ -49,4 +49,4 @@ The `isTransitive` property is added to make sure the library is imported correc
 
 ---
 
-Want to generate block models with a DSL like this? Check out [BlockModels!](https://github.com/theonlytails/blockmodels)!
+Want to generate block models with a DSL like this? Check out [BlockModels](https://github.com/theonlytails/blockmodels)!
