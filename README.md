@@ -13,7 +13,7 @@ Here's the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/rep
 
 ## Installation
 
-###### Don't forget to replace the VERSION key with the version in the top with the Maven Central badge at the top!
+_Don't forget to replace the VERSION key with the version in the top with the Maven Central badge at the top!_
 
 #### Gradle/Groovy
 
