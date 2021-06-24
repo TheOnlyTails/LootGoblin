@@ -31,7 +31,7 @@ body:
       label: LootTables Version
       description: What version of LootTables are you running?
       options:
-        - v0.2.14 (Default)
+        - v0.2.14 (Latest)
         - v0.2.13 
         - v0.2.12 
         - v0.2.11
@@ -58,7 +58,7 @@ body:
     attributes:
       label: Forge Version
       description: What version of Forge are you using?
-      placeholder: v36.1.32
+      placeholder: e.g. v36.1.32
     validations:
       required: true
   - type: dropdown
@@ -67,7 +67,7 @@ body:
       label: Minecraft Version
       description: What version of Minecraft are you running?
       options:
-        - v1.16.5 (Default)
+        - v1.16.5
     validations:
       required: true
   - type: textarea
