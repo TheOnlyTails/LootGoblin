@@ -54,6 +54,13 @@ body:
         - v0.1.0
     validations:
       required: true
+  - type: input
+    attributes:
+      label: Forge Version
+      description: What version of Forge are you using?
+      placeholder: v36.1.32
+    validations:
+      required: true
   - type: dropdown
     id: minecraft-version
     attributes:
