@@ -1,4 +1,8 @@
-![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2Floottables%2Fmaven-metadata.xml&style=flat-square)
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2Floottables%2Fmaven-metadata.xml&style=for-the-badge)](https://search.maven.org/artifact/com.theonlytails/loottables)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TheOnlyTails/loottables/Java%20CI%20with%20Gradle?label=gradle%20build&logo=github&style=for-the-badge)
+![Kotlin](https://img.shields.io/badge/kotlin-%236C3FD1.svg?style=for-the-badge&logo=kotlin&logoColor=white)
+![Gradle](https://img.shields.io/badge/gradle-%2302303A.svg?style=for-the-badge&logo=gradle&logoColor=white)
+![GitHub License](https://img.shields.io/github/license/theonlytails/loottables?style=for-the-badge&logo=key)
 
 # LootTables
 
@@ -10,7 +14,7 @@ Here's the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/rep
 
 ## Installation
 
-###### Don't forget to replace the VERSION key with the version in the top with the Maven Central badge at the top!
+_Don't forget to replace the VERSION key with the version in the top with the Maven Central badge at the top!_
 
 #### Gradle/Groovy
 
@@ -20,7 +24,11 @@ repositories {
 }
 
 dependencies {
-    implementation group: "com.theonlytails", name: "loottables", version: VERSION
+    def lootTables = fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "loottables", version: VERSION) {
+	    transitive = false
+    })
+    
+	implementation fg.deobf(lootTables)
 }
 ```
 
@@ -31,6 +39,15 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "com.theonlytails", name = "loottables", version = VERSION)
+    val lootTables = project.dependencies.create(group = "com.theonlytails", name = "loottables", version = VERSION)
+		.apply { isTransitive = false }
+
+	implementation(project.the<DependencyManagementExtension>().deobf(lootTables))
 }
 ```
+
+The `isTransitive` property is added to make sure the library is imported correctly.
+
+---
+
+Want to generate block models with a DSL like this? Check out [BlockModels](https://github.com/theonlytails/blockmodels)!
