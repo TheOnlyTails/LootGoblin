@@ -15,7 +15,7 @@ import net.minecraft.util.IItemProvider
  * An [ILootCondition.IBuilder] that checks if the breaking tool has [SILK_TOUCH] applied.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 val hasSilkTouch = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 
 /**
@@ -26,7 +26,7 @@ val hasSilkTouch = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 	message = "please use the property version of this function.",
 	replaceWith = ReplaceWith("hasSilkTouch")
 )
-@LootTablesDsl
+@LootTables
 fun hasSilkTouch() = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 
 /**
@@ -36,7 +36,7 @@ fun hasSilkTouch() = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1))
  * @return the predicate itself.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun stateProperties(body: StatePropertiesPredicate.Builder.() -> StatePropertiesPredicate.Builder) =
 	StatePropertiesPredicate.Builder.properties().body()
 
@@ -48,7 +48,7 @@ fun stateProperties(body: StatePropertiesPredicate.Builder.() -> StateProperties
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun blockPredicate(
 	block: Block,
 	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
@@ -62,7 +62,7 @@ fun blockPredicate(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun blockPredicate(
 	blockTag: ITag<Block>,
 	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
@@ -76,7 +76,7 @@ fun blockPredicate(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun itemPredicate(
 	item: IItemProvider,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -90,7 +90,7 @@ fun itemPredicate(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun itemPredicate(
 	itemTag: ITag<Item>,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -104,7 +104,7 @@ fun itemPredicate(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun itemHasNbt(
 	tag: CompoundNBT,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -118,7 +118,7 @@ fun itemHasNbt(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun itemHasEnchantment(
 	enchantment: EnchantmentPredicate,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -132,7 +132,7 @@ fun itemHasEnchantment(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun enchantAtLeast(enchantment: Enchantment, min: Int) =
 	EnchantmentPredicate(enchantment, MinMaxBounds.IntBound.atLeast(min))
 
@@ -144,7 +144,7 @@ fun enchantAtLeast(enchantment: Enchantment, min: Int) =
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun enchantExactly(enchantment: Enchantment, level: Int) =
 	EnchantmentPredicate(enchantment, MinMaxBounds.IntBound.exactly(level))
 
@@ -155,6 +155,6 @@ fun enchantExactly(enchantment: Enchantment, level: Int) =
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun fishingInOpenWater(isInOpenWater: Boolean) = FishingPredicate.inOpenWater(isInOpenWater)
 	?: throw LootTableCreationException("Something went wrong while creating a fishing predicate for fishing in open water.")

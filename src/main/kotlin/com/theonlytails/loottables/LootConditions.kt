@@ -29,7 +29,7 @@ import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
  * @return the [Inverted] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) = invert(condition).body()
 
 /**
@@ -40,7 +40,7 @@ fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) =
  * @return the [Alternative] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun alternative(
 	conditions: Collection<Condition>,
 	body: Condition.() -> Condition = { this },
@@ -54,7 +54,7 @@ fun alternative(
  * @return the [RandomChance] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun randomChance(chance: Float, body: Condition.() -> Condition = { this }) = randomChance(chance).body()
 
 /**
@@ -66,7 +66,7 @@ fun randomChance(chance: Float, body: Condition.() -> Condition = { this }) = ra
  * @return the [RandomChanceWithLooting] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun randomChanceWithLooting(
 	chance: Float,
 	lootingMultiplier: Float,
@@ -82,7 +82,7 @@ fun randomChanceWithLooting(
  * @return the [EntityHasProperty] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun entityProperties(
 	target: EntityTarget,
 	predicate: EntityPredicate.Builder,
@@ -97,7 +97,7 @@ fun entityProperties(
  * @return the [EntityHasProperty] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun entityPresent(target: EntityTarget, body: Condition.() -> Condition = { this }) = entityPresent(target).body()
 
 /**
@@ -107,7 +107,7 @@ fun entityPresent(target: EntityTarget, body: Condition.() -> Condition = { this
  * @return the [KilledByPlayer] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer().body()
 
 /**
@@ -118,7 +118,7 @@ fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer(
  * @return the [BlockStateProperty] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> BlockStateProperty.Builder = { this }) =
 	hasBlockStateProperties(block).body()
 
@@ -130,7 +130,7 @@ fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> Bloc
  * @return the [MatchTool] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition = { this }) =
 	toolMatches(predicate).body()
 
@@ -144,7 +144,7 @@ fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition 
  * @author TheOnlyTails
  */
 
-@LootTablesDsl
+@LootTables
 fun tableBonus(
 	enchantment: Enchantment,
 	vararg chances: Float,
@@ -158,7 +158,7 @@ fun tableBonus(
  * @return the [SurvivesExplosion] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExplosion().body()
 
 /**
@@ -169,7 +169,7 @@ fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExpl
  * @return the [DamageSourceProperties] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun damageSourceProperties(
 	predicate: DamageSourcePredicate.Builder,
 	body: Condition.() -> Condition = { this },
@@ -184,7 +184,7 @@ fun damageSourceProperties(
  * @return the [LocationCheck] condition.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun locationCheck(
 	pos: BlockPos = BlockPos.ZERO,
 	predicate: LocationPredicate.Builder,

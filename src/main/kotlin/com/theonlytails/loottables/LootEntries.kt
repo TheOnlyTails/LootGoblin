@@ -23,7 +23,7 @@ import net.minecraft.loot.StandaloneLootEntry.Builder as StandaloneEntry
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.itemEntry(
 	item: IItemProvider,
 	weight: Int = 1,
@@ -43,7 +43,7 @@ fun Pool.itemEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun AlternativesLootEntry.Builder.itemEntry(
 	item: IItemProvider,
 	weight: Int = 1,
@@ -63,7 +63,7 @@ fun AlternativesLootEntry.Builder.itemEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.tagEntry(
 	tag: ITag<Item>,
 	weight: Int = 1,
@@ -83,7 +83,7 @@ fun Pool.tagEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun AlternativesLootEntry.Builder.tagEntry(
 	tag: ITag<Item>,
 	weight: Int = 1,
@@ -104,7 +104,7 @@ fun AlternativesLootEntry.Builder.tagEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
 	weight: Int = 1,
@@ -125,7 +125,7 @@ fun Pool.tableEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun AlternativesLootEntry.Builder.tableEntry(
 	lootTable: ResourceLocation,
 	weight: Int = 1,
@@ -146,7 +146,7 @@ fun AlternativesLootEntry.Builder.tableEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
 	weight: Int = 1,
@@ -166,7 +166,7 @@ fun Pool.dynamicEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun AlternativesLootEntry.Builder.dynamicEntry(
 	id: ResourceLocation,
 	weight: Int = 1,
@@ -186,7 +186,7 @@ fun AlternativesLootEntry.Builder.dynamicEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.alternativesEntry(
 	vararg entries: Entry<*>,
 	addToPool: Boolean = true,
@@ -204,7 +204,7 @@ fun Pool.alternativesEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun AlternativesLootEntry.Builder.alternativesEntry(
 	vararg entries: Entry<*>,
 	addToPool: Boolean = true,
@@ -221,7 +221,7 @@ fun AlternativesLootEntry.Builder.alternativesEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.emptyEntry(
 	weight: Int = 1,
 	quality: Int = 0,
@@ -239,7 +239,7 @@ fun Pool.emptyEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun AlternativesLootEntry.Builder.emptyEntry(
 	weight: Int = 1,
 	quality: Int = 0,
@@ -257,9 +257,9 @@ fun AlternativesLootEntry.Builder.emptyEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCondition())
-    ?: throw LootTableCreationException("Something went wrong while adding a condition to a loot entry")
+	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot entry")
 
 /**
  * Adds a function to a [StandaloneEntry].
@@ -270,9 +270,9 @@ fun Entry<*>.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(get
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder) = apply(getFunction())
-    ?: throw LootTableCreationException("Something went wrong while adding a function to a loot entry")
+	?: throw LootTableCreationException("Something went wrong while adding a function to a loot entry")
 
 /**
  * Adds a list of conditions to a [Pool].
@@ -282,9 +282,9 @@ fun StandaloneEntry<*>.function(getFunction: () -> ILootFunction.IBuilder) = app
  * @return the original pool, with the conditions added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Entry<*>.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
-    conditions.forEach { condition { it } }
+	conditions.forEach { condition { it } }
 }
 
 /**
@@ -295,9 +295,9 @@ fun Entry<*>.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
  * @return the original pool, with the function added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun StandaloneEntry<*>.function(vararg functions: ILootFunction.IBuilder) = this.also {
-    functions.forEach { function { it } }
+	functions.forEach { function { it } }
 }
 
 /**

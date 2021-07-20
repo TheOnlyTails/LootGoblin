@@ -13,7 +13,7 @@ import net.minecraft.loot.LootPool.Builder as Pool
  * @return the pool, with the entry added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun LootEntry.Builder<*>.add(pool: Pool) = pool.add(this)
 	?: throw LootTableCreationException("Something went wrong while adding a loot entry to a pool")
 
@@ -25,7 +25,7 @@ fun LootEntry.Builder<*>.add(pool: Pool) = pool.add(this)
  * @return the pool, with the entries added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.add(vararg entries: LootEntry.Builder<*>) = entries.forEach { add(it) }
 
 /**
@@ -36,7 +36,7 @@ fun Pool.add(vararg entries: LootEntry.Builder<*>) = entries.forEach { add(it) }
  * @return the original pool, with the condition added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot pool")
 
@@ -48,7 +48,7 @@ fun Pool.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCond
  * @return the original pool, with the function added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.function(getFunction: () -> ILootFunction.IBuilder) = apply(getFunction())
 	?: throw LootTableCreationException("Something went wrong while adding a function to a loot pool")
 
@@ -60,7 +60,7 @@ fun Pool.function(getFunction: () -> ILootFunction.IBuilder) = apply(getFunction
  * @return the original pool, with the conditions added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
 	conditions.forEach { condition { it } }
 }
@@ -73,7 +73,7 @@ fun Pool.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
  * @return the original pool, with the function added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Pool.function(vararg functions: ILootFunction.IBuilder) = this.also {
 	functions.forEach { function { it } }
 }

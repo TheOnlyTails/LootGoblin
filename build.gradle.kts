@@ -1,7 +1,6 @@
 import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import com.vanniktech.maven.publish.SonatypeHost
 import net.minecraftforge.gradle.common.util.ModConfig
-import net.minecraftforge.gradle.common.util.RunConfig
 import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTOPENJDK
 import java.time.Instant.now
@@ -11,12 +10,11 @@ import java.time.format.DateTimeFormatter.ISO_INSTANT
 buildscript {
 	repositories {
 		maven(url = "https://maven.minecraftforge.net/")
-		jcenter()
 		mavenCentral()
 	}
 
 	dependencies {
-		classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "4.1.+") {
+		classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "5.+") {
 			isChanging = true
 		}
 		classpath(group = "com.vanniktech", name = "gradle-maven-publish-plugin", version = "latest.release")
@@ -26,7 +24,7 @@ buildscript {
 plugins {
 	idea
 	`java-library`
-	kotlin("jvm") version "1.5.10"
+	kotlin("jvm") version "latest.release"
 }
 apply(plugin = "com.vanniktech.maven.publish")
 apply(plugin = "net.minecraftforge.gradle")
@@ -34,15 +32,11 @@ apply(plugin = "net.minecraftforge.gradle")
 // Config -> Minecraft
 val forgeVersion: String by extra
 val minecraftVersion: String by extra
-
-@Suppress("PropertyName")
-val VERSION_NAME: String by extra
-
-@Suppress("PropertyName")
-val GROUP: String by extra
-
-@Suppress("PropertyName")
-val POM_ARTIFACT_ID: String by extra
+val projectVersion = findProperty("VERSION_NAME") as String
+val projectGroup = findProperty("GROUP") as String
+val modId = findProperty("POM_ARTIFACT_ID") as String
+val projectName = findProperty("POM_NAME") as String
+val projectAuthor = findProperty("POM_DEVELOPER_NAME") as String
 
 // JVM Info
 println(
@@ -60,7 +54,7 @@ configure<UserDevExtension> {
 	@Suppress("SpellCheckingInspection")
 	accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
-	runs(closureOf<NamedDomainObjectContainer<RunConfig>> {
+	runs {
 		create("client") {
 			workingDirectory(file("run"))
 
@@ -73,7 +67,7 @@ configure<UserDevExtension> {
 			property("forge.logging.console.level", "debug")
 
 			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create(POM_ARTIFACT_ID) {
+				create(modId) {
 					source(sourceSets["main"])
 				}
 			})
@@ -91,7 +85,7 @@ configure<UserDevExtension> {
 			property("forge.logging.console.level", "debug")
 
 			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create(POM_ARTIFACT_ID) {
+				create(modId) {
 					source(sourceSets["main"])
 				}
 			})
@@ -111,7 +105,7 @@ configure<UserDevExtension> {
 			// Specify the mod id for data generation, where to output the resulting resource, and where to look for existing resources.
 			args(
 				"--mod",
-				POM_ARTIFACT_ID,
+				modId,
 				"--all",
 				"--output",
 				file("src/generated/resources/"),
@@ -120,12 +114,12 @@ configure<UserDevExtension> {
 			)
 
 			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create(POM_ARTIFACT_ID) {
+				create(modId) {
 					source(sourceSets["main"])
 				}
 			})
 		}
-	})
+	}
 }
 
 // Minecraft Dependency
@@ -148,9 +142,9 @@ repositories {
 }
 
 // Setup
-project.group = GROUP
-project.version = VERSION_NAME
-base.archivesBaseName = POM_ARTIFACT_ID
+project.group = projectGroup
+project.version = projectVersion
+base.archivesName.set(modId)
 
 // Sets the toolchain to compile against OpenJDK 8
 java {
@@ -165,12 +159,12 @@ tasks.named<Jar>("jar") {
 	// Manifest
 	manifest {
 		attributes(
-			"Specification-Title" to "LootTables",
-			"Specification-Vendor" to "TheOnlyTails",
+			"Specification-Title" to projectName,
+			"Specification-Vendor" to projectAuthor,
 			"Specification-Version" to "1",
-			"Implementation-Title" to "LootTables",
+			"Implementation-Title" to projectName,
 			"Implementation-Version" to project.version,
-			"Implementation-Vendor" to "TheOnlyTails",
+			"Implementation-Vendor" to projectName,
 			"Implementation-Timestamp" to ISO_INSTANT.format(now()),
 			"FMLModType" to "LIBRARY"
 		)

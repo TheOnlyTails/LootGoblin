@@ -10,7 +10,7 @@ import net.minecraft.loot.*
  * @return the clamper.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun intClamper(min: Int, max: Int) = IntClamper.clamp(min, max)
 	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
 
@@ -21,7 +21,7 @@ fun intClamper(min: Int, max: Int) = IntClamper.clamp(min, max)
  * @return the clamper.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun intClamperLower(min: Int) = IntClamper.clamp(min, Int.MAX_VALUE)
 	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
 
@@ -32,7 +32,7 @@ fun intClamperLower(min: Int) = IntClamper.clamp(min, Int.MAX_VALUE)
  * @return the clamper.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun intClamperUpper(max: Int) = IntClamper.clamp(Int.MIN_VALUE, max)
 	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
 
@@ -44,7 +44,7 @@ fun intClamperUpper(max: Int) = IntClamper.clamp(Int.MIN_VALUE, max)
  * @return the random range.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun randomRangeValue(min: Float, max: Float) = RandomValueRange(min, max)
 
 /**
@@ -54,7 +54,7 @@ fun randomRangeValue(min: Float, max: Float) = RandomValueRange(min, max)
  * @return the random range.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun randomRangeValue(range: IntRange) = randomRangeValue(range.first.toFloat(), range.last.toFloat())
 
 /**
@@ -64,7 +64,7 @@ fun randomRangeValue(range: IntRange) = randomRangeValue(range.first.toFloat(), 
  * @return the constant range.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun constantRange(value: Int) = ConstantRange(value)
 
 /**
@@ -75,5 +75,5 @@ fun constantRange(value: Int) = ConstantRange(value)
  * @return the binomial range.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun binomialRange(amount: Int, chance: Float) = BinomialRange(amount, chance)

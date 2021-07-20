@@ -3,6 +3,7 @@ package com.theonlytails.loottables
 import net.minecraft.loot.*
 import net.minecraft.loot.LootPool.lootPool
 import net.minecraft.loot.LootTable.lootTable
+import kotlin.annotation.AnnotationTarget.*
 
 /**
  * An annotation that marks every member of this DSL.
@@ -11,9 +12,10 @@ import net.minecraft.loot.LootTable.lootTable
  */
 @DslMarker
 @MustBeDocumented
-annotation class LootTablesDsl
+@Target(CLASS, FUNCTION, PROPERTY)
+annotation class LootTables
 
-@LootTablesDsl
+@LootTables
 class LootTableCreationException(message: String) : Exception(message)
 
 /**
@@ -24,7 +26,7 @@ class LootTableCreationException(message: String) : Exception(message)
  * @return the loot table builder.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun lootTableBuilder(
 	parameterSet: LootParameterSet,
 	body: LootTable.Builder.() -> LootTable.Builder
@@ -39,7 +41,7 @@ fun lootTableBuilder(
  * @return the loot table builder.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun lootTable(parameterSet: LootParameterSet, body: LootTable.Builder.() -> LootTable.Builder) =
 	lootTableBuilder(parameterSet, body).build()
 		?: throw LootTableCreationException("Something went wrong while creating a loot table")
@@ -52,7 +54,7 @@ fun lootTable(parameterSet: LootParameterSet, body: LootTable.Builder.() -> Loot
  * @return the loot table builder.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool().setRolls(constantRange(rolls)).also(body))
 		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
@@ -65,7 +67,7 @@ fun LootTable.Builder.pool(rolls: Int = 1, body: LootPool.Builder.() -> Unit) =
  * @return the loot table builder.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun LootTable.Builder.pool(rolls: IRandomRange, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool().setRolls(rolls).also(body))
 		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")

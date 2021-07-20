@@ -26,7 +26,7 @@ import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
  * @return the original function, with the condition added.
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun Function<*>.condition(getCondition: () -> Condition) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a function")
 
@@ -38,7 +38,7 @@ fun Function<*>.condition(getCondition: () -> Condition) = `when`(getCondition()
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }) = setCount(value).body()
 
 /**
@@ -49,7 +49,7 @@ fun setCount(value: IRandomRange, body: Function<*>.() -> Function<*> = { this }
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this }) = setCount(constantRange(value)).body()
 
 /**
@@ -61,7 +61,7 @@ fun setConstantCount(value: Int, body: Function<*>.() -> Function<*> = { this })
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setBinomialCount(
 	amount: Int,
 	chance: Float,
@@ -77,7 +77,7 @@ fun setBinomialCount(
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setRandomCount(
 	min: Float,
 	max: Float,
@@ -92,7 +92,7 @@ fun setRandomCount(
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun enchantWithLevels(
 	levels: IRandomRange,
 	body: EnchantWithLevels.Builder.() -> EnchantWithLevels.Builder = { this }
@@ -105,7 +105,7 @@ fun enchantWithLevels(
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun enchantRandomly(body: Function<*>.() -> Function<*> = { this }) =
 	EnchantRandomly.randomApplicableEnchantment().body()
 
@@ -117,7 +117,7 @@ fun enchantRandomly(body: Function<*>.() -> Function<*> = { this }) =
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setNbt(tag: CompoundNBT, body: Function<*>.() -> Function<*> = { this }) = SetNBT.setTag(tag).body()
 
 /**
@@ -127,7 +127,7 @@ fun setNbt(tag: CompoundNBT, body: Function<*>.() -> Function<*> = { this }) = S
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun furnaceSmelt(body: Function<*>.() -> Function<*> = { this }) = Smelt.smelted().body()
 
 /**
@@ -138,7 +138,7 @@ fun furnaceSmelt(body: Function<*>.() -> Function<*> = { this }) = Smelt.smelted
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun looting(value: RandomValueRange, body: LootingEnchantBonus.Builder.() -> LootingEnchantBonus.Builder = { this }) =
 	LootingEnchantBonus.lootingMultiplier(value).body()
 
@@ -150,7 +150,7 @@ fun looting(value: RandomValueRange, body: LootingEnchantBonus.Builder.() -> Loo
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*> = { this }) = setDamage(damage).body()
 
 /**
@@ -160,7 +160,7 @@ fun setDamage(damage: RandomValueRange, body: Function<*>.() -> Function<*> = { 
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun explorationMap(body: ExplorationMap.Builder.() -> ExplorationMap.Builder = { this }) =
 	ExplorationMap.makeExplorationMap().body()
 
@@ -171,7 +171,7 @@ fun explorationMap(body: ExplorationMap.Builder.() -> ExplorationMap.Builder = {
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun stewEffect(body: SetStewEffect.Builder.() -> SetStewEffect.Builder = { this }) = stewEffect().body()
 
 /**
@@ -182,7 +182,7 @@ fun stewEffect(body: SetStewEffect.Builder.() -> SetStewEffect.Builder = { this 
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*> = { this }) = copyName(source).body()
 
 /**
@@ -192,7 +192,7 @@ fun copyName(source: CopyName.Source, body: Function<*>.() -> Function<*> = { th
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun setContents(body: SetContents.Builder.() -> SetContents.Builder = { this }) = setContents().body()
 
 /**
@@ -203,7 +203,7 @@ fun setContents(body: SetContents.Builder.() -> SetContents.Builder = { this }) 
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun limitCount(limiter: IntClamper, body: Function<*>.() -> Function<*> = { this }) = limitCount(limiter).body()
 
 /**
@@ -215,7 +215,7 @@ fun limitCount(limiter: IntClamper, body: Function<*>.() -> Function<*> = { this
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun uniformBonusCount(
 	enchantment: Enchantment,
 	bonusMultiplier: Int = 1,
@@ -232,7 +232,7 @@ fun uniformBonusCount(
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun bonusBinomialDistributionCount(
 	enchantment: Enchantment,
 	chance: Float,
@@ -248,7 +248,7 @@ fun bonusBinomialDistributionCount(
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun oreBonusCount(enchantment: Enchantment, body: Function<*>.() -> Function<*> = { this }) =
 	ApplyBonus.addOreBonusCount(enchantment).body()
 
@@ -259,7 +259,7 @@ fun oreBonusCount(enchantment: Enchantment, body: Function<*>.() -> Function<*> 
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun explosionDecay(body: Function<*>.() -> Function<*> = { this }) = explosionDecay().body()
 
 /**
@@ -270,7 +270,7 @@ fun explosionDecay(body: Function<*>.() -> Function<*> = { this }) = explosionDe
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun copyNbt(source: CopyNbt.Source, body: CopyNbt.Builder.() -> CopyNbt.Builder = { this }) =
 	CopyNbt.copyData(source).body()
 
@@ -282,6 +282,6 @@ fun copyNbt(source: CopyNbt.Source, body: CopyNbt.Builder.() -> CopyNbt.Builder 
  * @return the [Function].
  * @author TheOnlyTails
  */
-@LootTablesDsl
+@LootTables
 fun copyState(block: Block, body: CopyBlockState.Builder.() -> CopyBlockState.Builder = { this }) =
 	copyState(block).body()
