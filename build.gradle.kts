@@ -6,28 +6,13 @@ import org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTOPENJDK
 import java.time.Instant.now
 import java.time.format.DateTimeFormatter.ISO_INSTANT
 
-// BuildScript
-buildscript {
-	repositories {
-		maven(url = "https://maven.minecraftforge.net/")
-		mavenCentral()
-	}
-
-	dependencies {
-		classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "5.+") {
-			isChanging = true
-		}
-		classpath(group = "com.vanniktech", name = "gradle-maven-publish-plugin", version = "latest.release")
-	}
-}
-
 plugins {
 	idea
 	`java-library`
 	kotlin("jvm") version "latest.release"
+	id("net.minecraftforge.gradle")
+	id("com.vanniktech.maven.publish")
 }
-apply(plugin = "com.vanniktech.maven.publish")
-apply(plugin = "net.minecraftforge.gradle")
 
 // Config -> Minecraft
 val forgeVersion: String by extra
