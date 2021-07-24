@@ -1,79 +1,65 @@
 package com.theonlytails.loottables
 
-import net.minecraft.loot.LootEntry
-import net.minecraft.loot.conditions.ILootCondition
-import net.minecraft.loot.functions.ILootFunction
-import net.minecraft.loot.LootPool.Builder as Pool
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
+import net.minecraft.world.level.storage.loot.LootPool.Builder as Pool
+
+typealias LootEntryBuilder = LootPoolEntryContainer.Builder<*>
+typealias LootFunctionBuilder = LootItemFunction.Builder
+typealias LootConditionBuilder = LootItemCondition.Builder
 
 /**
- * Adds a [LootEntry] to a [Pool].
+ * Adds a [LootPoolEntryContainer] to a [Pool].
  *
- * @receiver a [LootEntry].
- * @param pool the pool the entry gets added to.
- * @return the pool, with the entry added.
  * @author TheOnlyTails
  */
 @LootTables
-fun LootEntry.Builder<*>.add(pool: Pool) = pool.add(this)
+fun LootEntryBuilder.add(pool: Pool) = pool.add(this)
 	?: throw LootTableCreationException("Something went wrong while adding a loot entry to a pool")
 
 /**
- * Adds multiple [LootEntry] to a [Pool].
+ * Adds multiple [LootPoolEntryContainer] to a [Pool].
  *
- * @receiver a [Pool].
- * @param entries the list of entries being added to the pool.
- * @return the pool, with the entries added.
- * @author TheOnlyTails
+ *  @author TheOnlyTails
  */
 @LootTables
-fun Pool.add(vararg entries: LootEntry.Builder<*>) = entries.forEach { add(it) }
+fun Pool.add(vararg entries: LootEntryBuilder) = entries.forEach { add(it) }
 
 /**
  * Adds a condition to a [Pool].
  *
- * @receiver a [Pool].
- * @param getCondition a lambda that returns the condition.
- * @return the original pool, with the condition added.
  * @author TheOnlyTails
  */
 @LootTables
-fun Pool.condition(getCondition: () -> ILootCondition.IBuilder) = `when`(getCondition())
+fun Pool.condition(getCondition: () -> LootConditionBuilder) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot pool")
 
 /**
  * Adds a function to a [Pool].
  *
- * @receiver a [Pool].
- * @param getFunction a lambda that returns the function.
- * @return the original pool, with the function added.
  * @author TheOnlyTails
  */
 @LootTables
-fun Pool.function(getFunction: () -> ILootFunction.IBuilder) = apply(getFunction())
+fun Pool.function(getFunction: () -> LootFunctionBuilder) = apply(getFunction())
 	?: throw LootTableCreationException("Something went wrong while adding a function to a loot pool")
 
 /**
  * Adds a list of conditions to a [Pool].
  *
- * @receiver a [Pool].
- * @param conditions a list of conditions.
- * @return the original pool, with the conditions added.
  * @author TheOnlyTails
  */
 @LootTables
-fun Pool.condition(vararg conditions: ILootCondition.IBuilder) = this.also {
+fun Pool.condition(vararg conditions: LootConditionBuilder) = this.also {
 	conditions.forEach { condition { it } }
 }
 
 /**
  * Adds a list of functions to a [Pool].
  *
- * @receiver a [Pool].
- * @param functions a list of functions.
- * @return the original pool, with the function added.
  * @author TheOnlyTails
  */
 @LootTables
-fun Pool.function(vararg functions: ILootFunction.IBuilder) = this.also {
+fun Pool.function(vararg functions: LootFunctionBuilder) = this.also {
 	functions.forEach { function { it } }
 }

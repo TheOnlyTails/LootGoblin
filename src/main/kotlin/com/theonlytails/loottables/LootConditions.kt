@@ -1,43 +1,47 @@
 package com.theonlytails.loottables
 
-import net.minecraft.advancements.criterion.*
-import net.minecraft.block.Block
-import net.minecraft.enchantment.Enchantment
-import net.minecraft.loot.LootContext.EntityTarget
-import net.minecraft.loot.conditions.*
-import net.minecraft.loot.conditions.Alternative.alternative
-import net.minecraft.loot.conditions.BlockStateProperty.hasBlockStateProperties
-import net.minecraft.loot.conditions.DamageSourceProperties.hasDamageSource
-import net.minecraft.loot.conditions.EntityHasProperty.entityPresent
-import net.minecraft.loot.conditions.EntityHasProperty.hasProperties
-import net.minecraft.loot.conditions.Inverted.invert
-import net.minecraft.loot.conditions.KilledByPlayer.killedByPlayer
-import net.minecraft.loot.conditions.LocationCheck.checkLocation
-import net.minecraft.loot.conditions.MatchTool.toolMatches
-import net.minecraft.loot.conditions.RandomChance.randomChance
-import net.minecraft.loot.conditions.RandomChanceWithLooting.randomChanceAndLootingBoost
-import net.minecraft.loot.conditions.SurvivesExplosion.survivesExplosion
-import net.minecraft.loot.conditions.TableBonus.bonusLevelFlatChance
-import net.minecraft.util.math.BlockPos
-import net.minecraft.loot.conditions.ILootCondition.IBuilder as Condition
+import net.minecraft.advancements.critereon.*
+import net.minecraft.core.BlockPos
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.storage.loot.LootContext
+import net.minecraft.world.level.storage.loot.predicates.*
+import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition.alternative
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition.bonusLevelFlatChance
+import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition.hasDamageSource
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition.survivesExplosion
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition.invert
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck.checkLocation
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition.hasBlockStateProperties
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition.entityPresent
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition.hasProperties
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition.killedByPlayer
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost
+import net.minecraft.world.level.storage.loot.predicates.MatchTool.toolMatches
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition as BlockPropertyCondition
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder as Condition
+
+typealias KilledByPlayerCondition = LootItemKilledByPlayerCondition
+typealias EntityPropertyCondition = LootItemEntityPropertyCondition
+typealias LootingRandomChanceCondition = LootItemRandomChanceWithLootingCondition
+typealias RandomChanceCondition = LootItemRandomChanceCondition
+typealias AlternativeCondition = AlternativeLootItemCondition
+typealias InvertedCondition = InvertedLootItemCondition
 
 /**
- * Uses an [Inverted] condition to invert another [Condition].
+ * Uses an [InvertedCondition] condition to invert another [Condition].
  *
  * @param condition the condition being inverted.
- * @param body the configuration block of this condition.
- * @return the [Inverted] condition.
  * @author TheOnlyTails
  */
 @LootTables
 fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) = invert(condition).body()
 
 /**
- * Uses an [Alternative] condition to choose between multiple [Condition].
+ * Uses an [AlternativeCondition] condition to choose between multiple [Condition]s.
  *
  * @param conditions the conditions being chosen from.
- * @param body the configuration block of this condition.
- * @return the [Alternative] condition.
  * @author TheOnlyTails
  */
 @LootTables
@@ -47,23 +51,19 @@ fun alternative(
 ) = alternative(*conditions.toTypedArray()).body()
 
 /**
- * Creates a [RandomChance] condition.
+ * Creates a [RandomChanceCondition] condition.
  *
  * @param chance the chance of this condition.
- * @param body the configuration block of this condition.
- * @return the [RandomChance] condition.
  * @author TheOnlyTails
  */
 @LootTables
 fun randomChance(chance: Float, body: Condition.() -> Condition = { this }) = randomChance(chance).body()
 
 /**
- * Creates a [RandomChanceWithLooting] condition.
+ * Creates a [LootingRandomChanceCondition] condition.
  *
  * @param chance the chance of this condition.
  * @param lootingMultiplier the multiplier of the output if looting is applied.
- * @param body the configuration block of this condition.
- * @return the [RandomChanceWithLooting] condition.
  * @author TheOnlyTails
  */
 @LootTables
@@ -74,60 +74,54 @@ fun randomChanceWithLooting(
 ) = randomChanceAndLootingBoost(chance, lootingMultiplier).body()
 
 /**
- * Creates a [EntityHasProperty] condition.
+ * Creates a [EntityPropertyCondition] condition.
  *
  * @param target the entity targeted by this condition.
  * @param predicate the [EntityPredicate] that matches against the targeted entity.
- * @param body the configuration block of this condition.
- * @return the [EntityHasProperty] condition.
  * @author TheOnlyTails
  */
 @LootTables
 fun entityProperties(
-	target: EntityTarget,
+	target: LootContext.EntityTarget,
 	predicate: EntityPredicate.Builder,
 	body: Condition.() -> Condition = { this },
 ) = hasProperties(target, predicate).body()
 
 /**
- * Creates a [EntityHasProperty] condition.
+ * Creates a [LootItemEntityPropertyCondition] condition.
  *
  * @param target the entity targeted by this condition.
- * @param body the configuration block of this condition.
- * @return the [EntityHasProperty] condition.
  * @author TheOnlyTails
  */
 @LootTables
-fun entityPresent(target: EntityTarget, body: Condition.() -> Condition = { this }) = entityPresent(target).body()
+fun entityPresent(target: LootContext.EntityTarget, body: Condition.() -> Condition = { this }) =
+	entityPresent(target).body()
 
 /**
- * Creates a [KilledByPlayer] condition.
+ * Creates a [KilledByPlayerCondition] condition.
  *
- * @param body the configuration block of this condition.
- * @return the [KilledByPlayer] condition.
  * @author TheOnlyTails
  */
 @LootTables
 fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer().body()
 
 /**
- * Creates a [BlockStateProperty] condition.
+ * Creates a [BlockPropertyCondition] condition.
  *
  * @param block the block of this condition.
- * @param body the configuration block of this condition.
- * @return the [BlockStateProperty] condition.
  * @author TheOnlyTails
  */
 @LootTables
-fun blockStateProperty(block: Block, body: BlockStateProperty.Builder.() -> BlockStateProperty.Builder = { this }) =
+fun blockStateProperty(
+	block: Block,
+	body: BlockPropertyCondition.Builder.() -> BlockPropertyCondition.Builder = { this }
+) =
 	hasBlockStateProperties(block).body()
 
 /**
  * Creates a [MatchTool] condition.
  *
  * @param predicate the predicate that matches against the tool in this condition.
- * @param body the configuration block of this condition.
- * @return the [MatchTool] condition.
  * @author TheOnlyTails
  */
 @LootTables
@@ -135,12 +129,10 @@ fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition 
 	toolMatches(predicate).body()
 
 /**
- * Creates a [TableBonus] condition that passes with probability picked from table, indexed by enchantment level.
+ * Creates a [BonusLevelTableCondition] condition that passes with probability picked from table, indexed by enchantment level.
  *
  * @param enchantment the enchantment being indexed by.
  * @param chances the list of chances for each enchantment level.
- * @param body the configuration block of this condition.
- * @return the [TableBonus] condition.
  * @author TheOnlyTails
  */
 
@@ -152,21 +144,17 @@ fun tableBonus(
 ) = bonusLevelFlatChance(enchantment, *chances).body()
 
 /**
- * Creates a [SurvivesExplosion] condition.
+ * Creates a [ExplosionCondition] condition.
  *
- * @param body the configuration block of this condition.
- * @return the [SurvivesExplosion] condition.
  * @author TheOnlyTails
  */
 @LootTables
 fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExplosion().body()
 
 /**
- * Creates a [DamageSourceProperties] condition.
+ * Creates a [DamageSourceCondition] condition.
  *
  * @param predicate the [DamageSourcePredicate] that this condition matches against.
- * @param body the configuration block of this condition.
- * @return the [DamageSourceProperties] condition.
  * @author TheOnlyTails
  */
 @LootTables
@@ -180,8 +168,6 @@ fun damageSourceProperties(
  *
  * @param pos the position to perform this check on.
  * @param predicate the [LocationPredicate] that this condition matches against.
- * @param body the configuration block of this condition.
- * @return the [LocationCheck] condition.
  * @author TheOnlyTails
  */
 @LootTables

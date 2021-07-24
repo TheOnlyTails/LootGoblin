@@ -1,8 +1,9 @@
+
 import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import com.vanniktech.maven.publish.SonatypeHost
-import net.minecraftforge.gradle.common.util.ModConfig
 import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTOPENJDK
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Instant.now
 import java.time.format.DateTimeFormatter.ISO_INSTANT
 
@@ -23,6 +24,8 @@ val modId = findProperty("POM_ARTIFACT_ID") as String
 val projectName = findProperty("POM_NAME") as String
 val projectAuthor = findProperty("POM_DEVELOPER_NAME") as String
 
+val testModId = "loottables_test"
+
 // JVM Info
 println(
 	"""
@@ -36,8 +39,8 @@ println(
 configure<UserDevExtension> {
 	mappings("official", minecraftVersion)
 
-	@Suppress("SpellCheckingInspection")
-	accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+	// @Suppress("SpellCheckingInspection")
+	// accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
 	runs {
 		create("client") {
@@ -51,11 +54,11 @@ configure<UserDevExtension> {
 			// Recommended logging level for the console
 			property("forge.logging.console.level", "debug")
 
-			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create(modId) {
-					source(sourceSets["main"])
+			mods {
+				create(testModId) {
+					source(sourceSets["test"])
 				}
-			})
+			}
 		}
 
 		create("server") {
@@ -69,11 +72,11 @@ configure<UserDevExtension> {
 			// Recommended logging level for the console
 			property("forge.logging.console.level", "debug")
 
-			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create(modId) {
-					source(sourceSets["main"])
+			mods {
+				create(testModId) {
+					source(sourceSets["test"])
 				}
-			})
+			}
 		}
 
 		create("data") {
@@ -90,7 +93,7 @@ configure<UserDevExtension> {
 			// Specify the mod id for data generation, where to output the resulting resource, and where to look for existing resources.
 			args(
 				"--mod",
-				modId,
+				testModId,
 				"--all",
 				"--output",
 				file("src/generated/resources/"),
@@ -98,11 +101,11 @@ configure<UserDevExtension> {
 				file("src/main/resources/")
 			)
 
-			mods(closureOf<NamedDomainObjectContainer<ModConfig>> {
-				create(modId) {
-					source(sourceSets["main"])
+			mods {
+				create(testModId) {
+					source(sourceSets["test"])
 				}
-			})
+			}
 		}
 	}
 }
@@ -111,7 +114,7 @@ configure<UserDevExtension> {
 // Note: Due to the way kotlin gradle works we need to define the minecraft dependency after we configure Minecraft
 dependencies {
 	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
-	implementation(group = "thedarkcolour", name = "kotlinforforge", version = "latest.release")
+	// implementation(group = "thedarkcolour", name = "kotlinforforge", version = "latest.release")
 	testImplementation(
 		group = "org.jetbrains.kotlin",
 		name = "kotlin-test-junit5",
@@ -131,12 +134,16 @@ project.group = projectGroup
 project.version = projectVersion
 base.archivesName.set(modId)
 
-// Sets the toolchain to compile against OpenJDK 8
+// Sets the toolchain to compile against OpenJDK 16
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(8))
+		languageVersion.set(JavaLanguageVersion.of(16))
 		vendor.set(ADOPTOPENJDK)
 	}
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+	kotlinOptions.jvmTarget = "16"
 }
 
 // Finalize the jar by re-obfuscating

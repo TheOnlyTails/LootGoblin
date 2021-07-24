@@ -1,79 +1,78 @@
 package com.theonlytails.loottables
 
-import net.minecraft.loot.*
+import net.minecraft.world.level.storage.loot.providers.number.*
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator.binomial
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue.exactly
+import kotlin.ranges.IntRange
+import net.minecraft.world.level.storage.loot.IntRange as LootIntRange
 
 /**
- * Creates an [IntClamper] with lower and upper bounds.
+ * Creates an [LootIntRange] with an exact value.
  *
- * @param min the lower bound of the clamper.
- * @param max the upper bound of the clamper.
- * @return the clamper.
  * @author TheOnlyTails
  */
 @LootTables
-fun intClamper(min: Int, max: Int) = IntClamper.clamp(min, max)
-	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
+fun intValue(value: Int) = LootIntRange.exact(value)
+	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
 /**
- * Creates an [IntClamper] with a lower bound.
+ * Creates an [LootIntRange] with lower and upper bounds.
  *
- * @param min the lower bound of the clamper.
- * @return the clamper.
  * @author TheOnlyTails
  */
 @LootTables
-fun intClamperLower(min: Int) = IntClamper.clamp(min, Int.MAX_VALUE)
-	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
+fun intRange(min: Int, max: Int) = LootIntRange.range(min, max)
+	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
 /**
- * Creates an [IntClamper] with an upper bound.
+ * Creates an [LootIntRange] with a lower bound.
  *
- * @param max the upper bound of the clamper.
- * @return the clamper.
  * @author TheOnlyTails
  */
 @LootTables
-fun intClamperUpper(max: Int) = IntClamper.clamp(Int.MIN_VALUE, max)
-	?: throw LootTableCreationException("Something went wrong while creating an IntClamper")
+fun intClamperLower(min: Int) = LootIntRange.lowerBound(min)
+	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
 /**
- * Creates a [RandomValueRange] with lower and upper bounds.
+ * Creates an [LootIntRange] with an upper bound.
  *
- * @param min the lower bound of the range.
- * @param max the upper bound of the range.
- * @return the random range.
  * @author TheOnlyTails
  */
 @LootTables
-fun randomRangeValue(min: Float, max: Float) = RandomValueRange(min, max)
+fun intClamperUpper(max: Int) = LootIntRange.upperBound(max)
+	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
 /**
- * Creates a [RandomValueRange] with a Kotlin [IntRange].
+ * Creates a [UniformGenerator] with lower and upper bounds.
  *
- * @param range a Kotlin range.
- * @return the random range.
  * @author TheOnlyTails
  */
 @LootTables
-fun randomRangeValue(range: IntRange) = randomRangeValue(range.first.toFloat(), range.last.toFloat())
+fun uniformGenerator(min: Float, max: Float): UniformGenerator = UniformGenerator.between(min, max)
 
 /**
- * Creates a [ConstantRange].
+ * Creates a [UniformGenerator] ([NumberProvider]) with a Kotlin [IntRange].
  *
- * @param value the value of the range.
- * @return the constant range.
  * @author TheOnlyTails
  */
 @LootTables
-fun constantRange(value: Int) = ConstantRange(value)
+fun uniformGenerator(range: IntRange): UniformGenerator =
+	UniformGenerator.between(range.first.toFloat(), range.last.toFloat())
 
 /**
- * Creates an [BinomialRange] with its amount and chance..
+ * Creates a [ConstantValue].
  *
- * @param amount the amount of trails in the range.
- * @param chance the chance of success in a trail.
- * @return the binomial range.
  * @author TheOnlyTails
  */
 @LootTables
-fun binomialRange(amount: Int, chance: Float) = BinomialRange(amount, chance)
+fun constantValue(value: Float): ConstantValue = exactly(value)
+
+/**
+ * Creates an [BinomialDistributionGenerator] which generates a number following a binomial distribution.
+ *
+ * @param amount the amount of trials in the range.
+ * @param chance the chance of success in a trial.
+ * @author TheOnlyTails
+ */
+@LootTables
+fun binomialRange(amount: Int, chance: Float): BinomialDistributionGenerator = binomial(amount, chance)
