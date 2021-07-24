@@ -35,6 +35,16 @@ println(
 	""".trimIndent()
 )
 
+dependencies {
+	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
+	implementation(group = "thedarkcolour", name = "kotlinforforge", version = "latest.release")
+	testImplementation(
+		group = "org.jetbrains.kotlin",
+		name = "kotlin-test-junit5",
+		version = kotlin.coreLibrariesVersion
+	)
+}
+
 // Minecraft
 configure<UserDevExtension> {
 	mappings("official", minecraftVersion)
@@ -43,42 +53,6 @@ configure<UserDevExtension> {
 	// accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
 	runs {
-		create("client") {
-			workingDirectory(file("run"))
-
-			taskName = "client"
-
-			// Recommended logging data for a userdev environment
-			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-
-			// Recommended logging level for the console
-			property("forge.logging.console.level", "debug")
-
-			mods {
-				create(testModId) {
-					source(sourceSets["test"])
-				}
-			}
-		}
-
-		create("server") {
-			workingDirectory(file("run"))
-
-			taskName = "server"
-
-			// Recommended logging data for a userdev environment
-			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-
-			// Recommended logging level for the console
-			property("forge.logging.console.level", "debug")
-
-			mods {
-				create(testModId) {
-					source(sourceSets["test"])
-				}
-			}
-		}
-
 		create("data") {
 			workingDirectory(file("run"))
 
@@ -108,18 +82,6 @@ configure<UserDevExtension> {
 			}
 		}
 	}
-}
-
-// Minecraft Dependency
-// Note: Due to the way kotlin gradle works we need to define the minecraft dependency after we configure Minecraft
-dependencies {
-	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
-	// implementation(group = "thedarkcolour", name = "kotlinforforge", version = "latest.release")
-	testImplementation(
-		group = "org.jetbrains.kotlin",
-		name = "kotlin-test-junit5",
-		version = kotlin.coreLibrariesVersion
-	)
 }
 
 repositories {
