@@ -4,6 +4,8 @@
 ![Gradle](https://img.shields.io/badge/gradle-%2302303A.svg?style=for-the-badge&logo=gradle&logoColor=white)
 ![GitHub License](https://img.shields.io/github/license/theonlytails/loottables?style=for-the-badge&logo=key)
 
+*Announcement: LootTables will be ported to 1.17*
+
 # LootTables
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
