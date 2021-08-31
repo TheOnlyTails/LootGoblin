@@ -1,4 +1,4 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.world.level.storage.loot.providers.number.*
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator.binomial
@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.IntRange as LootIntRange
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun intValue(value: Int) = LootIntRange.exact(value)
 	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
@@ -20,7 +20,7 @@ fun intValue(value: Int) = LootIntRange.exact(value)
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun intRange(min: Int, max: Int) = LootIntRange.range(min, max)
 	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
@@ -29,7 +29,7 @@ fun intRange(min: Int, max: Int) = LootIntRange.range(min, max)
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun intClamperLower(min: Int) = LootIntRange.lowerBound(min)
 	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
@@ -38,7 +38,7 @@ fun intClamperLower(min: Int) = LootIntRange.lowerBound(min)
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun intClamperUpper(max: Int) = LootIntRange.upperBound(max)
 	?: throw LootTableCreationException("Something went wrong while creating an IntLimiter")
 
@@ -47,7 +47,7 @@ fun intClamperUpper(max: Int) = LootIntRange.upperBound(max)
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun uniformGenerator(min: Float, max: Float): UniformGenerator = UniformGenerator.between(min, max)
 
 /**
@@ -55,7 +55,7 @@ fun uniformGenerator(min: Float, max: Float): UniformGenerator = UniformGenerato
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun uniformGenerator(range: IntRange): UniformGenerator =
 	UniformGenerator.between(range.first.toFloat(), range.last.toFloat())
 
@@ -64,7 +64,7 @@ fun uniformGenerator(range: IntRange): UniformGenerator =
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun constantValue(value: Float): ConstantValue = exactly(value)
 
 /**
@@ -74,5 +74,5 @@ fun constantValue(value: Float): ConstantValue = exactly(value)
  * @param chance the chance of success in a trial.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun binomialRange(amount: Int, chance: Float): BinomialDistributionGenerator = binomial(amount, chance)

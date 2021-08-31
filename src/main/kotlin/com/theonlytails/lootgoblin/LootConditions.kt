@@ -1,4 +1,4 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.advancements.critereon.*
 import net.minecraft.core.BlockPos
@@ -35,7 +35,7 @@ typealias InvertedCondition = InvertedLootItemCondition
  * @param condition the condition being inverted.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) = invert(condition).body()
 
 /**
@@ -44,7 +44,7 @@ fun inverted(condition: Condition, body: Condition.() -> Condition = { this }) =
  * @param conditions the conditions being chosen from.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun alternative(
 	conditions: Collection<Condition>,
 	body: Condition.() -> Condition = { this },
@@ -56,7 +56,7 @@ fun alternative(
  * @param chance the chance of this condition.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun randomChance(chance: Float, body: Condition.() -> Condition = { this }) = randomChance(chance).body()
 
 /**
@@ -66,7 +66,7 @@ fun randomChance(chance: Float, body: Condition.() -> Condition = { this }) = ra
  * @param lootingMultiplier the multiplier of the output if looting is applied.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun randomChanceWithLooting(
 	chance: Float,
 	lootingMultiplier: Float,
@@ -80,7 +80,7 @@ fun randomChanceWithLooting(
  * @param predicate the [EntityPredicate] that matches against the targeted entity.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun entityProperties(
 	target: LootContext.EntityTarget,
 	predicate: EntityPredicate.Builder,
@@ -93,7 +93,7 @@ fun entityProperties(
  * @param target the entity targeted by this condition.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun entityPresent(target: LootContext.EntityTarget, body: Condition.() -> Condition = { this }) =
 	entityPresent(target).body()
 
@@ -102,7 +102,7 @@ fun entityPresent(target: LootContext.EntityTarget, body: Condition.() -> Condit
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer().body()
 
 /**
@@ -111,7 +111,7 @@ fun killedByPlayer(body: Condition.() -> Condition = { this }) = killedByPlayer(
  * @param block the block of this condition.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun blockStateProperty(
 	block: Block,
 	body: BlockPropertyCondition.Builder.() -> BlockPropertyCondition.Builder = { this }
@@ -124,7 +124,7 @@ fun blockStateProperty(
  * @param predicate the predicate that matches against the tool in this condition.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition = { this }) =
 	toolMatches(predicate).body()
 
@@ -136,7 +136,7 @@ fun matchTool(predicate: ItemPredicate.Builder, body: Condition.() -> Condition 
  * @author TheOnlyTails
  */
 
-@LootTables
+@LootGoblin
 fun tableBonus(
 	enchantment: Enchantment,
 	vararg chances: Float,
@@ -148,7 +148,7 @@ fun tableBonus(
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExplosion().body()
 
 /**
@@ -157,7 +157,7 @@ fun survivesExplosion(body: Condition.() -> Condition = { this }) = survivesExpl
  * @param predicate the [DamageSourcePredicate] that this condition matches against.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun damageSourceProperties(
 	predicate: DamageSourcePredicate.Builder,
 	body: Condition.() -> Condition = { this },
@@ -170,7 +170,7 @@ fun damageSourceProperties(
  * @param predicate the [LocationPredicate] that this condition matches against.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun locationCheck(
 	pos: BlockPos = BlockPos.ZERO,
 	predicate: LocationPredicate.Builder,

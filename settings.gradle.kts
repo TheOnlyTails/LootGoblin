@@ -1,4 +1,4 @@
-rootProject.name = "LootTables"
+rootProject.name = "LootGoblin"
 
 pluginManagement {
 	repositories {

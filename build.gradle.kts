@@ -1,4 +1,3 @@
-
 import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import com.vanniktech.maven.publish.SonatypeHost
 import net.minecraftforge.gradle.userdev.UserDevExtension
@@ -10,7 +9,7 @@ import java.time.format.DateTimeFormatter.ISO_INSTANT
 plugins {
 	idea
 	`java-library`
-	kotlin("jvm") version "latest.release"
+	kotlin("jvm") version "1.5.30"
 	id("net.minecraftforge.gradle")
 	id("com.vanniktech.maven.publish")
 }
@@ -24,7 +23,7 @@ val modId = findProperty("POM_ARTIFACT_ID") as String
 val projectName = findProperty("POM_NAME") as String
 val projectAuthor = findProperty("POM_DEVELOPER_NAME") as String
 
-val testModId = "loottables_test"
+val testModId = "lootgoblin_test"
 
 // JVM Info
 println(
@@ -37,7 +36,6 @@ println(
 
 dependencies {
 	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
-	implementation(group = "thedarkcolour", name = "kotlinforforge", version = "latest.release")
 	testImplementation(
 		group = "org.jetbrains.kotlin",
 		name = "kotlin-test-junit5",
@@ -89,6 +87,7 @@ repositories {
 		name = "kotlinforforge"
 		url = uri("https://thedarkcolour.github.io/KotlinForForge/")
 	}
+	mavenCentral()
 }
 
 // Setup
@@ -132,3 +131,11 @@ extensions.getByType<MavenPublishPluginExtension>().sonatypeHost = SonatypeHost.
 
 // Testing
 tasks.withType<Test> { useJUnitPlatform() }
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+	jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+	jvmTarget = "1.8"
+}

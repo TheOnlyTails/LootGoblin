@@ -1,4 +1,4 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import com.google.gson.JsonIOException
 import net.minecraft.data.DataGenerator
@@ -20,7 +20,7 @@ import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.LoggingException
 
-val logger = LogManager.getLogger("LootTablesTester") ?: throw LoggingException("error creating the logger")
+val logger = LogManager.getLogger("LootGoblinTester") ?: throw LoggingException("error creating the logger")
 
 val gson = Deserializers.createLootTableSerializer()
 	.disableHtmlEscaping()
@@ -36,11 +36,11 @@ fun testLootTable(testName: String, lootTable: LootTable.Builder.() -> LootTable
 	""".trimIndent()
 	)
 
-const val MOD_ID = "loottables_test"
+const val MOD_ID = "lootgoblin_test"
 
 @Mod(MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-class LootTablesTests {
+class LootGoblinTests {
 	@SubscribeEvent
 	fun gatherData(event: GatherDataEvent) {
 		val gen = event.generator

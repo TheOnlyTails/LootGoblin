@@ -1,18 +1,25 @@
-[![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2Floottables%2Fmaven-metadata.xml&style=for-the-badge)](https://search.maven.org/artifact/com.theonlytails/loottables)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TheOnlyTails/loottables/Java%20CI%20with%20Gradle?label=gradle%20build&logo=github&style=for-the-badge)
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2lootgoblin%2Fmaven-metadata.xml&style=for-the-badge)](https://search.maven.org/artifact/com.theonlytails/lootgoblin)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TheOnlyTails/LootGoblin/Java%20CI%20with%20Gradle?label=gradle%20build&logo=github&style=for-the-badge)
 ![Kotlin](https://img.shields.io/badge/kotlin-%236C3FD1.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Gradle](https://img.shields.io/badge/gradle-%2302303A.svg?style=for-the-badge&logo=gradle&logoColor=white)
-![GitHub License](https://img.shields.io/github/license/theonlytails/loottables?style=for-the-badge&logo=key)
+![GitHub License](https://img.shields.io/github/license/theonlytails/LootGoblin?style=for-the-badge&logo=key)
+
+---
 
 *Announcement: LootTables will be ported to 1.17*
 
-# LootTables
+![LootGoblin](lootgoblin-logo.svg)
+
+# LootGoblin
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
-For documentation and usage instructions, please take a look at the [wiki](https://github.com/TheOnlyTails/LootTables/wiki).
+For documentation and usage instructions, please take a look at
+the [wiki](https://github.com/TheOnlyTails/LootGoblin/wiki).
 
-Here's the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/repositories/releases/content/com/theonlytails/loottables/maven-metadata.xml) of this library.
+Here's
+the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/repositories/releases/content/com/theonlytails/lootgoblin/maven-metadata.xml)
+of this library.
 
 ## Installation
 
@@ -20,17 +27,17 @@ _Don't forget to replace the VERSION key with the version in the top with the Ma
 
 #### Gradle/Groovy
 
-```groovy
+```gradle
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    def lootTables = fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "loottables", version: VERSION) {
+    def lootGoblin = fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "lootgoblin", version: VERSION) {
 	    transitive = false
     })
     
-	implementation fg.deobf(lootTables)
+	implementation fg.deobf(lootGoblin)
 }
 ```
 
@@ -41,10 +48,10 @@ repositories {
 }
 
 dependencies {
-    val lootTables = project.dependencies.create(group = "com.theonlytails", name = "loottables", version = VERSION)
+    val lootGoblin = project.dependencies.create(group = "com.theonlytails", name = "lootgoblin", version = VERSION)
 		.apply { isTransitive = false }
 
-	implementation(project.the<DependencyManagementExtension>().deobf(lootTables))
+	implementation(project.the<DependencyManagementExtension>().deobf(lootGoblin))
 }
 ```
 
@@ -52,4 +59,5 @@ The `isTransitive` property is added to make sure the library is imported correc
 
 ---
 
-Want to generate block models with a DSL like this? Check out [BlockModels](https://github.com/theonlytails/blockmodels)!
+Want to generate block models with a DSL like this? Check
+out [ModelGoblin](https://github.com/theonlytails/ModelGoblin)!

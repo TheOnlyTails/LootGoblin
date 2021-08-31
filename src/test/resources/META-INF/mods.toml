@@ -3,4 +3,4 @@ loaderVersion = "[37,)"
 license = "MIT License"
 
 [[mods]]
-modId = "loottables_test"
+modId = "lootgoblin_test"

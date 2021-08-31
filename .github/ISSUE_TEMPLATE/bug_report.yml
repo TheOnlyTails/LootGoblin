@@ -28,12 +28,13 @@ body:
   - type: dropdown
     id: loottables-version
     attributes:
-      label: LootTables Version
-      description: What version of LootTables are you running?
+      label: LootGoblin Version
+      description: What version of LootGoblin are you running?
       options:
-        - v0.2.14 (Latest)
-        - v0.2.13 
-        - v0.2.12 
+        - v0.2.15 (Latest)
+        - v0.2.14
+        - v0.2.13
+        - v0.2.12
         - v0.2.11
         - v0.2.10
         - v0.2.9

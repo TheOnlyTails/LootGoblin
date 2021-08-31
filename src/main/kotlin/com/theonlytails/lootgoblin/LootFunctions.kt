@@ -1,16 +1,15 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.storage.loot.IntRange
+import net.minecraft.world.level.storage.loot.IntRange.range
 import net.minecraft.world.level.storage.loot.functions.*
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay.explosionDecay
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState.copyState
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction.copyName
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction.enchantWithLevels
-import net.minecraft.world.level.storage.loot.functions.LimitCount.limitCount
 import net.minecraft.world.level.storage.loot.functions.SetContainerContents.setContents
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction.setCount
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction.setDamage
@@ -27,7 +26,7 @@ typealias ConditionalFunctionBuilder = LootItemConditionalFunction.Builder<*>
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun ConditionalFunctionBuilder.condition(getLootConditionBuilder: () -> LootConditionBuilder) =
 	`when`(getLootConditionBuilder())
 		?: throw LootTableCreationException("Something went wrong while adding a condition to a function")
@@ -38,7 +37,7 @@ fun ConditionalFunctionBuilder.condition(getLootConditionBuilder: () -> LootCond
  * @param value the range parameter of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setCount(value: NumberProvider, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	setCount(value).body()
 
@@ -47,7 +46,7 @@ fun setCount(value: NumberProvider, body: LootFunctionBuilder.() -> LootFunction
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setConstantCount(value: Float, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	setCount(constantValue(value)).body()
 
@@ -58,7 +57,7 @@ fun setConstantCount(value: Float, body: LootFunctionBuilder.() -> LootFunctionB
  * @param chance the chance of success in a trail.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setBinomialCount(
 	amount: Int,
 	chance: Float,
@@ -72,7 +71,7 @@ fun setBinomialCount(
  * @param max the upper bound of the range.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setUniformCount(
 	min: Float,
 	max: Float,
@@ -85,7 +84,7 @@ fun setUniformCount(
  * @param levels the range parameter of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun enchantWithLevels(
 	levels: NumberProvider,
 	body: EnchantWithLevelsFunction.Builder.() -> EnchantWithLevelsFunction.Builder = { this }
@@ -96,7 +95,7 @@ fun enchantWithLevels(
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun enchantRandomly(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	EnchantRandomlyFunction.randomApplicableEnchantment().body()
 
@@ -106,7 +105,7 @@ fun enchantRandomly(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this
  * @param tag the [CompoundTag] parameter of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setNbt(tag: CompoundTag, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = setTag(tag).body()
 
 /**
@@ -114,7 +113,7 @@ fun setNbt(tag: CompoundTag, body: LootFunctionBuilder.() -> LootFunctionBuilder
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun furnaceSmelt(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = SmeltItemFunction.smelted().body()
 
 /**
@@ -123,7 +122,7 @@ fun furnaceSmelt(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this })
  * @param value the range parameter of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun looting(
 	value: NumberProvider,
 	body: LootingEnchantFunction.Builder.() -> LootingEnchantFunction.Builder = { this }
@@ -136,7 +135,7 @@ fun looting(
  * @param damage the range of damage of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setDamage(damage: NumberProvider, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	setDamage(damage).body()
 
@@ -145,7 +144,7 @@ fun setDamage(damage: NumberProvider, body: LootFunctionBuilder.() -> LootFuncti
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun explorationMap(body: ExplorationMapFunction.Builder.() -> ExplorationMapFunction.Builder = { this }) =
 	ExplorationMapFunction.makeExplorationMap().body()
 
@@ -154,7 +153,7 @@ fun explorationMap(body: ExplorationMapFunction.Builder.() -> ExplorationMapFunc
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun stewEffect(body: SetStewEffectFunction.Builder.() -> SetStewEffectFunction.Builder = { this }) = stewEffect().body()
 
 /**
@@ -163,7 +162,7 @@ fun stewEffect(body: SetStewEffectFunction.Builder.() -> SetStewEffectFunction.B
  * @param source the type of [CopyNameFunction.NameSource] to copy the name from.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun copyName(source: CopyNameFunction.NameSource, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	copyName(source).body()
 
@@ -172,7 +171,7 @@ fun copyName(source: CopyNameFunction.NameSource, body: LootFunctionBuilder.() -
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun setContents(body: SetContainerContents.Builder.() -> SetContainerContents.Builder = { this }) = setContents().body()
 
 /**
@@ -181,9 +180,10 @@ fun setContents(body: SetContainerContents.Builder.() -> SetContainerContents.Bu
  * @param limiter the limiter of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@Suppress("RemoveRedundantQualifierName")
+@LootGoblin
 fun limitCount(limiter: IntRange, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
-	limitCount(limiter).body()
+	LimitCount.limitCount(range(limiter.first, limiter.last)).body()
 
 /**
  * Creates an [ApplyBonusCount] loot function of type [ApplyBonusCount.addUniformBonusCount].
@@ -192,7 +192,7 @@ fun limitCount(limiter: IntRange, body: LootFunctionBuilder.() -> LootFunctionBu
  * @param bonusMultiplier the bonus multiplier passed to the [ApplyBonusCount.UniformBonusCount] of the function
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun uniformBonusCount(
 	enchantment: Enchantment,
 	bonusMultiplier: Int = 1,
@@ -207,7 +207,7 @@ fun uniformBonusCount(
  * @param extraRounds the extra rounds parameter passed to the [ApplyBonusCount.BinomialWithBonusCount] of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun bonusBinomialDistributionCount(
 	enchantment: Enchantment,
 	chance: Float,
@@ -221,7 +221,7 @@ fun bonusBinomialDistributionCount(
  * @param enchantment the [Enchantment] of the function.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun oreBonusCount(enchantment: Enchantment, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	ApplyBonusCount.addOreBonusCount(enchantment).body()
 
@@ -230,7 +230,7 @@ fun oreBonusCount(enchantment: Enchantment, body: LootFunctionBuilder.() -> Loot
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun explosionDecay(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = explosionDecay().body()
 
 /**
@@ -239,7 +239,7 @@ fun explosionDecay(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this 
  * @param source the type of [NbtProvider] to copy the [CompoundTag] from.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun copyNbt(source: NbtProvider, body: CopyNbtFunction.Builder.() -> CopyNbtFunction.Builder = { this }) =
 	CopyNbtFunction.copyData(source).body()
 
@@ -249,6 +249,6 @@ fun copyNbt(source: NbtProvider, body: CopyNbtFunction.Builder.() -> CopyNbtFunc
  * @param block the [Block] to copy the [BlockState] from.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun copyState(block: Block, body: CopyBlockState.Builder.() -> CopyBlockState.Builder = { this }) =
 	copyState(block).body()

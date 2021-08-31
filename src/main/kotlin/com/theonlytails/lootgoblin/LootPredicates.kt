@@ -1,4 +1,4 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.advancements.critereon.*
 import net.minecraft.nbt.CompoundTag
@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 val hasSilkTouch = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 
 /**
@@ -27,7 +27,7 @@ val hasSilkTouch = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 	message = "use the property version of this function.",
 	replaceWith = ReplaceWith("hasSilkTouch")
 )
-@LootTables
+@LootGoblin
 fun hasSilkTouch() = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1)))
 
 /**
@@ -35,7 +35,7 @@ fun hasSilkTouch() = matchTool(itemHasEnchantment(enchantAtLeast(SILK_TOUCH, 1))
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun stateProperties(body: StatePropertiesPredicate.Builder.() -> StatePropertiesPredicate.Builder) =
 	StatePropertiesPredicate.Builder.properties().body()
 
@@ -45,7 +45,7 @@ fun stateProperties(body: StatePropertiesPredicate.Builder.() -> StateProperties
  * @param block the block to check for.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun blockPredicate(
 	block: Block,
 	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
@@ -57,7 +57,7 @@ fun blockPredicate(
  * @param blockTag the block [Tag] to check for.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun blockPredicate(
 	blockTag: Tag<Block>,
 	body: BlockPredicate.Builder.() -> BlockPredicate.Builder = { this },
@@ -69,7 +69,7 @@ fun blockPredicate(
  * @param item the [Item] to check for.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun itemPredicate(
 	item: ItemLike,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -81,7 +81,7 @@ fun itemPredicate(
  * @param itemTag the item [Tag] to check for.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun itemPredicate(
 	itemTag: Tag<Item>,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -93,7 +93,7 @@ fun itemPredicate(
  * @param tag the [CompoundTag] to check for.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun itemHasNbt(
 	tag: CompoundTag,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -105,7 +105,7 @@ fun itemHasNbt(
  * @param enchantment the [EnchantmentPredicate] to check for.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun itemHasEnchantment(
 	enchantment: EnchantmentPredicate,
 	body: ItemPredicate.Builder.() -> ItemPredicate.Builder = { this },
@@ -119,7 +119,7 @@ fun itemHasEnchantment(
  * @return the predicate.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun enchantAtLeast(enchantment: Enchantment, min: Int) =
 	EnchantmentPredicate(enchantment, MinMaxBounds.Ints.atLeast(min))
 
@@ -130,7 +130,7 @@ fun enchantAtLeast(enchantment: Enchantment, min: Int) =
  * @param level the level of the enchantment.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun enchantExactly(enchantment: Enchantment, level: Int) =
 	EnchantmentPredicate(enchantment, MinMaxBounds.Ints.exactly(level))
 
@@ -140,6 +140,6 @@ fun enchantExactly(enchantment: Enchantment, level: Int) =
  * @param isInOpenWater to check if the player was fishing in open water, or if they weren't.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun fishingInOpenWater(isInOpenWater: Boolean) = FishingHookPredicate.inOpenWater(isInOpenWater)
 	?: throw LootTableCreationException("Something went wrong while creating a fishing predicate for fishing in open water.")

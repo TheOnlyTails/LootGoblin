@@ -1,4 +1,4 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.Tag
@@ -24,7 +24,7 @@ typealias EntryBuilder = Entry.Builder<*>
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.itemEntry(
 	item: ItemLike,
 	weight: Int = 1,
@@ -42,7 +42,7 @@ fun Pool.itemEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun AlternativesEntry.Builder.itemEntry(
 	item: ItemLike,
 	weight: Int = 1,
@@ -60,7 +60,7 @@ fun AlternativesEntry.Builder.itemEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.tagEntry(
 	tag: Tag<Item>,
 	weight: Int = 1,
@@ -78,7 +78,7 @@ fun Pool.tagEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun AlternativesEntry.Builder.tagEntry(
 	tag: Tag<Item>,
 	weight: Int = 1,
@@ -97,7 +97,7 @@ fun AlternativesEntry.Builder.tagEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
 	weight: Int = 1,
@@ -116,7 +116,7 @@ fun Pool.tableEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun AlternativesEntry.Builder.tableEntry(
 	lootTable: ResourceLocation,
 	weight: Int = 1,
@@ -135,7 +135,7 @@ fun AlternativesEntry.Builder.tableEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
 	weight: Int = 1,
@@ -153,7 +153,7 @@ fun Pool.dynamicEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun AlternativesEntry.Builder.dynamicEntry(
 	id: ResourceLocation,
 	weight: Int = 1,
@@ -171,7 +171,7 @@ fun AlternativesEntry.Builder.dynamicEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.alternativesEntry(
 	vararg entries: EntryBuilder,
 	addToPool: Boolean = true,
@@ -187,7 +187,7 @@ fun Pool.alternativesEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun AlternativesEntry.Builder.alternativesEntry(
 	vararg entries: EntryBuilder,
 	addToPool: Boolean = true,
@@ -202,7 +202,7 @@ fun AlternativesEntry.Builder.alternativesEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.emptyEntry(
 	weight: Int = 1,
 	quality: Int = 0,
@@ -219,7 +219,7 @@ fun Pool.emptyEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun AlternativesEntry.Builder.emptyEntry(
 	weight: Int = 1,
 	quality: Int = 0,
@@ -234,7 +234,7 @@ fun AlternativesEntry.Builder.emptyEntry(
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun EntryBuilder.condition(getCondition: () -> LootConditionBuilder) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot entry")
 
@@ -244,7 +244,7 @@ fun EntryBuilder.condition(getCondition: () -> LootConditionBuilder) = `when`(ge
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun StandaloneEntry<*>.function(getFunction: () -> LootFunctionBuilder) = apply(getFunction())
 	?: throw LootTableCreationException("Something went wrong while adding a function to a loot entry")
 
@@ -253,7 +253,7 @@ fun StandaloneEntry<*>.function(getFunction: () -> LootFunctionBuilder) = apply(
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = this.also {
 	conditions.forEach { condition { it } }
 }
@@ -263,7 +263,7 @@ fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = this.also 
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun StandaloneEntry<*>.function(vararg functions: LootFunctionBuilder) = this.also {
 	functions.forEach { function { it } }
 }

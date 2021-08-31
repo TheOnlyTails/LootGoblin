@@ -1,4 +1,4 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction
@@ -14,7 +14,7 @@ typealias LootConditionBuilder = LootItemCondition.Builder
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun LootEntryBuilder.add(pool: Pool) = pool.add(this)
 	?: throw LootTableCreationException("Something went wrong while adding a loot entry to a pool")
 
@@ -23,7 +23,7 @@ fun LootEntryBuilder.add(pool: Pool) = pool.add(this)
  *
  *  @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.add(vararg entries: LootEntryBuilder) = entries.forEach { add(it) }
 
 /**
@@ -31,7 +31,7 @@ fun Pool.add(vararg entries: LootEntryBuilder) = entries.forEach { add(it) }
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.condition(getCondition: () -> LootConditionBuilder) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot pool")
 
@@ -40,7 +40,7 @@ fun Pool.condition(getCondition: () -> LootConditionBuilder) = `when`(getConditi
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.function(getFunction: () -> LootFunctionBuilder) = apply(getFunction())
 	?: throw LootTableCreationException("Something went wrong while adding a function to a loot pool")
 
@@ -49,7 +49,7 @@ fun Pool.function(getFunction: () -> LootFunctionBuilder) = apply(getFunction())
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.condition(vararg conditions: LootConditionBuilder) = this.also {
 	conditions.forEach { condition { it } }
 }
@@ -59,7 +59,7 @@ fun Pool.condition(vararg conditions: LootConditionBuilder) = this.also {
  *
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun Pool.function(vararg functions: LootFunctionBuilder) = this.also {
 	functions.forEach { function { it } }
 }

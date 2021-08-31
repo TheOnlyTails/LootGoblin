@@ -1,9 +1,8 @@
-package com.theonlytails.loottables
+package com.theonlytails.lootgoblin
 
 import net.minecraft.world.level.storage.loot.LootPool
 import net.minecraft.world.level.storage.loot.LootPool.lootPool
 import net.minecraft.world.level.storage.loot.LootTable
-import net.minecraft.world.level.storage.loot.LootTable.lootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider
 import kotlin.annotation.AnnotationTarget.*
@@ -16,9 +15,9 @@ import kotlin.annotation.AnnotationTarget.*
 @DslMarker
 @MustBeDocumented
 @Target(CLASS, FUNCTION, PROPERTY)
-annotation class LootTables
+annotation class LootGoblin
 
-@LootTables
+@LootGoblin
 class LootTableCreationException(message: String) : Exception(message)
 
 /**
@@ -27,11 +26,11 @@ class LootTableCreationException(message: String) : Exception(message)
  * @param parameterSet the [LootContextParamSet] type of the loot table.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun lootTableBuilder(
 	parameterSet: LootContextParamSet,
-	body: LootTable.Builder.() -> LootTable.Builder
-) = lootTable().body().setParamSet(parameterSet)
+	body: LootTable.Builder.() -> LootTable.Builder,
+) = LootTable.lootTable().body().setParamSet(parameterSet)
 	?: throw LootTableCreationException("Something went wrong while creating a loot table")
 
 /**
@@ -40,7 +39,7 @@ fun lootTableBuilder(
  * @param parameterSet the [LootContextParamSet] type of the loot table.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun lootTable(parameterSet: LootContextParamSet, body: LootTable.Builder.() -> LootTable.Builder) =
 	lootTableBuilder(parameterSet, body).build()
 		?: throw LootTableCreationException("Something went wrong while creating a loot table")
@@ -51,7 +50,7 @@ fun lootTable(parameterSet: LootContextParamSet, body: LootTable.Builder.() -> L
  * @param rolls the number of rolls in this pool.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun LootTable.Builder.pool(rolls: Float = 1f, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool().setRolls(constantValue(rolls)).also(body))
 		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
@@ -62,7 +61,7 @@ fun LootTable.Builder.pool(rolls: Float = 1f, body: LootPool.Builder.() -> Unit)
  * @param rolls the number of rolls in this pool.
  * @author TheOnlyTails
  */
-@LootTables
+@LootGoblin
 fun LootTable.Builder.pool(rolls: NumberProvider, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool().setRolls(rolls).also(body))
 		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
