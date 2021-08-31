@@ -36,11 +36,6 @@ println(
 
 dependencies {
 	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
-	testImplementation(
-		group = "org.jetbrains.kotlin",
-		name = "kotlin-test-junit5",
-		version = kotlin.coreLibrariesVersion
-	)
 }
 
 // Minecraft
@@ -128,14 +123,3 @@ tasks.named<Jar>("jar") {
 
 // Publishing to maven central
 extensions.getByType<MavenPublishPluginExtension>().sonatypeHost = SonatypeHost.S01
-
-// Testing
-tasks.withType<Test> { useJUnitPlatform() }
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-	jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-	jvmTarget = "1.8"
-}
