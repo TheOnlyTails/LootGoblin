@@ -1,6 +1,21 @@
-package com.theonlytails.lootgoblin
+package com.theonlytails.lootgoblintest
 
 import com.google.gson.JsonIOException
+import com.theonlytails.lootgoblin.alternativesEntry
+import com.theonlytails.lootgoblin.condition
+import com.theonlytails.lootgoblin.dynamicEntry
+import com.theonlytails.lootgoblin.emptyEntry
+import com.theonlytails.lootgoblin.explosionDecay
+import com.theonlytails.lootgoblin.function
+import com.theonlytails.lootgoblin.hasSilkTouch
+import com.theonlytails.lootgoblin.itemEntry
+import com.theonlytails.lootgoblin.oreBonusCount
+import com.theonlytails.lootgoblin.pool
+import com.theonlytails.lootgoblin.randomChance
+import com.theonlytails.lootgoblin.setConstantCount
+import com.theonlytails.lootgoblin.survivesExplosion
+import com.theonlytails.lootgoblin.tableEntry
+import com.theonlytails.lootgoblin.tagEntry
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.HashCache
 import net.minecraft.data.loot.LootTableProvider
@@ -32,7 +47,7 @@ fun testLootTable(testName: String, lootTable: LootTable.Builder.() -> LootTable
 		"""
 		Test: $testName
 		
-		${gson.toJson(lootTable(BLOCK, lootTable))}
+		${gson.toJson(com.theonlytails.lootgoblin.lootTable(BLOCK, lootTable))}
 	""".trimIndent()
 	)
 
@@ -41,13 +56,16 @@ const val MOD_ID = "lootgoblin_test"
 @Mod(MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 class LootGoblinTests {
-	@SubscribeEvent
-	fun gatherData(event: GatherDataEvent) {
-		val gen = event.generator
-		if (event.includeServer()) {
-			gen.addProvider(LootTables(gen))
-		}
-	}
+    companion object {
+        @JvmStatic
+        @SubscribeEvent
+        fun gatherData(event: GatherDataEvent) {
+            val gen = event.generator
+            if (event.includeServer()) {
+                gen.addProvider(LootTables(gen))
+            }
+        }
+    }
 
 	class LootTables(generator: DataGenerator) : LootTableProvider(generator) {
 		override fun run(cache: HashCache) {
