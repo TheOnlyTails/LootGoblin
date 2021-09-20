@@ -51,7 +51,7 @@ dependencies {
     val lootGoblin = project.dependencies.create(group = "com.theonlytails", name = "lootgoblin", version = VERSION)
 		.apply { isTransitive = false }
 
-	implementation(project.the<DependencyManagementExtension>().deobf(lootGoblin))
+	implementation(fg.deobf(lootGoblin))
 }
 ```
 
