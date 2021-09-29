@@ -8,7 +8,7 @@
 
 *Announcement: LootTables will be ported to 1.17*
 
-![LootGoblin](lootgoblin-logo.svg)
+![The LootGoblin wordmark](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin.svg)
 
 # LootGoblin
 

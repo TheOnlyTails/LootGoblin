@@ -1,21 +1,7 @@
 package com.theonlytails.lootgoblintest
 
 import com.google.gson.JsonIOException
-import com.theonlytails.lootgoblin.alternativesEntry
-import com.theonlytails.lootgoblin.condition
-import com.theonlytails.lootgoblin.dynamicEntry
-import com.theonlytails.lootgoblin.emptyEntry
-import com.theonlytails.lootgoblin.explosionDecay
-import com.theonlytails.lootgoblin.function
-import com.theonlytails.lootgoblin.hasSilkTouch
-import com.theonlytails.lootgoblin.itemEntry
-import com.theonlytails.lootgoblin.oreBonusCount
-import com.theonlytails.lootgoblin.pool
-import com.theonlytails.lootgoblin.randomChance
-import com.theonlytails.lootgoblin.setConstantCount
-import com.theonlytails.lootgoblin.survivesExplosion
-import com.theonlytails.lootgoblin.tableEntry
-import com.theonlytails.lootgoblin.tagEntry
+import com.theonlytails.lootgoblin.*
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.HashCache
 import net.minecraft.data.loot.LootTableProvider
@@ -43,29 +29,28 @@ val gson = Deserializers.createLootTableSerializer()
 	.create() ?: throw JsonIOException("error creating a Gson object")
 
 fun testLootTable(testName: String, lootTable: LootTable.Builder.() -> LootTable.Builder) =
-	logger.info(
-		"""
-		Test: $testName
-		
-		${gson.toJson(com.theonlytails.lootgoblin.lootTable(BLOCK, lootTable))}
-	""".trimIndent()
-	)
+	lootTable(BLOCK, lootTable).also {
+		logger.info("""
+			Test: $testName
+			${gson.toJson(it)}
+		""".trimIndent())
+	}
 
 const val MOD_ID = "lootgoblin_test"
 
 @Mod(MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 class LootGoblinTests {
-    companion object {
-        @JvmStatic
-        @SubscribeEvent
-        fun gatherData(event: GatherDataEvent) {
-            val gen = event.generator
-            if (event.includeServer()) {
-                gen.addProvider(LootTables(gen))
-            }
-        }
-    }
+	companion object {
+		@JvmStatic
+		@SubscribeEvent
+		fun gatherData(event: GatherDataEvent) {
+			val gen = event.generator
+			if (event.includeServer()) {
+				gen.addProvider(LootTables(gen))
+			}
+		}
+	}
 
 	class LootTables(generator: DataGenerator) : LootTableProvider(generator) {
 		override fun run(cache: HashCache) {
@@ -80,7 +65,7 @@ class LootGoblinTests {
 					itemEntry(Items.STICK /* this is an example item, of course */)
 					tagEntry(ItemTags.PLANKS)
 					tableEntry(ResourceLocation("grass_block"))
-					alternativesEntry(itemEntry(Items.STICK))
+					alternativesEntry(itemEntry(Items.STICK, addToPool = false))
 					dynamicEntry(ShulkerBoxBlock.CONTENTS) // I couldn't find any other example of this being used in vanilla.
 					emptyEntry(weight = 2, quality = 2)
 				}

@@ -26,21 +26,19 @@ val projectAuthor = findProperty("POM_DEVELOPER_NAME") as String
 val testModId = "lootgoblin_test"
 
 // JVM Info
-println(
-	"""
+println("""
 		Java: ${System.getProperty("java.version")} 
 		JVM: ${System.getProperty("java.vm.version")} (${System.getProperty("java.vendor")}) 
 		Arch: ${System.getProperty("os.arch")}
-	""".trimIndent()
-)
+	""".trimIndent())
 
 // Workaround to remove build\java from MOD_CLASSES because SJH doesn't like nonexistent dirs
 for (sourceSet in project.sourceSets) {
-    val mutClassesDirs = sourceSet.output.classesDirs as ConfigurableFileCollection
-    val javaClassDir = sourceSet.java.classesDirectory.get()
-    val mutClassesFrom = HashSet(mutClassesDirs.from)
-    mutClassesFrom.removeAll { ((it as? Provider<*>)?.get() ?: it) == javaClassDir }
-    mutClassesDirs.setFrom(mutClassesFrom)
+	val mutClassesDirs = sourceSet.output.classesDirs as ConfigurableFileCollection
+	val javaClassDir = sourceSet.java.classesDirectory.get()
+	val mutClassesFrom = HashSet(mutClassesDirs.from)
+	mutClassesFrom.removeAll { ((it as? Provider<*>)?.get() ?: it) == javaClassDir }
+	mutClassesDirs.setFrom(mutClassesFrom)
 }
 
 // Minecraft
@@ -63,20 +61,18 @@ minecraft {
 			property("forge.logging.console.level", "debug")
 
 			// Specify the mod ID for data generation, where to output the resulting resource, and where to look for existing resources.
-			args(
-				"--mod",
+			args("--mod",
 				testModId,
 				"--all",
 				"--output",
 				file("src/generated/resources/"),
 				"--existing",
-				file("src/main/resources/")
-			)
+				file("src/main/resources/"))
 
 			mods {
-                create("lootgoblin") {
+				create("lootgoblin") {
 					source(sourceSets["main"])
-                }
+				}
 				create(testModId) {
 					source(sourceSets["test"])
 				}
@@ -130,16 +126,14 @@ tasks.withType<KotlinCompile>().configureEach {
 tasks.named<Jar>("jar") {
 	// Manifest
 	manifest {
-		attributes(
-			"Specification-Title" to projectName,
+		attributes("Specification-Title" to projectName,
 			"Specification-Vendor" to projectAuthor,
 			"Specification-Version" to "1",
 			"Implementation-Title" to projectName,
 			"Implementation-Version" to project.version,
 			"Implementation-Vendor" to projectName,
 			"Implementation-Timestamp" to ISO_INSTANT.format(now()),
-			"FMLModType" to "GAMELIBRARY"
-		)
+			"FMLModType" to "GAMELIBRARY")
 	}
 
 	finalizedBy("reobfJar")
