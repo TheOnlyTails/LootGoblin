@@ -32,15 +32,6 @@ println("""
 		Arch: ${System.getProperty("os.arch")}
 	""".trimIndent())
 
-// Workaround to remove build\java from MOD_CLASSES because SJH doesn't like nonexistent dirs
-for (sourceSet in project.sourceSets) {
-	val mutClassesDirs = sourceSet.output.classesDirs as ConfigurableFileCollection
-	val javaClassDir = sourceSet.java.classesDirectory.get()
-	val mutClassesFrom = HashSet(mutClassesDirs.from)
-	mutClassesFrom.removeAll { ((it as? Provider<*>)?.get() ?: it) == javaClassDir }
-	mutClassesDirs.setFrom(mutClassesFrom)
-}
-
 // Minecraft
 minecraft {
 	mappings("official", minecraftVersion)
@@ -126,14 +117,16 @@ tasks.withType<KotlinCompile>().configureEach {
 tasks.named<Jar>("jar") {
 	// Manifest
 	manifest {
-		attributes("Specification-Title" to projectName,
+		attributes(
+			"Specification-Title" to projectName,
 			"Specification-Vendor" to projectAuthor,
 			"Specification-Version" to "1",
 			"Implementation-Title" to projectName,
 			"Implementation-Version" to project.version,
 			"Implementation-Vendor" to projectName,
 			"Implementation-Timestamp" to ISO_INSTANT.format(now()),
-			"FMLModType" to "GAMELIBRARY")
+			"FMLModType" to "GAMELIBRARY",
+		)
 	}
 
 	finalizedBy("reobfJar")
