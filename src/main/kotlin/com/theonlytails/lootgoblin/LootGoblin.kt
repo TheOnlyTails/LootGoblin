@@ -65,6 +65,7 @@ fun LootTable.Builder.pool(rolls: Float = 1f, bonusRolls: Float = 0f, body: Loot
  * @author TheOnlyTails
  */
 @LootGoblin
+@Suppress("unused")
 fun LootTable.Builder.pool(rolls: NumberProvider, bonusRolls: NumberProvider, body: LootPool.Builder.() -> Unit) =
 	withPool(lootPool()
 		.setRolls(rolls)

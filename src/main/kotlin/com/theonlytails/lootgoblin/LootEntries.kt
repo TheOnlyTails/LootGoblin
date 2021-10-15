@@ -310,6 +310,7 @@ fun StandaloneEntry<*>.function(getFunction: () -> LootFunctionBuilder) = apply(
  * @author TheOnlyTails
  */
 @LootGoblin
+@Suppress("unused")
 fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = also {
 	conditions.forEach { condition { it } }
 }
@@ -320,6 +321,7 @@ fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = also {
  * @author TheOnlyTails
  */
 @LootGoblin
+@Suppress("unused")
 fun StandaloneEntry<*>.function(vararg functions: LootFunctionBuilder) = also {
 	functions.forEach { function { it } }
 }
