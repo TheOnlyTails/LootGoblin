@@ -51,9 +51,12 @@ fun lootTable(parameterSet: LootContextParamSet, body: LootTable.Builder.() -> L
  * @author TheOnlyTails
  */
 @LootGoblin
-fun LootTable.Builder.pool(rolls: Float = 1f, body: LootPool.Builder.() -> Unit) =
-	withPool(lootPool().setRolls(constantValue(rolls)).also(body))
-		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
+fun LootTable.Builder.pool(rolls: Float = 1f, bonusRolls: Float = 0f, body: LootPool.Builder.() -> Unit) =
+	withPool(lootPool()
+		.setRolls(constantValue(rolls))
+		.setBonusRolls(constantValue(bonusRolls))
+		.also(body)
+	) ?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
 
 /**
  * Adds a new [LootPool.Builder] to a [LootTable.Builder].
@@ -62,6 +65,10 @@ fun LootTable.Builder.pool(rolls: Float = 1f, body: LootPool.Builder.() -> Unit)
  * @author TheOnlyTails
  */
 @LootGoblin
-fun LootTable.Builder.pool(rolls: NumberProvider, body: LootPool.Builder.() -> Unit) =
-	withPool(lootPool().setRolls(rolls).also(body))
-		?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")
+@Suppress("unused")
+fun LootTable.Builder.pool(rolls: NumberProvider, bonusRolls: NumberProvider, body: LootPool.Builder.() -> Unit) =
+	withPool(lootPool()
+		.setRolls(rolls)
+		.setBonusRolls(bonusRolls)
+		.also(body)
+	) ?: throw LootTableCreationException("Something went wrong while adding a pool to a loot table")

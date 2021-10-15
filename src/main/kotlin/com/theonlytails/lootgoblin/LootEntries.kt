@@ -16,6 +16,9 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 
 typealias EntryBuilder = Entry.Builder<*>
 
+const val defaultWeight = 1
+const val defaultQuality = 0
+
 /**
  * Adds an [ItemEntry] to a [Pool].
  *
@@ -27,12 +30,17 @@ typealias EntryBuilder = Entry.Builder<*>
 @LootGoblin
 fun Pool.itemEntry(
 	item: ItemLike,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = lootTableItem(item).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: item")
+) = lootTableItem(item).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToPool) this.add(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: item")
 
 /**
  * Adds an [ItemEntry] to a [AlternativesEntry.Builder].
@@ -45,12 +53,17 @@ fun Pool.itemEntry(
 @LootGoblin
 fun AlternativesEntry.Builder.itemEntry(
 	item: ItemLike,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToEntry: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = lootTableItem(item).also { it.setWeight(weight).setQuality(quality).body(); if (addToEntry) this.otherwise(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: item")
+) = lootTableItem(item).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToEntry) this.otherwise(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: item")
 
 /**
  * Adds a [TagEntry] to a [Pool].
@@ -63,12 +76,18 @@ fun AlternativesEntry.Builder.itemEntry(
 @LootGoblin
 fun Pool.tagEntry(
 	tag: Tag<Item>,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
+	expand: Boolean = false,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = TagEntry.expandTag(tag).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: tag")
+) = (if (!expand) TagEntry.tagContents(tag) else TagEntry.expandTag(tag)).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToPool) add(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: tag")
 
 /**
  * Adds a [TagEntry] to a [AlternativesEntry.Builder].
@@ -81,13 +100,18 @@ fun Pool.tagEntry(
 @LootGoblin
 fun AlternativesEntry.Builder.tagEntry(
 	tag: Tag<Item>,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
+	expand: Boolean = false,
 	addToEntry: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = TagEntry.expandTag(tag)
-	.also { it.setWeight(weight).setQuality(quality).body(); if (addToEntry) this.otherwise(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: tag")
+) = (if (!expand) TagEntry.tagContents(tag) else TagEntry.expandTag(tag)).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToEntry) this.otherwise(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: tag")
 
 /**
  * Adds a [LootTableReference] to a [Pool].
@@ -100,13 +124,17 @@ fun AlternativesEntry.Builder.tagEntry(
 @LootGoblin
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = lootTableReference(lootTable)
-	.also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: loot_table")
+) = lootTableReference(lootTable).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToPool) this.add(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: loot_table")
 
 /**
  * Adds a [LootTableReference] to a [AlternativesEntry.Builder].
@@ -119,18 +147,22 @@ fun Pool.tableEntry(
 @LootGoblin
 fun AlternativesEntry.Builder.tableEntry(
 	lootTable: ResourceLocation,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToEntry: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = lootTableReference(lootTable)
-	.also { it.setWeight(weight).setQuality(quality).body(); if (addToEntry) this.otherwise(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: loot_table")
+) = lootTableReference(lootTable).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToEntry) this.otherwise(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: loot_table")
 
 /**
  * Adds a [DynamicLoot] to a [Pool].
  *
- * @param id the id of the entry.
+ * @param id the ID of the entry.
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
@@ -138,17 +170,22 @@ fun AlternativesEntry.Builder.tableEntry(
 @LootGoblin
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = DynamicLoot.dynamicEntry(id).also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: dynamic")
+) = DynamicLoot.dynamicEntry(id).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToPool) this.add(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: dynamic")
 
 /**
  * Adds a [DynamicLoot] to a [AlternativesEntry.Builder].
  *
- * @param id the id of the entry.
+ * @param id the ID of the entry.
  * @param addToEntry controls whether this entry should be added to the over-arching entry.
  * @throws [LootTableCreationException] if the entry returned is `null`.
  * @author TheOnlyTails
@@ -156,12 +193,17 @@ fun Pool.dynamicEntry(
 @LootGoblin
 fun AlternativesEntry.Builder.dynamicEntry(
 	id: ResourceLocation,
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToEntry: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = dynamicLootEntry(id).also { it.setWeight(weight).setQuality(quality).body(); if (addToEntry) this.otherwise(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: dynamic")
+) = dynamicLootEntry(id).also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToEntry) this.otherwise(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: dynamic")
 
 /**
  * Adds an [AlternativesEntry] to a [Pool].
@@ -176,8 +218,11 @@ fun Pool.alternativesEntry(
 	vararg entries: EntryBuilder,
 	addToPool: Boolean = true,
 	body: AlternativesEntry.Builder.() -> Unit = { },
-) = AlternativesEntry.alternatives(*entries).also { it.body(); if (addToPool) this.add(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: alternatives")
+) = AlternativesEntry.alternatives(*entries).also {
+	it.body()
+
+	if (addToPool) this.add(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: alternatives")
 
 /**
  * Adds an [AlternativesEntry] to a [AlternativesEntry.Builder].
@@ -192,8 +237,10 @@ fun AlternativesEntry.Builder.alternativesEntry(
 	vararg entries: EntryBuilder,
 	addToPool: Boolean = true,
 	body: AlternativesEntry.Builder.() -> Unit = { },
-) = AlternativesEntry.alternatives(*entries).also { it.body(); if (addToPool) this.otherwise(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: alternatives")
+) = AlternativesEntry.alternatives(*entries).also {
+	it.body()
+	if (addToPool) this.otherwise(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: alternatives")
 
 /**
  * Adds an [EmptyEntry] to a [Pool].
@@ -204,13 +251,17 @@ fun AlternativesEntry.Builder.alternativesEntry(
  */
 @LootGoblin
 fun Pool.emptyEntry(
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToPool: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = emptyItem()
-	.also { it.setWeight(weight).setQuality(quality).body(); if (addToPool) this.add(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: empty")
+) = emptyItem().also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToPool) this.add(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: empty")
 
 /**
  * Adds an [EmptyEntry] to an [AlternativesEntry].
@@ -221,12 +272,17 @@ fun Pool.emptyEntry(
  */
 @LootGoblin
 fun AlternativesEntry.Builder.emptyEntry(
-	weight: Int = 1,
-	quality: Int = 0,
+	weight: Int = defaultWeight,
+	quality: Int = defaultQuality,
 	addToEntry: Boolean = true,
 	body: StandaloneEntry<*>.() -> Unit = { },
-) = emptyItem().also { it.setWeight(weight).setQuality(quality).body(); if (addToEntry) this.otherwise(it) }
-	?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: empty")
+) = emptyItem().also {
+	it.setWeight(weight)
+	it.setQuality(quality)
+	it.body()
+
+	if (addToEntry) this.otherwise(it)
+} ?: throw LootTableCreationException("Something went wrong while creating a Loot Entry of type: empty")
 
 /**
  * Adds a condition to an [Entry].
@@ -254,7 +310,8 @@ fun StandaloneEntry<*>.function(getFunction: () -> LootFunctionBuilder) = apply(
  * @author TheOnlyTails
  */
 @LootGoblin
-fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = this.also {
+@Suppress("unused")
+fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = also {
 	conditions.forEach { condition { it } }
 }
 
@@ -264,14 +321,15 @@ fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = this.also 
  * @author TheOnlyTails
  */
 @LootGoblin
-fun StandaloneEntry<*>.function(vararg functions: LootFunctionBuilder) = this.also {
+@Suppress("unused")
+fun StandaloneEntry<*>.function(vararg functions: LootFunctionBuilder) = also {
 	functions.forEach { function { it } }
 }
 
 /**
  * This solves some recursion issues in [dynamicEntry].
  *
- * @param id the id of the entry.
+ * @param id the ID of the entry.
  * @author TheOnlyTails
  */
 private fun dynamicLootEntry(id: ResourceLocation) = DynamicLoot.dynamicEntry(id)

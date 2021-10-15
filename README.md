@@ -6,9 +6,7 @@
 
 ---
 
-*Announcement: LootTables will be ported to 1.17*
-
-# ![LootGoblin](lootgoblin-logo.svg)
+# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin.svg)
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
