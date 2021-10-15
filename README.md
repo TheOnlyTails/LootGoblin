@@ -11,7 +11,7 @@
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
 For documentation and usage instructions, please take a look at
-the [wiki](https://github.com/TheOnlyTails/LootGoblin/wiki).
+the [wiki](https://github.com/TheOnlyTails/LootGoblin/wiki) as well as the [docs](https://lootgoblin.theonlytails.com/).
 
 Here's
 the [`maven-metadata.xml`](https://s01.oss.sonatype.org/service/local/repositories/releases/content/com/theonlytails/lootgoblin/maven-metadata.xml)
