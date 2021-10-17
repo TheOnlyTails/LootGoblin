@@ -1,3 +1,4 @@
+@file:JvmName("LootFunctions")
 package com.theonlytails.lootgoblin
 
 import net.minecraft.nbt.CompoundTag
@@ -23,10 +24,8 @@ typealias ConditionalFunctionBuilder = LootItemConditionalFunction.Builder<*>
 
 /**
  * Adds a [LootConditionBuilder] to a [ConditionalFunctionBuilder].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun ConditionalFunctionBuilder.condition(getLootConditionBuilder: () -> LootConditionBuilder) =
 	`when`(getLootConditionBuilder())
 		?: throw LootTableCreationException("Something went wrong while adding a condition to a function")
@@ -35,18 +34,15 @@ fun ConditionalFunctionBuilder.condition(getLootConditionBuilder: () -> LootCond
  * Creates a [SetItemCountFunction] loot function.
  *
  * @param value the range parameter of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setCount(value: NumberProvider, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	setCount(value).body()
 
 /**
  * Creates a [SetItemCountFunction] loot function with a [ConstantValue].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setConstantCount(value: Float, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	setCount(constantValue(value)).body()
 
@@ -55,9 +51,8 @@ fun setConstantCount(value: Float, body: LootFunctionBuilder.() -> LootFunctionB
  *
  * @param amount the amount of trails in the range.
  * @param chance the chance of success in a trail.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setBinomialCount(
 	amount: Int,
 	chance: Float,
@@ -69,9 +64,8 @@ fun setBinomialCount(
  *
  * @param min the lower bound of the range.
  * @param max the upper bound of the range.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setUniformCount(
 	min: Float,
 	max: Float,
@@ -82,9 +76,8 @@ fun setUniformCount(
  * Creates an [EnchantWithLevelsFunction] loot function.
  *
  * @param levels the range parameter of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun enchantWithLevels(
 	levels: NumberProvider,
 	body: EnchantWithLevelsFunction.Builder.() -> EnchantWithLevelsFunction.Builder = { this }
@@ -92,10 +85,8 @@ fun enchantWithLevels(
 
 /**
  * Creates an [EnchantRandomlyFunction] loot function.
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun enchantRandomly(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	EnchantRandomlyFunction.randomApplicableEnchantment().body()
 
@@ -103,26 +94,22 @@ fun enchantRandomly(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this
  * Creates a [SetNbtFunction] loot function.
  *
  * @param tag the [CompoundTag] parameter of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setNbt(tag: CompoundTag, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = setTag(tag).body()
 
 /**
  * Creates a [SmeltItemFunction] loot function.
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun furnaceSmelt(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = SmeltItemFunction.smelted().body()
 
 /**
  * Creates an [LootingEnchantFunction] loot function.
  *
  * @param value the range parameter of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun looting(
 	value: NumberProvider,
 	body: LootingEnchantFunction.Builder.() -> LootingEnchantFunction.Builder = { this }
@@ -133,55 +120,46 @@ fun looting(
  * Creates an [SetItemDamageFunction] loot function.
  *
  * @param damage the range of damage of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setDamage(damage: NumberProvider, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	setDamage(damage).body()
 
 /**
  * Creates an [ExplorationMapFunction] loot function.
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun explorationMap(body: ExplorationMapFunction.Builder.() -> ExplorationMapFunction.Builder = { this }) =
 	ExplorationMapFunction.makeExplorationMap().body()
 
 /**
  * Creates an [SetStewEffectFunction] loot function.
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun stewEffect(body: SetStewEffectFunction.Builder.() -> SetStewEffectFunction.Builder = { this }) = stewEffect().body()
 
 /**
  * Creates an [CopyNameFunction] loot function.
  *
  * @param source the type of [CopyNameFunction.NameSource] to copy the name from.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun copyName(source: CopyNameFunction.NameSource, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	copyName(source).body()
 
 /**
  * Creates an [SetContainerContents] loot function.
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun setContents(body: SetContainerContents.Builder.() -> SetContainerContents.Builder = { this }) = setContents().body()
 
 /**
  * Creates an [LimitCount] loot function.
  *
  * @param limiter the limiter of the function.
- * @author TheOnlyTails
  */
 @Suppress("RemoveRedundantQualifierName")
-@LootGoblin
+@LootGoblinDsl
 fun limitCount(limiter: IntRange, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	LimitCount.limitCount(range(limiter.first, limiter.last)).body()
 
@@ -190,9 +168,8 @@ fun limitCount(limiter: IntRange, body: LootFunctionBuilder.() -> LootFunctionBu
  *
  * @param enchantment the enchantment of the function.
  * @param bonusMultiplier the bonus multiplier passed to the [ApplyBonusCount.UniformBonusCount] of the function
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun uniformBonusCount(
 	enchantment: Enchantment,
 	bonusMultiplier: Int = 1,
@@ -205,9 +182,8 @@ fun uniformBonusCount(
  * @param enchantment the enchantment of the function.
  * @param chance the chance parameter passed to the [ApplyBonusCount.BinomialWithBonusCount] of the function.
  * @param extraRounds the extra rounds parameter passed to the [ApplyBonusCount.BinomialWithBonusCount] of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun bonusBinomialDistributionCount(
 	enchantment: Enchantment,
 	chance: Float,
@@ -219,27 +195,23 @@ fun bonusBinomialDistributionCount(
  * Creates an [ApplyBonusCount] loot function of type [ApplyBonusCount.addOreBonusCount] with the [ApplyBonusCount.OreDrops].
  *
  * @param enchantment the [Enchantment] of the function.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun oreBonusCount(enchantment: Enchantment, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
 	ApplyBonusCount.addOreBonusCount(enchantment).body()
 
 /**
  * Creates an [ApplyExplosionDecay] loot function.
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun explosionDecay(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = explosionDecay().body()
 
 /**
  * Creates an [CopyNbtFunction] loot function.
  *
  * @param source the type of [NbtProvider] to copy the [CompoundTag] from.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun copyNbt(source: NbtProvider, body: CopyNbtFunction.Builder.() -> CopyNbtFunction.Builder = { this }) =
 	CopyNbtFunction.copyData(source).body()
 
@@ -247,8 +219,7 @@ fun copyNbt(source: NbtProvider, body: CopyNbtFunction.Builder.() -> CopyNbtFunc
  * Creates an [CopyBlockState] loot function.
  *
  * @param block the [Block] to copy the [BlockState] from.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun copyState(block: Block, body: CopyBlockState.Builder.() -> CopyBlockState.Builder = { this }) =
 	copyState(block).body()
