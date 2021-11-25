@@ -6,7 +6,8 @@
 
 ---
 
-# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin.svg)
+# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin/LootGoblin.svg#gh-light-mode-only)
+# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin/LootGoblin_dark.svg#gh-dark-mode-only)
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
