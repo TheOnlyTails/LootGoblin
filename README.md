@@ -1,12 +1,13 @@
 [![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2lootgoblin%2Fmaven-metadata.xml&style=for-the-badge)](https://search.maven.org/artifact/com.theonlytails/lootgoblin)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TheOnlyTails/LootGoblin/Java%20CI%20with%20Gradle?label=gradle%20build&logo=github&style=for-the-badge)
-![Kotlin](https://img.shields.io/badge/kotlin-%236C3FD1.svg?style=for-the-badge&logo=kotlin&logoColor=white)
+![Kotlin](https://img.shields.io/badge/kotlin-%238052ff.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Gradle](https://img.shields.io/badge/gradle-%2302303A.svg?style=for-the-badge&logo=gradle&logoColor=white)
 ![GitHub License](https://img.shields.io/github/license/theonlytails/LootGoblin?style=for-the-badge&logo=key)
 
 ---
 
-# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin.svg)
+# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin/LootGoblin.svg#gh-light-mode-only)
+# ![LootGoblin](https://raw.githubusercontent.com/TheOnlyTails/DataGoblinAssets/main/LootGoblin/LootGoblin_dark.svg#gh-dark-mode-only)
 
 A Kotlin DSL for creating loot tables in Minecraft Forge mods.
 
