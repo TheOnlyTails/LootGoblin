@@ -6,13 +6,12 @@ pluginManagement {
 		mavenCentral()
 		gradlePluginPortal()
 	}
-	plugins {
-		id("net.minecraftforge.gradle")
-	}
 	resolutionStrategy {
 		eachPlugin {
-			if (requested.id.id == "net.minecraftforge.gradle") useModule("net.minecraftforge.gradle:ForgeGradle:${extra["forge_gradle_version"]}")
-			else if (requested.id.id == "com.vanniktech.maven.publish") useModule("com.vanniktech:gradle-maven-publish-plugin:latest.release")
+			if (requested.id.toString() == "net.minecraftforge.gradle")
+				useModule("${requested.id}:ForgeGradle:${requested.version}")
+			else if (requested.id.toString() == "com.vanniktech.maven.publish")
+				useModule("com.vanniktech:gradle-maven-publish-plugin:${requested.version}")
 		}
 	}
 }

@@ -1,6 +1,6 @@
+
 import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import com.vanniktech.maven.publish.SonatypeHost
-import org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTOPENJDK
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Instant.now
 import java.time.format.DateTimeFormatter.ISO_INSTANT
@@ -8,9 +8,9 @@ import java.time.format.DateTimeFormatter.ISO_INSTANT
 plugins {
 	idea
 	`java-library`
-	kotlin("jvm") version "1.5.31"
-	id("net.minecraftforge.gradle")
-	id("com.vanniktech.maven.publish")
+	kotlin("jvm") version "1.6.0"
+	id("net.minecraftforge.gradle") version "5.+"
+	id("com.vanniktech.maven.publish") version "latest.release"
 	id("org.jetbrains.dokka") version "latest.release" // dokka
 }
 
@@ -22,8 +22,6 @@ val projectGroup = findProperty("GROUP") as String
 val modId = findProperty("POM_ARTIFACT_ID") as String
 val projectName = findProperty("POM_NAME") as String
 val projectAuthor = findProperty("POM_DEVELOPER_NAME") as String
-
-val testModId = "lootgoblin_test"
 
 // JVM Info
 println("""
@@ -40,36 +38,6 @@ minecraft {
 	// accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
 	runs {
-		create("data") {
-			workingDirectory(file("run"))
-
-			taskName = "datagen"
-
-			// Recommended logging data for a userdev environment
-			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-
-			// Recommended logging level for the console
-			property("forge.logging.console.level", "debug")
-
-			// Specify the mod ID for data generation, where to output the resulting resource, and where to look for existing resources.
-			args("--mod",
-				testModId,
-				"--all",
-				"--output",
-				file("src/generated/resources/"),
-				"--existing",
-				file("src/main/resources/"))
-
-			mods {
-				create("lootgoblin") {
-					source(sourceSets["main"])
-				}
-				create(testModId) {
-					source(sourceSets["test"])
-				}
-			}
-		}
-
 		all {
 			lazyToken("minecraft_classpath") {
 				library.copyRecursive().resolve().joinToString(File.pathSeparator) { it.absolutePath }
@@ -83,17 +51,14 @@ val library: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(library)
 
 repositories {
-	maven {
-		name = "kotlinforforge"
-		url = uri("https://thedarkcolour.github.io/KotlinForForge/")
-	}
 	mavenCentral()
-	mavenLocal()
 }
 
 dependencies {
 	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
-	library(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = kotlin.coreLibrariesVersion)
+	library(group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version = kotlin.coreLibrariesVersion) {
+		exclude("org.jetbrains", "annotations")
+	}
 }
 
 // Setup
@@ -101,16 +66,22 @@ project.group = projectGroup
 project.version = projectVersion
 base.archivesName.set(modId)
 
-// Sets the toolchain to compile against OpenJDK 16
+val javaVersion = 17
+
+// Sets the toolchain to compile against Java 17
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(16))
-		vendor.set(ADOPTOPENJDK)
+		languageVersion.set(JavaLanguageVersion.of(javaVersion))
+	}
+}
+kotlin {
+	jvmToolchain {
+		(this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(javaVersion))
 	}
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-	kotlinOptions.jvmTarget = "16"
+	kotlinOptions.jvmTarget = "$javaVersion"
 }
 
 // Finalize the jar by re-obfuscating

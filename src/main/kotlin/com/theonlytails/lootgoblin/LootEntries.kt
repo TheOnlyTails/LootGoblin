@@ -17,7 +17,10 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 
 typealias EntryBuilder = Entry.Builder<*>
 
+@LootGoblinDsl
 const val defaultWeight = 1
+
+@LootGoblinDsl
 const val defaultQuality = 0
 
 /**

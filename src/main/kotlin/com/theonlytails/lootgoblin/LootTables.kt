@@ -23,7 +23,6 @@ fun LootTable.Builder.pool(rolls: Float = 1f, bonusRolls: Float = 0f, body: Loot
  * @param rolls the number of rolls in this pool.
  */
 @LootGoblinDsl
-@Suppress("unused")
 fun LootTable.Builder.pool(rolls: NumberProvider, bonusRolls: NumberProvider, body: LootPool.Builder.() -> Unit) =
 	withPool(LootPool.lootPool()
 		.setRolls(rolls)

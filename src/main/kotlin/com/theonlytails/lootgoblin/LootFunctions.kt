@@ -2,8 +2,11 @@
 package com.theonlytails.lootgoblin
 
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.storage.loot.IntRange.range
 import net.minecraft.world.level.storage.loot.functions.*
@@ -12,6 +15,7 @@ import net.minecraft.world.level.storage.loot.functions.CopyBlockState.copyState
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction.copyName
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction.enchantWithLevels
 import net.minecraft.world.level.storage.loot.functions.SetContainerContents.setContents
+import net.minecraft.world.level.storage.loot.functions.SetContainerLootTable.withLootTable
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction.setCount
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction.setDamage
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction.setTag
@@ -21,6 +25,9 @@ import net.minecraft.world.level.storage.loot.providers.number.*
 
 typealias BinomialRange = BinomialDistributionGenerator
 typealias ConditionalFunctionBuilder = LootItemConditionalFunction.Builder<*>
+
+typealias LootFunctionBuilderBody = LootFunctionBuilder.() -> LootFunctionBuilder
+typealias LootFunctionBody<T> = LootItemConditionalFunction.Builder<T>.() -> LootItemConditionalFunction.Builder<T>
 
 /**
  * Adds a [LootConditionBuilder] to a [ConditionalFunctionBuilder].
@@ -36,14 +43,14 @@ fun ConditionalFunctionBuilder.condition(getLootConditionBuilder: () -> LootCond
  * @param value the range parameter of the function.
  */
 @LootGoblinDsl
-fun setCount(value: NumberProvider, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun setCount(value: NumberProvider, body: LootFunctionBuilderBody = { this }) =
 	setCount(value).body()
 
 /**
  * Creates a [SetItemCountFunction] loot function with a [ConstantValue].
  */
 @LootGoblinDsl
-fun setConstantCount(value: Float, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun setConstantCount(value: Float, body: LootFunctionBuilderBody = { this }) =
 	setCount(constantValue(value)).body()
 
 /**
@@ -56,7 +63,7 @@ fun setConstantCount(value: Float, body: LootFunctionBuilder.() -> LootFunctionB
 fun setBinomialCount(
 	amount: Int,
 	chance: Float,
-	body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }
+	body: LootFunctionBuilderBody = { this },
 ) = setCount(binomialRange(amount, chance)).body()
 
 /**
@@ -69,7 +76,7 @@ fun setBinomialCount(
 fun setUniformCount(
 	min: Float,
 	max: Float,
-	body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }
+	body: LootFunctionBuilderBody = { this },
 ) = setCount(uniformGenerator(min, max)).body()
 
 /**
@@ -80,14 +87,14 @@ fun setUniformCount(
 @LootGoblinDsl
 fun enchantWithLevels(
 	levels: NumberProvider,
-	body: EnchantWithLevelsFunction.Builder.() -> EnchantWithLevelsFunction.Builder = { this }
+	body: LootFunctionBody<EnchantWithLevelsFunction.Builder> = { this },
 ) = enchantWithLevels(levels).body()
 
 /**
  * Creates an [EnchantRandomlyFunction] loot function.
  */
 @LootGoblinDsl
-fun enchantRandomly(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun enchantRandomly(body: LootFunctionBuilderBody = { this }) =
 	EnchantRandomlyFunction.randomApplicableEnchantment().body()
 
 /**
@@ -95,14 +102,15 @@ fun enchantRandomly(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this
  *
  * @param tag the [CompoundTag] parameter of the function.
  */
+@Deprecated("Set for removal in a future Minecraft version.", level = DeprecationLevel.HIDDEN)
 @LootGoblinDsl
-fun setNbt(tag: CompoundTag, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = setTag(tag).body()
+fun setNbt(tag: CompoundTag, body: LootFunctionBuilderBody = { this }) = setTag(tag).body()
 
 /**
  * Creates a [SmeltItemFunction] loot function.
  */
 @LootGoblinDsl
-fun furnaceSmelt(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = SmeltItemFunction.smelted().body()
+fun furnaceSmelt(body: LootFunctionBuilderBody = { this }) = SmeltItemFunction.smelted().body()
 
 /**
  * Creates an [LootingEnchantFunction] loot function.
@@ -112,7 +120,7 @@ fun furnaceSmelt(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this })
 @LootGoblinDsl
 fun looting(
 	value: NumberProvider,
-	body: LootingEnchantFunction.Builder.() -> LootingEnchantFunction.Builder = { this }
+	body: LootFunctionBody<LootingEnchantFunction.Builder> = { this },
 ) =
 	LootingEnchantFunction.lootingMultiplier(value).body()
 
@@ -122,21 +130,21 @@ fun looting(
  * @param damage the range of damage of the function.
  */
 @LootGoblinDsl
-fun setDamage(damage: NumberProvider, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun setDamage(damage: NumberProvider, body: LootFunctionBuilderBody = { this }) =
 	setDamage(damage).body()
 
 /**
  * Creates an [ExplorationMapFunction] loot function.
  */
 @LootGoblinDsl
-fun explorationMap(body: ExplorationMapFunction.Builder.() -> ExplorationMapFunction.Builder = { this }) =
+fun explorationMap(body: LootFunctionBody<ExplorationMapFunction.Builder> = { this }) =
 	ExplorationMapFunction.makeExplorationMap().body()
 
 /**
  * Creates an [SetStewEffectFunction] loot function.
  */
 @LootGoblinDsl
-fun stewEffect(body: SetStewEffectFunction.Builder.() -> SetStewEffectFunction.Builder = { this }) = stewEffect().body()
+fun stewEffect(body: LootFunctionBody<SetStewEffectFunction.Builder> = { this }) = stewEffect().body()
 
 /**
  * Creates an [CopyNameFunction] loot function.
@@ -144,14 +152,37 @@ fun stewEffect(body: SetStewEffectFunction.Builder.() -> SetStewEffectFunction.B
  * @param source the type of [CopyNameFunction.NameSource] to copy the name from.
  */
 @LootGoblinDsl
-fun copyName(source: CopyNameFunction.NameSource, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun copyName(source: CopyNameFunction.NameSource, body: LootFunctionBuilderBody = { this }) =
 	copyName(source).body()
 
 /**
  * Creates an [SetContainerContents] loot function.
  */
 @LootGoblinDsl
-fun setContents(body: SetContainerContents.Builder.() -> SetContainerContents.Builder = { this }) = setContents().body()
+fun setContents(blockEntityType: BlockEntityType<*>, body: LootFunctionBody<SetContainerContents.Builder> = { this }) =
+	setContents(blockEntityType).body()
+
+/**
+ * Creates an [SetContainerLootTable] loot function.
+ *
+ * @param name Specifies the [ResourceLocation] of the loot table to be used.
+ * @param type the type to be written in `BlockEntityTag.id`.
+ * @param seed Specifies the loot table seed. If absent, a random seed will be used.
+ */
+@LootGoblinDsl
+fun setLootTable(
+	name: ResourceLocation,
+	type: BlockEntityType<*>,
+	seed: Long? = null,
+	body: LootFunctionBuilderBody = { this },
+) =
+	(if (seed != null) withLootTable(type, name, seed) else withLootTable(type, name)).body()
+
+/**
+ * Creates an [SetPotionFunction] loot function.
+ */
+@LootGoblinDsl
+fun setPotion(potion: Potion, body: LootFunctionBuilderBody = { this }) = SetPotionFunction.setPotion(potion).body()
 
 /**
  * Creates an [LimitCount] loot function.
@@ -160,7 +191,7 @@ fun setContents(body: SetContainerContents.Builder.() -> SetContainerContents.Bu
  */
 @Suppress("RemoveRedundantQualifierName")
 @LootGoblinDsl
-fun limitCount(limiter: IntRange, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun limitCount(limiter: IntRange, body: LootFunctionBuilderBody = { this }) =
 	LimitCount.limitCount(range(limiter.first, limiter.last)).body()
 
 /**
@@ -173,7 +204,7 @@ fun limitCount(limiter: IntRange, body: LootFunctionBuilder.() -> LootFunctionBu
 fun uniformBonusCount(
 	enchantment: Enchantment,
 	bonusMultiplier: Int = 1,
-	body: LootFunctionBuilder.() -> LootFunctionBuilder = { this },
+	body: LootFunctionBuilderBody = { this },
 ) = ApplyBonusCount.addUniformBonusCount(enchantment, bonusMultiplier).body()
 
 /**
@@ -188,7 +219,7 @@ fun bonusBinomialDistributionCount(
 	enchantment: Enchantment,
 	chance: Float,
 	extraRounds: Int,
-	body: LootFunctionBuilder.() -> LootFunctionBuilder = { this },
+	body: LootFunctionBuilderBody = { this },
 ) = ApplyBonusCount.addBonusBinomialDistributionCount(enchantment, chance, extraRounds).body()
 
 /**
@@ -197,14 +228,14 @@ fun bonusBinomialDistributionCount(
  * @param enchantment the [Enchantment] of the function.
  */
 @LootGoblinDsl
-fun oreBonusCount(enchantment: Enchantment, body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) =
+fun oreBonusCount(enchantment: Enchantment, body: LootFunctionBuilderBody = { this }) =
 	ApplyBonusCount.addOreBonusCount(enchantment).body()
 
 /**
  * Creates an [ApplyExplosionDecay] loot function.
  */
 @LootGoblinDsl
-fun explosionDecay(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this }) = explosionDecay().body()
+fun explosionDecay(body: LootFunctionBuilderBody = { this }) = explosionDecay().body()
 
 /**
  * Creates an [CopyNbtFunction] loot function.
@@ -212,7 +243,7 @@ fun explosionDecay(body: LootFunctionBuilder.() -> LootFunctionBuilder = { this 
  * @param source the type of [NbtProvider] to copy the [CompoundTag] from.
  */
 @LootGoblinDsl
-fun copyNbt(source: NbtProvider, body: CopyNbtFunction.Builder.() -> CopyNbtFunction.Builder = { this }) =
+fun copyNbt(source: NbtProvider, body: LootFunctionBody<CopyNbtFunction.Builder> = { this }) =
 	CopyNbtFunction.copyData(source).body()
 
 /**
@@ -221,5 +252,5 @@ fun copyNbt(source: NbtProvider, body: CopyNbtFunction.Builder.() -> CopyNbtFunc
  * @param block the [Block] to copy the [BlockState] from.
  */
 @LootGoblinDsl
-fun copyState(block: Block, body: CopyBlockState.Builder.() -> CopyBlockState.Builder = { this }) =
+fun copyState(block: Block, body: LootFunctionBody<CopyBlockState.Builder> = { this }) =
 	copyState(block).body()
