@@ -1,3 +1,4 @@
+@file:JvmName("LootPools")
 package com.theonlytails.lootgoblin
 
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer
@@ -11,55 +12,43 @@ typealias LootConditionBuilder = LootItemCondition.Builder
 
 /**
  * Adds a [LootPoolEntryContainer] to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun LootEntryBuilder.add(pool: Pool) = pool.add(this)
 	?: throw LootTableCreationException("Something went wrong while adding a loot entry to a pool")
 
 /**
  * Adds multiple [LootPoolEntryContainer] to a [Pool].
- *
- *  @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.add(vararg entries: LootEntryBuilder) = entries.forEach { add(it) }
 
 /**
  * Adds a condition to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.condition(getCondition: () -> LootConditionBuilder) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot pool")
 
 /**
  * Adds a function to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.function(getFunction: () -> LootFunctionBuilder) = apply(getFunction())
 	?: throw LootTableCreationException("Something went wrong while adding a function to a loot pool")
 
 /**
  * Adds a list of conditions to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.condition(vararg conditions: LootConditionBuilder) = this.also {
 	conditions.forEach { condition { it } }
 }
 
 /**
  * Adds a list of functions to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.function(vararg functions: LootFunctionBuilder) = this.also {
 	functions.forEach { function { it } }
 }

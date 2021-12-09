@@ -1,3 +1,4 @@
+@file:JvmName("LootEntries")
 package com.theonlytails.lootgoblin
 
 import net.minecraft.resources.ResourceLocation
@@ -16,7 +17,10 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 
 typealias EntryBuilder = Entry.Builder<*>
 
+@LootGoblinDsl
 const val defaultWeight = 1
+
+@LootGoblinDsl
 const val defaultQuality = 0
 
 /**
@@ -25,9 +29,8 @@ const val defaultQuality = 0
  * @param item the item of the entry.
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.itemEntry(
 	item: ItemLike,
 	weight: Int = defaultWeight,
@@ -48,9 +51,8 @@ fun Pool.itemEntry(
  * @param item the item of the entry.
  * @param addToEntry controls whether this entry should be added to the over-arching entry.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun AlternativesEntry.Builder.itemEntry(
 	item: ItemLike,
 	weight: Int = defaultWeight,
@@ -71,9 +73,8 @@ fun AlternativesEntry.Builder.itemEntry(
  * @param tag the [Tag] of the entry.
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.tagEntry(
 	tag: Tag<Item>,
 	weight: Int = defaultWeight,
@@ -95,9 +96,8 @@ fun Pool.tagEntry(
  * @param tag the [Tag] of the entry.
  * @param addToEntry controls whether this entry should be added to the over-arching entry.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun AlternativesEntry.Builder.tagEntry(
 	tag: Tag<Item>,
 	weight: Int = defaultWeight,
@@ -119,9 +119,8 @@ fun AlternativesEntry.Builder.tagEntry(
  * @param lootTable the loot table being referenced in the entry.
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.tableEntry(
 	lootTable: ResourceLocation,
 	weight: Int = defaultWeight,
@@ -142,9 +141,8 @@ fun Pool.tableEntry(
  * @param lootTable the loot table being referenced in this entry.
  * @param addToEntry controls whether this entry should be added to the over-arching.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun AlternativesEntry.Builder.tableEntry(
 	lootTable: ResourceLocation,
 	weight: Int = defaultWeight,
@@ -165,9 +163,8 @@ fun AlternativesEntry.Builder.tableEntry(
  * @param id the ID of the entry.
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.dynamicEntry(
 	id: ResourceLocation,
 	weight: Int = defaultWeight,
@@ -188,9 +185,8 @@ fun Pool.dynamicEntry(
  * @param id the ID of the entry.
  * @param addToEntry controls whether this entry should be added to the over-arching entry.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun AlternativesEntry.Builder.dynamicEntry(
 	id: ResourceLocation,
 	weight: Int = defaultWeight,
@@ -211,9 +207,8 @@ fun AlternativesEntry.Builder.dynamicEntry(
  * @param entries the sub-entries of the entry.
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.alternativesEntry(
 	vararg entries: EntryBuilder,
 	addToPool: Boolean = true,
@@ -230,9 +225,8 @@ fun Pool.alternativesEntry(
  * @param entries the sub-entries of the entry.
  * @param addToPool controls whether this entry should be added to the over-arching entry.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun AlternativesEntry.Builder.alternativesEntry(
 	vararg entries: EntryBuilder,
 	addToPool: Boolean = true,
@@ -247,9 +241,8 @@ fun AlternativesEntry.Builder.alternativesEntry(
  *
  * @param addToPool controls whether this entry should be added to the pool.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun Pool.emptyEntry(
 	weight: Int = defaultWeight,
 	quality: Int = defaultQuality,
@@ -268,9 +261,8 @@ fun Pool.emptyEntry(
  *
  * @param addToEntry controls whether this entry should be added to the overarching entry.
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun AlternativesEntry.Builder.emptyEntry(
 	weight: Int = defaultWeight,
 	quality: Int = defaultQuality,
@@ -288,9 +280,8 @@ fun AlternativesEntry.Builder.emptyEntry(
  * Adds a condition to an [Entry].
  *
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun EntryBuilder.condition(getCondition: () -> LootConditionBuilder) = `when`(getCondition())
 	?: throw LootTableCreationException("Something went wrong while adding a condition to a loot entry")
 
@@ -298,18 +289,15 @@ fun EntryBuilder.condition(getCondition: () -> LootConditionBuilder) = `when`(ge
  * Adds a function to a [StandaloneEntry].
  *
  * @throws [LootTableCreationException] if the entry returned is `null`.
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 fun StandaloneEntry<*>.function(getFunction: () -> LootFunctionBuilder) = apply(getFunction())
 	?: throw LootTableCreationException("Something went wrong while adding a function to a loot entry")
 
 /**
  * Adds a list of conditions to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 @Suppress("unused")
 fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = also {
 	conditions.forEach { condition { it } }
@@ -317,10 +305,8 @@ fun EntryBuilder.condition(vararg conditions: LootConditionBuilder) = also {
 
 /**
  * Adds a list of functions to a [Pool].
- *
- * @author TheOnlyTails
  */
-@LootGoblin
+@LootGoblinDsl
 @Suppress("unused")
 fun StandaloneEntry<*>.function(vararg functions: LootFunctionBuilder) = also {
 	functions.forEach { function { it } }
@@ -330,6 +316,5 @@ fun StandaloneEntry<*>.function(vararg functions: LootFunctionBuilder) = also {
  * This solves some recursion issues in [dynamicEntry].
  *
  * @param id the ID of the entry.
- * @author TheOnlyTails
  */
 private fun dynamicLootEntry(id: ResourceLocation) = DynamicLoot.dynamicEntry(id)

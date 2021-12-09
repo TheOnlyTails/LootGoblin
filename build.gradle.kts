@@ -1,6 +1,4 @@
-import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import com.vanniktech.maven.publish.SonatypeHost
-import org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTOPENJDK
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Instant.now
 import java.time.format.DateTimeFormatter.ISO_INSTANT
@@ -8,22 +6,18 @@ import java.time.format.DateTimeFormatter.ISO_INSTANT
 plugins {
 	idea
 	`java-library`
-	kotlin("jvm") version "1.5.31"
-	id("net.minecraftforge.gradle")
-	id("com.vanniktech.maven.publish")
+	kotlin("jvm") version "1.6.0"
+	id("net.minecraftforge.gradle") version "5.+"
+	id("com.vanniktech.maven.publish.base")
 	id("org.jetbrains.dokka") version "latest.release" // dokka
 }
 
 // Config -> Minecraft
 val forgeVersion = findProperty("forge_version") as String
 val minecraftVersion = findProperty("minecraft_version") as String
-val projectVersion = findProperty("VERSION_NAME") as String
-val projectGroup = findProperty("GROUP") as String
-val modId = findProperty("POM_ARTIFACT_ID") as String
-val projectName = findProperty("POM_NAME") as String
-val projectAuthor = findProperty("POM_DEVELOPER_NAME") as String
-
-val testModId = "lootgoblin_test"
+val projectVersion = findProperty("version") as String
+val groupId = findProperty("groupId") as String
+val modId = findProperty("modId") as String
 
 // JVM Info
 println("""
@@ -40,36 +34,6 @@ minecraft {
 	// accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
 	runs {
-		create("data") {
-			workingDirectory(file("run"))
-
-			taskName = "datagen"
-
-			// Recommended logging data for a userdev environment
-			property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-
-			// Recommended logging level for the console
-			property("forge.logging.console.level", "debug")
-
-			// Specify the mod ID for data generation, where to output the resulting resource, and where to look for existing resources.
-			args("--mod",
-				testModId,
-				"--all",
-				"--output",
-				file("src/generated/resources/"),
-				"--existing",
-				file("src/main/resources/"))
-
-			mods {
-				create("lootgoblin") {
-					source(sourceSets["main"])
-				}
-				create(testModId) {
-					source(sourceSets["test"])
-				}
-			}
-		}
-
 		all {
 			lazyToken("minecraft_classpath") {
 				library.copyRecursive().resolve().joinToString(File.pathSeparator) { it.absolutePath }
@@ -83,34 +47,37 @@ val library: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(library)
 
 repositories {
-	maven {
-		name = "kotlinforforge"
-		url = uri("https://thedarkcolour.github.io/KotlinForForge/")
-	}
 	mavenCentral()
-	mavenLocal()
 }
 
 dependencies {
 	"minecraft"(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
-	library(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = kotlin.coreLibrariesVersion)
+	library(group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version = kotlin.coreLibrariesVersion) {
+		exclude("org.jetbrains", "annotations")
+	}
 }
 
 // Setup
-project.group = projectGroup
+project.group = groupId
 project.version = projectVersion
 base.archivesName.set(modId)
 
-// Sets the toolchain to compile against OpenJDK 16
+val javaVersion = 17
+
+// Sets the toolchain to compile against Java 17
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(16))
-		vendor.set(ADOPTOPENJDK)
+		languageVersion.set(JavaLanguageVersion.of(javaVersion))
+	}
+}
+kotlin {
+	jvmToolchain {
+		(this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(javaVersion))
 	}
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-	kotlinOptions.jvmTarget = "16"
+	kotlinOptions.jvmTarget = "$javaVersion"
 }
 
 // Finalize the jar by re-obfuscating
@@ -118,12 +85,12 @@ tasks.named<Jar>("jar") {
 	// Manifest
 	manifest {
 		attributes(
-			"Specification-Title" to projectName,
-			"Specification-Vendor" to projectAuthor,
+			"Specification-Title" to "LootGoblin",
+			"Specification-Vendor" to "TheOnlyTails",
 			"Specification-Version" to "1",
-			"Implementation-Title" to projectName,
+			"Implementation-Title" to "LootGoblin",
 			"Implementation-Version" to project.version,
-			"Implementation-Vendor" to projectName,
+			"Implementation-Vendor" to "LootGoblin",
 			"Implementation-Timestamp" to ISO_INSTANT.format(now()),
 			"FMLModType" to "GAMELIBRARY",
 		)
@@ -138,4 +105,42 @@ tasks.dokkaHtml.configure {
 }
 
 // Publishing to maven central
-extensions.getByType<MavenPublishPluginExtension>().sonatypeHost = SonatypeHost.S01
+plugins.withId("com.vanniktech.maven.publish.base") {
+	mavenPublishing {
+		publishToMavenCentral(SonatypeHost.S01)
+		signAllPublications()
+
+		pom {
+			name.set("LootGoblin")
+			description.set("A Kotlin DSL for creating loot tables in Minecraft Forge mods.")
+			url.set("https://github.com/theonlytails/lootgoblin")
+			inceptionYear.set("2021")
+
+			licenses {
+				license {
+					name.set("MIT License")
+					url.set("https://www.opensource.org/licenses/mit-license.php")
+					distribution.set("repo")
+				}
+			}
+
+			scm {
+				connection.set("scm:git:git://github.com/theonlytails/lootgoblin.git")
+				developerConnection.set("scm:git:ssh://git@github.com/theonlytails/lootgoblin.git")
+				url.set("https://github.com/theonlytails/lootgoblin/")
+			}
+
+			developers {
+				developer {
+					name.set("TheOnlyTails")
+					id.set("theonlytails")
+					url.set("https://github.com/theonlytails/")
+				}
+			}
+		}
+	}
+}
+
+publishing.publications.create<MavenPublication>("mavenLocal") {
+	artifactId = modId
+}

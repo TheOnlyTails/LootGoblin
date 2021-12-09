@@ -1,4 +1,4 @@
-[![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&label=maven%20central&logo=gradle&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepositories%2Freleases%2Fcontent%2Fcom%2Ftheonlytails%2lootgoblin%2Fmaven-metadata.xml&style=for-the-badge)](https://search.maven.org/artifact/com.theonlytails/lootgoblin)
+[![Maven metadata URL](https://img.shields.io/maven-central/v/com.theonlytails/lootgoblin?color=blue&style=for-the-badge)](https://search.maven.org/artifact/com.theonlytails/lootgoblin)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TheOnlyTails/LootGoblin/Java%20CI%20with%20Gradle?label=gradle%20build&logo=github&style=for-the-badge)
 ![Kotlin](https://img.shields.io/badge/kotlin-%238052ff.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Gradle](https://img.shields.io/badge/gradle-%2302303A.svg?style=for-the-badge&logo=gradle&logoColor=white)
@@ -30,11 +30,7 @@ repositories {
 }
 
 dependencies {
-    def lootGoblin = fg.deobf(project.dependencies.create(group: "com.theonlytails", name: "lootgoblin", version: VERSION) {
-	    transitive = false
-    })
-    
-	implementation fg.deobf(lootGoblin)
+    implementation fg.deobf("com.theonlytails:lootgoblin:VERSION")
 }
 ```
 
@@ -45,14 +41,9 @@ repositories {
 }
 
 dependencies {
-    val lootGoblin = project.dependencies.create(group = "com.theonlytails", name = "lootgoblin", version = VERSION)
-		.apply { isTransitive = false }
-
-	implementation(fg.deobf(lootGoblin))
+	implementation(fg.deobf(group = "com.theonlytails", name = "lootgoblin", version = "VERSION"))
 }
 ```
-
-The `isTransitive` property is added to make sure the library is imported correctly.
 
 ---
 
