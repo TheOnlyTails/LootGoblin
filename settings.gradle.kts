@@ -10,8 +10,14 @@ pluginManagement {
 		eachPlugin {
 			if (requested.id.toString() == "net.minecraftforge.gradle")
 				useModule("${requested.id}:ForgeGradle:${requested.version}")
-			else if (requested.id.toString() == "com.vanniktech.maven.publish")
-				useModule("com.vanniktech:gradle-maven-publish-plugin:${requested.version}")
+		}
+	}
+	buildscript {
+		repositories {
+			mavenCentral()
+		}
+		dependencies {
+			classpath(group = "com.vanniktech", name = "gradle-maven-publish-plugin", version = "latest.release")
 		}
 	}
 }
