@@ -1,5 +1,8 @@
+
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 import java.time.Instant.now
 import java.time.format.DateTimeFormatter.ISO_INSTANT
 
@@ -135,6 +138,23 @@ plugins.withId("com.vanniktech.maven.publish.base") {
 					name.set("TheOnlyTails")
 					id.set("theonlytails")
 					url.set("https://github.com/theonlytails/")
+				}
+			}
+
+			withXml {
+				val document = asElement()
+				val dependencies = document.getElementsByTagName("dependencies")
+
+				fun NodeList.forEach(action: Node.() -> Unit) {
+					for (i in 0 until length) {
+						item(i).action()
+					}
+				}
+
+				dependencies.forEach {
+					asElement().getElementsByTagName("version").forEach {
+						textContent = textContent.removeSuffix("_mapped_official_$minecraftVersion")
+					}
 				}
 			}
 		}
